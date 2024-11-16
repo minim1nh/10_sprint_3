@@ -1,4 +1,4 @@
-export const teamId = '3';
+export const teamId = '10-3';
 
 export type signInUpResponseData = {
   user: User;
