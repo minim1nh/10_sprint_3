@@ -1,17 +1,17 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, signUpRequestProps, signInRequestProps, signInUpResponseData } from './Wikid.types';
+import { teamId, SignUpProps, SignInProps, SignInData, SignUpData, RefreahData } from './Wikid.types';
 
 /**
  * '회원가입' 요청을 보내는 함수
  */
-export const postSignUp = async (reqData: signUpRequestProps): Promise<signInUpResponseData> => {
+export const postSignUp = async (reqProps: SignUpProps): Promise<SignUpData> => {
   try {
-    const response = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/signUp`, {
-      email: reqData.email,
-      name: reqData.name,
-      password: reqData.password,
-      passwordConfirmation: reqData.passwordConfirmation,
+    const res = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/signUp`, {
+      email: reqProps.email,
+      name: reqProps.name,
+      password: reqProps.password,
+      passwordConfirmation: reqProps.passwordConfirmation,
     }, {
       headers: {
         'accept': 'application/json',
@@ -19,28 +19,27 @@ export const postSignUp = async (reqData: signUpRequestProps): Promise<signInUpR
       }
     });
 
-    if (response.status === 201) {
-      const signUp = response.data as signInUpResponseData;
-      LocalStorage.setItem(`signUp`, signUp);
+    if (res.status === 201) {
+      const signUp = res.data as SignUpData;
+      LocalStorage.setItem(`SignUp`, signUp);
       return signUp;
     } else {
-      throw new Error('Failed to axios.post: Auth signUp');
+      throw new Error('Failed to Auth postSignUp()');
     }
   } catch (error) {
-    console.error('Error axios.post: Auth signUp', error);
+    console.error('Error to Auth postSignUp()', error);
     throw error;
   }
 };
 
-
 /**
  * '로그인' 요청을 보내는 함수
  */
-export const postSignIn = async (reqData: signInRequestProps): Promise<signInUpResponseData> => {
+export const postSignIn = async (reqProps: SignInProps): Promise<SignInData> => {
   try {
-    const response = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/signIn`, {
-      email: reqData.email,
-      password: reqData.password,
+    const res = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/signIn`, {
+      email: reqProps.email,
+      password: reqProps.password,
     }, {
       headers: {
         'accept': 'application/json',
@@ -48,15 +47,15 @@ export const postSignIn = async (reqData: signInRequestProps): Promise<signInUpR
       }
     });
 
-    if (response.status === 200) {
-      const signIn = response.data as signInUpResponseData;
-      LocalStorage.setItem(`signIn`, signIn);
+    if (res.status === 200) {
+      const signIn = res.data as SignInData;
+      LocalStorage.setItem(`SignIn`, signIn);
       return signIn;
     } else {
-      throw new Error('Failed to axios.post: Auth signIn');
+      throw new Error('Failed to Auth postSignIn()');
     }
   } catch (error) {
-    console.error('Error axios.post: Auth signIn', error);
+    console.error('Error to Auth postSignIn()', error);
     throw error;
   }
 };
@@ -64,14 +63,14 @@ export const postSignIn = async (reqData: signInRequestProps): Promise<signInUpR
 /**
  * '토큰갱신' 요청을 보내는 함수
  */
-export const postRefreshToken = async (): Promise<string | undefined> => {
-  const signIn = LocalStorage.getItem(`signIn`) as signInUpResponseData;
+export const postRefreshToken = async (): Promise<RefreahData | null> => {
+  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
   if (!signIn?.refreshToken) {
-    console.error(`Error axios.post: Auth 'signIn.refreshToken' info does not exist in localstorage.`);
-    return undefined;
+    console.error(`Error : postRefreshToken() 'signIn.refreshToken' info does not exist in localstorage.`);
+    return null;
   }
   try {
-    const response = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/refresh-token`, {
+    const res = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/refresh-token`, {
       refreshToken: signIn.refreshToken,
     }, {
       headers: {
@@ -80,16 +79,16 @@ export const postRefreshToken = async (): Promise<string | undefined> => {
       }
     });
 
-    if (response.status === 200) {
-      const accessToken = response.data as string;
-      signIn.accessToken = accessToken;
-      LocalStorage.setItem(`signIn`, signIn);
-      return accessToken;
+    if (res.status === 200) {
+      const resData = res.data as RefreahData;
+      signIn.accessToken = resData.accessToken;
+      LocalStorage.setItem(`SignIn`, signIn);
+      return resData;
     } else {
-      throw new Error('Failed to axios.post: Auth refreshToken');
+      throw new Error('Failed to Auth postRefreshToken()');
     }
   } catch (error) {
-    console.error('Error axios.post: Auth refreshToken', error);
+    console.error('Error to Auth postRefreshToken()', error);
     throw error;
   }
 };
