@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { WikidNavbar } from '../components/common/WikidNavbar';
 import "@/styles/globals.scss";
 
 export const metadata = {
@@ -11,6 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+
     <html lang="ko">
       <head>
         <link
@@ -18,7 +22,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
         />
       </head>
-      <body className="font-pretendard antialiased">{children}</body>
+      <body className="font-pretendard antialiased"><WikidNavbar />{children}</body>
     </html>
   );
 }
