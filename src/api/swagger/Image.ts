@@ -16,10 +16,13 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
   const URL = `https://wikied-api.vercel.app/${teamId}/images/upload`
   console.log('POST - URL: ', URL)
 
+  // create formdata
+  const formData = new FormData();
+  formData.append('image', reqProps.path);
+  
   try {
     const res = await axios.post(URL, {
-      image: reqProps.path,
-    }, {
+      data: formData,
       headers: {
         'accept': 'application/json',
         'Content-Type': ' multipart/form-data',
