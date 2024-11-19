@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -11,6 +12,16 @@ const nextConfig: NextConfig = {
 
     return config;
   },  
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")],
+  },
+
+  webpack(config) {
+    config.resolve.modules.push(path.resolve("./"));
+    return config;
+  },
+
+  reactStrictMode: true,
 };
 
 export default nextConfig;

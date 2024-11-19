@@ -1,0 +1,16 @@
+@use "./variables" as *;
+
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    Pretendard Variable,
+    Pretendard,
+    sans-serif;
+  background-color: $white;
+}
