@@ -16,12 +16,12 @@ const nextConfig: NextConfig = {
     includePaths: [path.join(__dirname, "styles")],
   },
 
-  webpack(config) {
-    config.resolve.modules.push(path.resolve("./"));
-    return config;
-  },
+  // webpack(config) {
+  //   config.resolve.modules.push(path.resolve("./"));
+  //   return config;
+  // },
 
-  reactStrictMode: true,
+  // reactStrictMode: true,
 };
 
 export default nextConfig;
