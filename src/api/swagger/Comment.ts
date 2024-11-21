@@ -1,6 +1,7 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, SignInData, CommentsProps, CommentsData, CommentsListData, CommentsIdData } from './Wikid.types';
+import { teamId, CommentsProps, CommentsData, CommentsListData, CommentsIdData } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 댓글 작성
@@ -8,11 +9,8 @@ import { teamId, SignInData, CommentsProps, CommentsData, CommentsListData, Comm
  */
 export const postComments = async (articleId: number, reqProps: CommentsProps): Promise<CommentsData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postComments() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/comments`
   console.log('POST - URL: ', URL)
@@ -24,7 +22,7 @@ export const postComments = async (articleId: number, reqProps: CommentsProps): 
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -78,11 +76,8 @@ export const getComments = async (articleId: number, limit: number, cursor?: num
  */
 export const patchCommentsId = async (commentId: number, reqProps: CommentsProps): Promise<CommentsData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : patchCommentsId() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${commentId}`
   console.log('PATCH - URL: ', URL)
@@ -94,7 +89,7 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }      
     });
 
@@ -118,11 +113,8 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
  */
 export const deleteCommentsId = async (commentId: number): Promise<CommentsIdData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : deleteCommentsId() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${commentId}`
   console.log('DELETE - URL: ', URL)
@@ -131,7 +123,7 @@ export const deleteCommentsId = async (commentId: number): Promise<CommentsIdDat
     const res = await axios.delete(URL, {
       headers: {
         'accept': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     })
 

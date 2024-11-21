@@ -1,6 +1,7 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
 import { teamId, SignUpProps, SignInProps, SignInData, SignUpData, RefreahData } from './Wikid.types';
+import { getRefreshToken } from '@/hooks/Token'
 
 /**
  * '회원가입' 요청을 보내는 함수
@@ -64,14 +65,15 @@ export const postSignIn = async (reqProps: SignInProps): Promise<SignInData> => 
  * '토큰갱신' 요청을 보내는 함수
  */
 export const postRefreshToken = async (): Promise<RefreahData | null> => {
+
+  const refreshToken = getRefreshToken();
+  if(!refreshToken) return null;
+  
   const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postRefreshToken() 'signIn.refreshToken' info does not exist in localstorage.`);
-    return null;
-  }
+
   try {
     const res = await axios.post(`https://wikied-api.vercel.app/${teamId}/auth/refresh-token`, {
-      refreshToken: signIn.refreshToken,
+      refreshToken: refreshToken,
     }, {
       headers: {
         'accept': 'application/json',
