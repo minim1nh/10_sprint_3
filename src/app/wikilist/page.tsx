@@ -1,7 +1,7 @@
-export default function LoginPage() {
+export default function WikiListPage() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1>로그인 페이지 입니다.</h1>
+      <h1>위키목록 페이지 입니다.</h1>
     </div>
   );
 }

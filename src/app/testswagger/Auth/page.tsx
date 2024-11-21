@@ -24,6 +24,7 @@ const AuthTest = () => {
   const [token, setToken] = useState<RefreahData | null>(null);
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState('')
+
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -40,11 +41,12 @@ const AuthTest = () => {
   const handleSignUp = async () => {
     const reqData = {
       //아래 내용을 수정하여 테스트 해주세요!!!
-      email: 'bugbug@gmail.com',
-      name: 'bugbug',
-      password: 'Melon!1732',
-      passwordConfirmation: 'Melon!1732',
+      email: 'tiger002@gmail.com',
+      name: 'tiger002',
+      password: '1qa2ws3ed',
+      passwordConfirmation: '1qa2ws3ed',
     } as SignUpProps;
+
     try {
       const resData = await postSignUp(reqData);
       setSignUp(resData)
@@ -59,9 +61,10 @@ const AuthTest = () => {
   const handleSignIn = async () => {
     const reqData = {
       //아래 내용을 수정하여 테스트 해주세요!!!
-      email: 'monkey@gmail.com',
-      password: 'Melon!1732',
+      email: 'tiger001@gmail.com',
+      password: '1qa2ws3ed',
     } as SignInProps;
+
     try {
       const resData = await postSignIn(reqData);
       setSignIn(resData)

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, SignInData, NotificationsData, NotificationsIdData } from './Wikid.types';
+import { teamId, NotificationsData, NotificationsIdData } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 알림 목록 조회 함수
@@ -8,11 +9,8 @@ import { teamId, SignInData, NotificationsData, NotificationsIdData } from './Wi
  */
 export const getNotifications = async (page: number, pageSize: number): Promise<NotificationsData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : getNotifications() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/notifications/?page=${page}&pageSize=${pageSize}`
   console.log('GET - URL: ', URL)
@@ -22,7 +20,7 @@ export const getNotifications = async (page: number, pageSize: number): Promise<
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -44,11 +42,8 @@ export const getNotifications = async (page: number, pageSize: number): Promise<
  */
 export const deleteNotificationsId = async (id: number): Promise<NotificationsIdData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : getNotifications() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/notifications/${id}`
   console.log('DELETE - URL: ', URL)
@@ -57,7 +52,7 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
     const res = await axios.delete(URL, {
       headers: {
         'accept': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     })
 

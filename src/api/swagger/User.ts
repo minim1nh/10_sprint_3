@@ -1,17 +1,15 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, UserData, SignInData, PasswordProps } from './Wikid.types';
+import { teamId, UserData, PasswordProps } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 내 정보 조회 함수
  */
 export const getUsersMe = async (): Promise<UserData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : getUsersMe() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/user/me`
   console.log('GET - URL: ', URL)
@@ -20,7 +18,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
     const res = await axios.get(URL, {
       headers: {
         'accept': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -42,11 +40,8 @@ export const getUsersMe = async (): Promise<UserData | null> => {
  */
 export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<UserData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : patchUsersMePassword() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   try {
     const res = await axios.patch(`https://wikied-api.vercel.app/${teamId}/user/me/password`, {
@@ -57,7 +52,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
