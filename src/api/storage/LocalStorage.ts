@@ -1,3 +1,4 @@
+'use client';
 const LocalStorage = {
   setItem: (key: string, value: object): void => {
     if (typeof window !== 'undefined' && window.localStorage) {

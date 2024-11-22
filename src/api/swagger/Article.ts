@@ -1,21 +1,20 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, SignInData, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from './Wikid.types';
+import { teamId, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 게시글 작성
  * https://wikied-api.vercel.app/10-3/articles
  */
 export const postArticles = async (articleId: number, reqProps: ArticlesProps): Promise<ArticlesData | null> => {
-
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postArticles() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles`
   console.log('POST - URL: ', URL)
+  
 
   try {
     const res = await axios.post(URL, {
@@ -24,7 +23,7 @@ export const postArticles = async (articleId: number, reqProps: ArticlesProps): 
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -45,11 +44,11 @@ export const postArticles = async (articleId: number, reqProps: ArticlesProps): 
  * 게시글 목록 조회 함수
  * https://wikied-api.vercel.app/10-3/articles?page=1&pageSize=10&orderBy=like&keyword=keyword
  */
-export const getArticles = async (page: number=1, pageSize: number=10, orderBy: string='recent', keyword: string=''): Promise<ArticlesListData> => {
+export const getArticles = async (page: number = 1, pageSize: number = 10, orderBy: string = 'recent', keyword: string = ''): Promise<ArticlesListData> => {
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&keyword=${keyword}`
   console.log('GET - URL: ', URL)
-  
+
   try {
     const res = await axios.get(URL, {
       headers: {
@@ -77,21 +76,18 @@ export const getArticles = async (page: number=1, pageSize: number=10, orderBy: 
  */
 export const getArticlesId = async (articleId: number): Promise<ArticlesDetailData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : getArticlesId() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}`
   console.log('GET - URL: ', URL)
-  
+
   try {
     const res = await axios.get(URL, {
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -114,11 +110,8 @@ export const getArticlesId = async (articleId: number): Promise<ArticlesDetailDa
  */
 export const patchArticlesId = async (articleId: number, reqProps: ArticlesProps): Promise<ArticlesDetailData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : patchArticlesId() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${articleId}`
   console.log('PATCH - URL: ', URL)
@@ -130,8 +123,8 @@ export const patchArticlesId = async (articleId: number, reqProps: ArticlesProps
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
-      }      
+        'Authorization': `Bearer ${accessToken}`,
+      }
     });
 
     if (res.status === 200) {
@@ -154,11 +147,8 @@ export const patchArticlesId = async (articleId: number, reqProps: ArticlesProps
  */
 export const deleteArticlesId = async (articleId: number): Promise<ArticlesIdData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : deleteArticlesId() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}`
   console.log('DELETE - URL: ', URL)
@@ -167,7 +157,7 @@ export const deleteArticlesId = async (articleId: number): Promise<ArticlesIdDat
     const res = await axios.delete(URL, {
       headers: {
         'accept': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     })
 
@@ -191,11 +181,8 @@ export const deleteArticlesId = async (articleId: number): Promise<ArticlesIdDat
  */
 export const postArticlesIdLike = async (articleId: number): Promise<ArticlesIdLikeData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postArticlesIdLike() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`
   console.log('POST - URL: ', URL)
@@ -206,7 +193,7 @@ export const postArticlesIdLike = async (articleId: number): Promise<ArticlesIdL
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -230,11 +217,8 @@ export const postArticlesIdLike = async (articleId: number): Promise<ArticlesIdL
  */
 export const deleteArticlesIdLike = async (articleId: number): Promise<ArticlesIdLikeData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : deleteArticlesIdLike() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`
   console.log('DELETE - URL: ', URL)
@@ -243,7 +227,7 @@ export const deleteArticlesIdLike = async (articleId: number): Promise<ArticlesI
     const res = await axios.delete(URL, {
       headers: {
         'accept': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     })
 
