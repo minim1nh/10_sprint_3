@@ -145,7 +145,7 @@ export const WikidNavbar = () => {
     <AppBar position='static' color='transparent' >
       <Toolbar sx={{ height: '60px' }}>
         <IconButton size='large'>
-          <Image onClick={()=>router.push('/landingpage')} src="/images/ic_W.svg" alt='Wikid Logo' width={48} height={48} priority />
+          <Image onClick={()=>router.push('/landingpage')} src="/images/img/img_W.svg" alt='Wikid Logo' width={48} height={48} priority />
         </IconButton>
         <Typography sx={{ flexGrow: -1, fontWeight: 800, fontSize: '24px', lineHeight: '28px', color: 'lightgray' }} width={100}>
           wikied
