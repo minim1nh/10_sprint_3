@@ -1,17 +1,15 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, SignInData, ProfilesProps, ProfilesData, ProfileListData, ProfilesCodeProps, ProfilesCodePingData, ProfilesCodePingProps } from './Wikid.types';
+import { teamId, ProfilesProps, ProfilesData, ProfileListData, ProfilesCodeProps, ProfilesCodePingData, ProfilesCodePingProps } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * '프로필생성' 요청을 보내는 함수
  */
 export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postProfiles() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles`
   console.log('POST - URL: ', URL)
@@ -24,7 +22,7 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -110,11 +108,8 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
  */
 export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProps): Promise<ProfilesData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : patchProfilesCode() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`
   console.log('PATCH - URL: ', URL)
@@ -138,7 +133,7 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }      
     });
 
@@ -194,11 +189,8 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
  */
 export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodePingProps): Promise<ProfilesCodePingData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postProfilesCodePing() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles`
   console.log('POST - URL: ', URL)
@@ -210,7 +202,7 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 

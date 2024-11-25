@@ -1,17 +1,15 @@
 import axios from 'axios';
 import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, SignInData, ImageUploadProps, ImageUploadData } from './Wikid.types';
+import { teamId, ImageUploadProps, ImageUploadData } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 이미지 업로드, 프로젝트에 저장하는 이미지들은 이 엔드포인트를 통해 업로드한 후 URL을 획득하여 사용합니다.
  */
 export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<ImageUploadData | null> => {
 
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData;
-  if (!signIn?.refreshToken) {
-    console.error(`Error : postProfiles() 'signIn.accessToken' info does not exist in localstorage.`);
-    return null;
-  }
+  const accessToken = getAccessToken();
+  if(!accessToken) return null;
 
   const URL = `https://wikied-api.vercel.app/${teamId}/images/upload`
   console.log('POST - URL: ', URL)
@@ -26,7 +24,7 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
       headers: {
         'accept': 'application/json',
         'Content-Type': ' multipart/form-data',
-        'Authorization': `Bearer ${signIn.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
