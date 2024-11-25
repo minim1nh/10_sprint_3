@@ -13,7 +13,7 @@ const Landing: React.FC = () => {
             <h3 className={styles.title2}>위키</h3>
           </div>
           <Image
-            src="/images/img_Main1.svg"
+            src="/images/img/img_Main1.svg"
             alt="Main Image"
             width={498}
             height={590}
@@ -28,7 +28,7 @@ const Landing: React.FC = () => {
             </div>
             <div className={styles.imgContain1}>
               <Image
-                src="/images/img_Main2.svg"
+                src="/images/img/img_Main2.svg"
                 alt="Main Image 2"
                 width={310}
                 height={450}
@@ -36,7 +36,7 @@ const Landing: React.FC = () => {
             </div>
           </div>
           <Image
-            src="/images/img_Main3.svg"
+            src="/images/img/img_Main3.svg"
             alt="Main Image 3"
             width={500}
             height={500}
@@ -53,7 +53,7 @@ const Landing: React.FC = () => {
           <div className={styles.photoContain}>
             <div className={styles.iconContain1}>
               <Image
-                src="/images/ic_Speaker.svg"
+                src="/images/img/img_Speaker.svg"
                 alt="ICON1"
                 width={500}
                 height={500}
@@ -61,7 +61,7 @@ const Landing: React.FC = () => {
             </div>
             <div className={styles.iconContain2}>
               <Image
-                src="/images/ic_W.svg"
+                src="/images/img/img_W.svg"
                 alt="ICON2"
                 width={500}
                 height={500}
@@ -69,7 +69,7 @@ const Landing: React.FC = () => {
             </div>
             <div className={styles.iconContain3}>
               <Image
-                src="/images/ic_Phone.svg"
+                src="/images/img/img_Phone.svg"
                 alt="ICON3"
                 width={500}
                 height={500}
@@ -93,19 +93,19 @@ const Landing: React.FC = () => {
               <h3 className={styles.title}>내용을 확인해봐요</h3>
             </div>
             <Image
-              src="/images/img_Main4.svg"
+              src="/images/img/img_Main4.svg"
               alt="Main Image 4"
               width={500}
               height={500}
             />
             <Image
-              src="/images/ic_bell.svg"
+              src="/images/img/img_bell.svg"
               alt="icon5"
               width={500}
               height={500}
             />
             <Image
-              src="/images/img_Main5.svg"
+              src="/images/img/img_Main5.svg"
               alt="Main Image 5"
               width={500}
               height={500}
