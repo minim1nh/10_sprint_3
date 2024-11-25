@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff; /* 흰색 배경 */
-  padding: 2rem; /* 여백 증가 */
-  border-radius: 10px; /* 모서리 둥글게 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 더 부드러운 그림자 */
-  width: 320px; /* Figma 디자인에서 설정된 폭 */
-  height: auto; /* 높이는 콘텐츠에 맞게 */
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  height: 671px;
 }
 
 .header {
@@ -16,23 +16,23 @@
 }
 
 .name {
-  font-size: 1.5rem; /* 이름 크기 */
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 .image {
-  width: 120px; /* 이미지 크기 설정 */
-  height: 120px;
-  border-radius: 50%; /* 원형 이미지 */
-  object-fit: cover; /* 비율 유지하며 크기 조정 */
-  margin-bottom: 1rem; /* 아래 여백 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 3px solid #3b82f6;
 }
 
 .link:hover {
-  text-decoration: underline; /* 링크 호버 시 스타일 */
+  text-decoration: underline;
 }
 
 .card {
@@ -51,23 +51,23 @@
 .infoRow {
   display: flex;
   justify-content: space-between;
-  font-size: 1rem; /* 기본 글씨 크기 */
+  font-size: 1rem;
 }
 
 .label {
   font-weight: bold;
-  color: #333333; /* 더 어두운 색상 */
+  color: #333333;
 }
 
 .value {
-  color: #555555; /* 중간 밝기의 색상 */
+  color: #555555;
 }
 
 .image {
-  width: 120px; /* Figma에 따라 이미지 크기 */
+  width: 120px;
   height: 120px;
-  border-radius: 50%; /* 원형 */
+  border-radius: 50%;
   object-fit: cover;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
