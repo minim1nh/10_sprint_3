@@ -1,10 +1,19 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-import Image from 'next/image'
-import { AppBar, Toolbar, IconButton, Typography, Button, Stack, Menu, MenuItem } from '@mui/material'
+import Image from "next/image";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+  Stack,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -14,9 +23,9 @@ import { isSignIn } from '@/hooks/Token'
 import SessionStorage from '@/api/storage/SessionStorage'
 
 export const WikidNavbar = () => {
-  const screenwidth = useScreenWidth()
-  const [openMenu, setOpenMenu] = useState<null | HTMLElement>(null)
-  const [clearStorage, setClearStorage] = useState(false)
+  const screenwidth = useScreenWidth();
+  const [openMenu, setOpenMenu] = useState<null | HTMLElement>(null);
+  const [clearStorage, setClearStorage] = useState(false);
 
   useEffect(() => {
     if (!clearStorage) {
@@ -28,13 +37,13 @@ export const WikidNavbar = () => {
   const open = Boolean(openMenu)
 
   const onMenuIconOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenMenu(event.currentTarget)
-  }
+    setOpenMenu(event.currentTarget);
+  };
   const onMenuIconClose = () => {
-    setOpenMenu(null)
-  }
+    setOpenMenu(null);
+  };
 
-  const router = useRouter()
+  const router = useRouter();
 
   //로그인 클릭 시 페이지 이동
   const onClickLogin = () => {
@@ -44,9 +53,9 @@ export const WikidNavbar = () => {
 
   //위키목록 클릭 시 페이지 이동
   const onClickWikiList = () => {
-    onMenuIconClose()
-    router.push('/wikilist')
-  }
+    onMenuIconClose();
+    router.push("/wikilist");
+  };
 
   //자유게시판 클릭 시 페이지 이동
   const onClickBoards = () => {

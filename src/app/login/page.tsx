@@ -1,11 +1,21 @@
-'use client'
-import { redirect } from 'next/navigation'
+import style from "@/styles/login/style.module.scss";
 
-export default function LoginPage() {
+export default function Login() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1>로그인 페이지 입니다.</h1>
-      <button onClick={() => redirect('/testswagger/Auth')}>로그인 테스트</button>
+    <div className={style.containerLogin}>
+      <div className={style.containerHeader}>로그인</div>
+        <form className={style.containerForm}>
+          <label className={style.containerLabel} htmlFor="email">
+            이메일<br />
+            <input className={style.containerInput} name="email" type="text" placeholder="이메일을 입력해 주세요" />
+          </label><br />
+          <label className={style.containerLabel} htmlFor="pwd">
+            비밀번호<br />
+            <input className={style.containerInput} name="pwd" type="password" placeholder="비밀번호를 입력해 주세요" />
+          </label><br />
+          <input className={style.btnLogin} type="button" value="로그인" />
+        </form><br /><br />
+        <div className={style.containerSignup}><a href="/signup">회원가입</a></div>
     </div>
   );
 }
