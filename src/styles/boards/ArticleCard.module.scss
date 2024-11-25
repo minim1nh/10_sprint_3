@@ -1,0 +1,45 @@
+@use "../variables" as *;
+
+.articleContain {
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  width: 250px;
+  height: 220px;
+  overflow: hidden;
+}
+
+.innerContain {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.innerInfo {
+  margin-left: 19px;
+}
+.contentTitle {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  white-space: nowrap;
+  text-decoration: none;
+  color: $gray;
+}
+.nameAupdate {
+  display: flex;
+  gap: 8px;
+}
+.userInfo {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  color: $gray-400;
+  margin: 0;
+  padding: 0;
+  gap: 45px;
+}
+
+.likeCount {
+  font-size: 16px;
+  font-weight: bold;
+}
