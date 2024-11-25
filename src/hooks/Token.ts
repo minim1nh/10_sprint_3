@@ -1,15 +1,15 @@
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { SignInData, SignUpData } from '@/api/swagger/Wikid.types';
 
 // 회원가입 정보 얻기
 export const isSignUp = () => {
-  const signUp = LocalStorage.getItem(`SignUp`) as SignUpData || null
+  const signUp = SessionStorage.getItem(`postSignUp`) as SignUpData || null
   return signUp;
 };
 
 // 로그인 정보 얻기
 export const isSignIn = () => {
-  const signIn = LocalStorage.getItem(`SignIn`) as SignInData | null
+  const signIn = SessionStorage.getItem(`postSignIn`) as SignInData | null
   return signIn;
 };
 

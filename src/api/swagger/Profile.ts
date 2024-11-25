@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { teamId, ProfilesProps, ProfilesData, ProfileListData, ProfilesCodeProps, ProfilesCodePingData, ProfilesCodePingProps } from './Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
@@ -28,13 +28,13 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`postProfiles`, resData);
+      SessionStorage.setItem(`postProfiles`, resData);
       return resData;
     } else {
       throw new Error('Failed to Profiles postProfiles()');
     }
   } catch (error) {
-    console.error('Error to Profiles postProfiles():', error);
+    // console.error('Error to Profiles postProfiles():', error);
     throw error;
   }
 };
@@ -58,13 +58,13 @@ export const getProfiles = async (page: number, pageSize: number, name: string):
 
     if (res.status === 200) {
       const resData = res.data as ProfileListData;
-      LocalStorage.setItem(`getProfiles`, resData);
+      SessionStorage.setItem(`getProfiles`, resData);
       return resData;
     } else {
       throw new Error('Failed to getMe()');
     }
   } catch (error) {
-    console.error('Error to getMe():', error);
+    // console.error('Error to getMe():', error);
     throw error;
   }
 };
@@ -89,13 +89,13 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`getProfilesCode`, resData);
+      SessionStorage.setItem(`getProfilesCode`, resData);
       return resData;
     } else {
       throw new Error('Failed to getProfilesCode()');
     }
   } catch (error) {
-    console.error('Error to getProfilesCode():', error);
+    // console.error('Error to getProfilesCode():', error);
     throw error;
   }
 };
@@ -139,13 +139,13 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`patchProfilesCode`, resData);
+      SessionStorage.setItem(`patchProfilesCode`, resData);
       return resData;
     } else {
       throw new Error('Failed to patchProfilesCode()');
     }
   } catch (error) {
-    console.error('Error to patchProfilesCode():', error);
+    // console.error('Error to patchProfilesCode():', error);
     throw error;
   }
 };
@@ -170,13 +170,13 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
 
     if (res.status === 200) {
       const resData = res.data as ProfilesCodePingData;
-      LocalStorage.setItem(`getProfilesCodePing`, resData);
+      SessionStorage.setItem(`getProfilesCodePing`, resData);
       return resData;
     } else {
       throw new Error('Failed to getProfilesCodePing()');
     }
   } catch (error) {
-    console.error('Error to getProfilesCodePing():', error);
+    // console.error('Error to getProfilesCodePing():', error);
     throw error;
   }
 };
@@ -208,13 +208,13 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
 
     if (res.status === 200) {
       const resData = res.data as ProfilesCodePingData;
-      LocalStorage.setItem(`postProfilesCodePing`, resData);
+      SessionStorage.setItem(`postProfilesCodePing`, resData);
       return resData;
     } else {
       throw new Error('Failed to Profiles postProfilesCodePing()');
     }
   } catch (error) {
-    console.error('Error to Profiles postProfilesCodePing():', error);
+    // console.error('Error to Profiles postProfilesCodePing():', error);
     throw error;
   }
 };
