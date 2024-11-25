@@ -87,7 +87,7 @@ export const WikidNavbar = () => {
         <IconButton size="large">
           <Image
             onClick={() => router.push("/landingpage")}
-            src="/images/img/img_W.svg"
+            src="/images/ic_W.svg"
             alt="Wikid Logo"
             width={48}
             height={48}
