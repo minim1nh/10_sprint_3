@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { teamId, UserData, PasswordProps } from './Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
@@ -24,13 +24,13 @@ export const getUsersMe = async (): Promise<UserData | null> => {
 
     if (res.status === 200) {
       const resData = res.data as UserData;
-      LocalStorage.setItem(`getUsersMe`, resData);
+      SessionStorage.setItem(`getUsersMe`, resData);
       return resData;
     } else {
       throw new Error('Failed to getUsersMe()');
     }
   } catch (error) {
-    console.error('Error to getUsersMe():', error);
+    // console.error('Error to getUsersMe():', error);
     throw error;
   }
 };
@@ -58,13 +58,13 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
 
     if (res.status === 200) {
       const resData = res.data as UserData;
-      LocalStorage.setItem(`patchUsersMePassword`, resData);
+      SessionStorage.setItem(`patchUsersMePassword`, resData);
       return resData;
     } else {
       throw new Error('Failed to patchUsersMePassword()');
     }
   } catch (error) {
-    console.error('Error to patchUsersMePassword():', error);
+    // console.error('Error to patchUsersMePassword():', error);
     throw error;
   }
 };

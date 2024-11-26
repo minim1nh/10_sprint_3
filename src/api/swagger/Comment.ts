@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { teamId, CommentsProps, CommentsData, CommentsListData, CommentsIdData } from './Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
@@ -28,13 +28,13 @@ export const postComments = async (articleId: number, reqProps: CommentsProps): 
 
     if (res.status === 200) {
       const resData = res.data as CommentsData;
-      LocalStorage.setItem(`postComments`, resData);
+      SessionStorage.setItem(`postComments`, resData);
       return resData;
     } else {
       throw new Error('Failed to postComments()');
     }
   } catch (error) {
-    console.error('Error to postComments():', error);
+    // console.error('Error to postComments():', error);
     throw error;
   }
 };
@@ -59,13 +59,13 @@ export const getComments = async (articleId: number, limit: number, cursor?: num
 
     if (res.status === 200) {
       const resData = res.data as CommentsListData;
-      LocalStorage.setItem(`getComments`, resData);
+      SessionStorage.setItem(`getComments`, resData);
       return resData;
     } else {
       throw new Error('Failed to getComments()');
     }
   } catch (error) {
-    console.error('Error to getComments():', error);
+    // console.error('Error to getComments():', error);
     throw error;
   }
 };
@@ -95,13 +95,13 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
 
     if (res.status === 200) {
       const resData = res.data as CommentsData;
-      LocalStorage.setItem(`patchCommentsId`, resData);
+      SessionStorage.setItem(`patchCommentsId`, resData);
       return resData;
     } else {
       throw new Error('Failed to patchCommentsId()');
     }
   } catch (error) {
-    console.error('Error to patchCommentsId():', error);
+    // console.error('Error to patchCommentsId():', error);
     throw error;
   }
 };
@@ -129,13 +129,13 @@ export const deleteCommentsId = async (commentId: number): Promise<CommentsIdDat
 
     if (res.status === 200) {
       const resData = res.data as CommentsIdData;
-      LocalStorage.setItem(`deleteCommentsId`, resData);
+      SessionStorage.setItem(`deleteCommentsId`, resData);
       return resData;
     } else {
       throw new Error('Failed to deleteCommentsId()');
     }
   } catch (error) {
-    console.error('Error to deleteCommentsId():', error)
+    // console.error('Error to deleteCommentsId():', error)
     throw error
   }
 }

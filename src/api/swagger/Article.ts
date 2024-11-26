@@ -1,15 +1,7 @@
-import axios from "axios";
-import LocalStorage from "@/api/storage/LocalStorage";
-import {
-  teamId,
-  ArticlesProps,
-  ArticlesData,
-  ArticlesListData,
-  ArticlesDetailData,
-  ArticlesIdData,
-  ArticlesIdLikeData,
-} from "./Wikid.types";
-import { getAccessToken } from "@/hooks/Token";
+import axios from 'axios';
+import SessionStorage from '@/api/storage/SessionStorage';
+import { teamId, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from './Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 게시글 작성
@@ -42,13 +34,13 @@ export const postArticles = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesData;
-      LocalStorage.setItem(`postArticles`, resData);
+      SessionStorage.setItem(`postArticles`, resData);
       return resData;
     } else {
       throw new Error("Failed to postArticles()");
     }
   } catch (error) {
-    console.error("Error to postArticles():", error);
+    // console.error('Error to postArticles():', error);
     throw error;
   }
 };
@@ -76,13 +68,13 @@ export const getArticles = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesListData;
-      LocalStorage.setItem(`getArticles`, resData);
+      SessionStorage.setItem(`getArticles`, resData);
       return resData;
     } else {
       throw new Error("Failed to getArticles()");
     }
   } catch (error) {
-    console.error("Error to getArticles():", error);
+    // console.error('Error to getArticles():', error);
     throw error;
   }
 };
@@ -111,13 +103,13 @@ export const getArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesDetailData;
-      LocalStorage.setItem(`getArticlesId`, resData);
+      SessionStorage.setItem(`getArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to getArticlesId()");
     }
   } catch (error) {
-    console.error("Error to getArticlesId():", error);
+    // console.error('Error to getArticlesId():', error);
     throw error;
   }
 };
@@ -153,13 +145,13 @@ export const patchArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesDetailData;
-      LocalStorage.setItem(`patchArticlesId`, resData);
+      SessionStorage.setItem(`patchArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to patchArticlesId()");
     }
   } catch (error) {
-    console.error("Error to patchArticlesId():", error);
+    // console.error('Error to patchArticlesId():', error);
     throw error;
   }
 };
@@ -187,14 +179,14 @@ export const deleteArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdData;
-      LocalStorage.setItem(`deleteArticlesId`, resData);
+      SessionStorage.setItem(`deleteArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to deleteArticlesId()");
     }
   } catch (error) {
-    console.error("Error to deleteArticlesId():", error);
-    throw error;
+    // console.error('Error to deleteArticlesId():', error)
+    throw error
   }
 };
 
@@ -226,13 +218,13 @@ export const postArticlesIdLike = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdLikeData;
-      LocalStorage.setItem(`postArticlesIdLike`, resData);
+      SessionStorage.setItem(`postArticlesIdLike`, resData);
       return resData;
     } else {
       throw new Error("Failed to postArticlesIdLike()");
     }
   } catch (error) {
-    console.error("Error to postArticlesIdLike():", error);
+    // console.error('Error to postArticlesIdLike():', error);
     throw error;
   }
 };
@@ -260,13 +252,13 @@ export const deleteArticlesIdLike = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdLikeData;
-      LocalStorage.setItem(`deleteArticlesIdLike`, resData);
+      SessionStorage.setItem(`deleteArticlesIdLike`, resData);
       return resData;
     } else {
       throw new Error("Failed to deleteArticlesIdLike()");
     }
   } catch (error) {
-    console.error("Error to deleteArticlesIdLike():", error);
-    throw error;
+    // console.error('Error to deleteArticlesIdLike():', error)
+    throw error
   }
 };
