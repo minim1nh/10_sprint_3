@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { teamId, ImageUploadProps, ImageUploadData } from './Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
@@ -30,13 +30,13 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
 
     if (res.status === 200) {
       const resData = res.data as ImageUploadData;
-      LocalStorage.setItem(`postImagesUpload`, resData);
+      SessionStorage.setItem(`postImagesUpload`, resData);
       return resData;
     } else {
       throw new Error('Failed to postImagesUpload()');
     }
   } catch (error) {
-    console.error('Error to postImagesUpload():', error);
+    // console.error('Error to postImagesUpload():', error);
     throw error;
   }
 };

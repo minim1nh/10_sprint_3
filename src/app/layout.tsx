@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { WikidNavbar } from '../components/common/WikidNavbar';
 import "@/styles/globals.scss";
 

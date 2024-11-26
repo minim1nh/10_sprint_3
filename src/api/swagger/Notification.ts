@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
+import SessionStorage from '@/api/storage/SessionStorage';
 import { teamId, NotificationsData, NotificationsIdData } from './Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
@@ -7,7 +7,7 @@ import { getAccessToken } from '@/hooks/Token'
  * 알림 목록 조회 함수
  * https://wikied-api.vercel.app/10-3/notifications?page=1&pageSize=10
  */
-export const getNotifications = async (page: number, pageSize: number): Promise<NotificationsData | null> => {
+export const getNotifications = async (pageSize: number, page: number = 1): Promise<NotificationsData | null> => {
 
   const accessToken = getAccessToken();
   if(!accessToken) return null;
@@ -26,13 +26,13 @@ export const getNotifications = async (page: number, pageSize: number): Promise<
 
     if (res.status === 200) {
       const resData = res.data as NotificationsData;
-      LocalStorage.setItem(`getNotifications`, resData);
+      SessionStorage.setItem(`getNotifications`, resData);
       return resData;
     } else {
       throw new Error('Failed to getNotifications()');
     }
   } catch (error) {
-    console.error('Error to getNotifications():', error);
+    // console.error('Error to getNotifications():', error);
     throw error;
   }
 };
@@ -58,13 +58,13 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
 
     if (res.status === 200) {
       const resData = res.data as NotificationsIdData;
-      LocalStorage.setItem(`deleteNotificationsId`, resData);
+      SessionStorage.setItem(`deleteNotificationsId`, resData);
       return resData;
     } else {
       throw new Error('Failed to deleteNotificationsId()');
     }
   } catch (error) {
-    console.error('Error to deleteNotificationsId():', error)
+    // console.error('Error to deleteNotificationsId():', error)
     throw error
   }
 }

@@ -1,5 +1,7 @@
-import { Snackbar, Button, Alert, AlertProps } from '@mui/material'
-import { useState, forwardRef } from 'react'
+'use client'
+
+import { Snackbar, Alert, AlertProps } from '@mui/material'
+import { useState, forwardRef, useEffect } from 'react'
 
 const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
   function SnackbarAlert(props, ref) {
@@ -7,8 +9,10 @@ const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
   }
 )
 
-export const WikidSnackbar = () => {
+export const WikidSnackbar = (props: {severity: 'error' | 'warning' | 'info' | 'success', message: string, autoHideDuration: number}) => {
+  const {severity, message, autoHideDuration} = props
   const [open, setOpen] = useState(false)
+  
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -18,19 +22,16 @@ export const WikidSnackbar = () => {
     }
     setOpen(false)
   }
+
+  useEffect(() => {
+    setOpen(true)
+  }, [severity, message, autoHideDuration])
+
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Submit</Button>
-      <Snackbar
-        open={open}
-        autoHideDuration={4000}
-        onClose={handleClose}
-        message='Form submitted successfully!'
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      />
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <SnackbarAlert onClose={handleClose} severity='success'>
-          Form submitted successfully!
+      <Snackbar open={open} autoHideDuration={autoHideDuration} onClose={handleClose}>
+        <SnackbarAlert onClose={handleClose} severity={severity}>
+          {message}
         </SnackbarAlert>
       </Snackbar>
     </>
