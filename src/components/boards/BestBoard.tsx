@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import ArticleCard from "./ArticleCard";
+import ArticleCard from "./best/ArticleCard";
+import AddButton from "./best/AddButton";
 import { getArticles } from "@/api/swagger/Article";
 import { ArticlesData } from "@/api/swagger/Wikid.types";
-import styles from "@/styles/boards/BestBoard.module.scss";
+import styles from "@/styles/boards/best/BestBoard.module.scss";
 
 const BestBoards = () => {
   const [articles, setArticles] = useState<ArticlesData[]>([]);
@@ -27,7 +28,10 @@ const BestBoards = () => {
 
   return (
     <section className={styles.wrapper}>
-      <h2>베스트 게시글</h2>
+      <div className={styles.topWrapper}>
+        <h2 className={styles.mainTitle}>베스트 게시글</h2>
+        <AddButton label="게시물 등록하기" />
+      </div>
       <div className={styles.container}>
         {articles.map((article: ArticlesData) => (
           <Link key={article.id} href={`/boards/${article.id}`}>

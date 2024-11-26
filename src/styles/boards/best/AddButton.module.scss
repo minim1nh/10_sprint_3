@@ -1,0 +1,13 @@
+@use "../../variables" as *;
+.addBoardButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  font-size: 14px;
+  color: $white;
+  background-color: $green-200;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
