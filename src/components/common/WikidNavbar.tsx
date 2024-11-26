@@ -29,7 +29,7 @@ export const WikidNavbar = () => {
 
   useEffect(() => {
     if (!clearStorage) {
-      SessionStorage.clear()
+      // SessionStorage.clear()
       setClearStorage(true)
     }
   }, [clearStorage])

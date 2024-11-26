@@ -1,6 +1,6 @@
 import axios from 'axios';
 import SessionStorage from '@/api/storage/SessionStorage';
-import { teamId, CommentsProps, CommentsData, CommentsListData, CommentsIdData } from './Wikid.types';
+import { teamId, CommentsProps, CommentsData, CommentsListData, CommentsIdData } from '@/api/swagger/Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
 /**
@@ -10,19 +10,21 @@ import { getAccessToken } from '@/hooks/Token'
 export const postComments = async (articleId: number, reqProps: CommentsProps): Promise<CommentsData | null> => {
 
   const accessToken = getAccessToken();
-  if(!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/comments`
-  console.log('POST - URL: ', URL)
+  console.log('POST - postComments(): ', URL)
 
   try {
-    const res = await axios.post(URL, {
-      content: reqProps.content,
-    }, {
-      headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+    const res = await axios.post(
+      URL, {
+        content: reqProps.content,
+      },
+      {
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
       }
     });
 
@@ -34,7 +36,7 @@ export const postComments = async (articleId: number, reqProps: CommentsProps): 
       throw new Error('Failed to postComments()');
     }
   } catch (error) {
-    // console.error('Error to postComments():', error);
+    //console.error('Error to postComments():', error);
     throw error;
   }
 };
@@ -65,7 +67,7 @@ export const getComments = async (articleId: number, limit: number, cursor?: num
       throw new Error('Failed to getComments()');
     }
   } catch (error) {
-    // console.error('Error to getComments():', error);
+    //console.error('Error to getComments():', error);
     throw error;
   }
 };
@@ -77,7 +79,7 @@ export const getComments = async (articleId: number, limit: number, cursor?: num
 export const patchCommentsId = async (commentId: number, reqProps: CommentsProps): Promise<CommentsData | null> => {
 
   const accessToken = getAccessToken();
-  if(!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${commentId}`
   console.log('PATCH - URL: ', URL)
@@ -101,7 +103,7 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
       throw new Error('Failed to patchCommentsId()');
     }
   } catch (error) {
-    // console.error('Error to patchCommentsId():', error);
+    //console.error('Error to patchCommentsId():', error);
     throw error;
   }
 };
@@ -114,7 +116,7 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
 export const deleteCommentsId = async (commentId: number): Promise<CommentsIdData | null> => {
 
   const accessToken = getAccessToken();
-  if(!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${commentId}`
   console.log('DELETE - URL: ', URL)
@@ -135,7 +137,7 @@ export const deleteCommentsId = async (commentId: number): Promise<CommentsIdDat
       throw new Error('Failed to deleteCommentsId()');
     }
   } catch (error) {
-    // console.error('Error to deleteCommentsId():', error)
+    //console.error('Error to deleteCommentsId():', error)
     throw error
   }
 }

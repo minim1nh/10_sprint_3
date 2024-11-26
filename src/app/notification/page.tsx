@@ -19,26 +19,27 @@ export default function NotificationPage() {
     fetchNotifications();
   }, []);
 
+  const moknotifies: NotificationsData = {
+    totalCount: 2,
+    list: [
+      {
+        id: 1,
+        content: '테스트 알림 내용1',
+        createdAt: '2024-11-24 10:00',
+      },
+      {
+        id: 2,
+        content: '테스트 알림 내용2',
+        createdAt: '2024-11-25 10:00',
+      },
+    ]
+  }
+
   return (
+
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    <NotificationModal notifies={{
-      totalCount: 2,
-      list: [
-        {
-          id: 1,
-          content: '테스트 알림 내용1',
-          createdAt: '2024-11-24 10:00',
-        },
-        {
-          id: 2,
-          content: '테스트 알림 내용2',
-          createdAt: '2024-11-25 10:00',
-        },
-      ]
-    }} />
+      notifies && <NotificationModal notifies={notifies} />
+      <NotificationModal notifies={moknotifies} />
     </div>
-    // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    //   <NotificationModal notifies={notifies} />
-    // </div>
   );
 }
