@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "@/styles/boards/LikeCount.module.scss";
+import styles from "@/styles/boards/best/LikeCount.module.scss";
 
 interface LikeCountProps {
   likeCount: number;
