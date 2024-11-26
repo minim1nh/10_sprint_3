@@ -14,9 +14,12 @@ import {
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { NotificationList, NotificationsData } from '@/api/swagger/Wikid.types'
+import { NotificationList, NotificationsData, ImageUploadProps } from '@/api/swagger/Wikid.types'
 import { useEffect, useState } from 'react'
+import { postImagesUpload } from '@/api/swagger/Image';
+
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {notifies: NotificationsData | null}) => {
@@ -122,20 +125,9 @@ export const CertificationModal = () => {
   )
 }
 
-//TODO: 접속 끊김 모달 다이얼로그 (작업중)
+//접속 끊김 모달 다이얼로그
 export const DisconnectedModal = () => {
   const [open, setOpen] = useState(false)
-  
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    console.log('handleClose', reason)
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpen(false)
-  }
   
   useEffect(() => {
     setOpen(true)
@@ -217,13 +209,13 @@ export const ExitNotSavedModal = () => {
                   </DialogContentText>
               </DialogContent>
               <DialogActions>
-                  <Button
-                      onClick={() => setOpen(false)}
-                      variant='contained'
-                      color='error'
-                      >
-                          페이지 나가기
-                  </Button>
+                <Button
+                    onClick={() => setOpen(false)}
+                    variant='contained'
+                    color='error'
+                    >
+                        페이지 나가기
+                </Button>
               </DialogActions>
           </Dialog>
       </>
@@ -232,27 +224,110 @@ export const ExitNotSavedModal = () => {
 
 //TODO: 이미지 삽입 모달 다이얼로그 (작업중)
 export const ImageInsertModal = () => {
+
+  const [images, setImages] = useState<string[]>([]);
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    setOpen(true)
+  }, [])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {    
+    e.preventDefault();
+    console.log("event", e);
+    if (e.target.files) {
+      const ProductImg = [...e.target.files];
+      const images = ProductImg.map((image) => URL.createObjectURL(image));
+      setImages(images);
+    }
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    const props: ImageUploadProps = {
+      path: images[0]
+    }
+    console.log('handleClose', reason)
+    if (reason === 'clickaway') {
+      return
+    }
+    if(reason === 'upload') { // 이미지 전송
+      console.log('image upload path: ', props)
+      try {
+        postImagesUpload(props)
+      } catch (error) {
+        console.log('error', error)
+      }
+    }
+    setOpen(false)
+  }
+
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Open dialog</Button>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby='dialog-title'
         aria-describedby='dialog-description'>
-        <DialogTitle id='dialog-title'>Submit the test?</DialogTitle>
+        <DialogTitle id="dialog-title">
+          <Box display="flex" justifyContent={'end'}>
+              <IconButton onClick={() => setOpen(false)}>
+                  <CloseIcon />
+              </IconButton>
+          </Box>
+        </DialogTitle>       
         <DialogContent>
           <DialogContentText id='dialog-description' component={'span'}>
-            Are you sure you want to submit the test? You will not be able to
-            edit it after submitting.
+            <form>
+              <p>
+                <label htmlFor="file">Upload images</label>
+                <input
+                  type="file"
+                  id="file"
+                  onChange={handleImageChange}
+                  accept="image/png, image/jpg, image/jpeg"
+                  // multiple
+                />
+              </p>
+            </form>
+          </DialogContentText>
+          <DialogContentText id='dialog-description' component={'span'}>
+            <Box>
+              <div className="">
+                {images.length > 0 && (
+                  <div>
+                    {images.map((image, index) => (
+                      <p key={index}>
+                        <img src={image} alt="" />
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {images.length == 0 && (
+                    <IconButton disabled={true} sx={{
+                      bgcolor: 'background.paper',
+                      boxShadow: 1,
+                      borderRadius: 2,
+                      p: 1,
+                      minWidth: 354,
+                      minHeight: 206,
+                    }}>
+                      <CameraAltIcon />
+                    </IconButton>
+                )}
+              </div>
+            </Box>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => setOpen(false)} autoFocus>
-            Submit
-          </Button>
+        <Button
+            onClick={(e) => handleClose(e, 'upload')}
+            variant='contained'
+            color='secondary'
+            >
+                삽입하기
+        </Button>
         </DialogActions>
       </Dialog>
     </>

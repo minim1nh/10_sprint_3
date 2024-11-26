@@ -56,13 +56,13 @@ const UserTest = () => {
     setIsExitNotSavedModalOpen(true)
     setIsImageInsertModalOpen(false)
   }
-  // const handleImageInsertModal = () => {
-  //   setIsNotificationModalOpen(false)
-  //   setIsCertificationModalOpen(false)
-  //   setIsDisconnectedModalOpen(false)
-  //   setIsExitNotSavedModalOpen(false)
-  //   setIsImageInsertModalOpen(true)
-  // }
+  const handleImageInsertModal = () => {
+    setIsNotificationModalOpen(false)
+    setIsCertificationModalOpen(false)
+    setIsDisconnectedModalOpen(false)
+    setIsExitNotSavedModalOpen(false)
+    setIsImageInsertModalOpen(true)
+  }
 
   return (
     <>
@@ -71,7 +71,7 @@ const UserTest = () => {
         {/* <Button variant='outlined' onClick={() => handleCertificationModal()}>위키참여인증 모달</Button> */}
         <Button variant='outlined' onClick={() => handleDisconnectedModal()}>접속끊김 모달</Button>
         <Button variant='outlined' onClick={() => handleExitNotSavedModal()}>저장하지않고 나가기 모달</Button>
-        {/* <Button variant='outlined' onClick={() => handleImageInsertModal()}>이미지 삽입 모달</Button> */}
+        <Button variant='outlined' onClick={() => handleImageInsertModal()}>이미지 삽입 모달</Button>
       </Box>
       {isNotificationModalOpen && <NotificationModal notifies={notifies} />}
       {isCertificationModalOpen && <CertificationModal />}
