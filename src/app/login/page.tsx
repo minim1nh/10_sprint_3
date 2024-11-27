@@ -2,6 +2,9 @@
 
 import style from "@/styles/login/style.module.scss";
 import { useForm } from "react-hook-form";
+import { useRef, useState } from "react";
+import { postSignIn } from '@/api/swagger/Auth';
+import { SignInProps, SignInData } from '@/api/swagger/Wikid.types';
 
 interface FormTypes {
   email: string;
@@ -9,7 +12,28 @@ interface FormTypes {
 }
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, } = useForm<FormTypes>({ mode: "onBlur"});
-  const onValid = (data: FormTypes) => console.log(data);
+
+  const [success, setSuccess] = useState(false);
+
+  const [signIn, setSignIn] = useState<SignInData | null>(null);
+
+  const onValid = async (data: FormTypes) => {
+    const reqData = {
+      email: data.email,
+      password: data.pwd,
+    };
+
+    try {
+      const resData = await postSignIn(reqData);
+      setSignIn(resData)
+      console.log(JSON.stringify(resData));
+      setSuccess(true);
+    } catch (e) {
+      console.log(e);
+      alert('이메일 또는 비밀번호가 일치하지 않습니다.');
+      setSuccess(false);
+    } 
+  }
 
   return (
     <div className={style.containerLogin}>
