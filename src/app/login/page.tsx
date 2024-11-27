@@ -17,6 +17,7 @@ export default function Login() {
     try {
       const resData = await postSignIn(reqData);
       console.log(JSON.stringify(resData));
+      window.location.reload();
     } catch (e) {
       console.log(e);
       alert('이메일 또는 비밀번호가 일치하지 않습니다.');
