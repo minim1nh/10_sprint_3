@@ -2,25 +2,21 @@
 
 import style from "@/styles/login/style.module.scss";
 import { useForm } from "react-hook-form";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { postSignIn } from '@/api/swagger/Auth';
 import { SignInProps, SignInData } from '@/api/swagger/Wikid.types';
 
-interface FormTypes {
-  email: string;
-  pwd: string;
-}
 export default function Login() {
-  const { register, handleSubmit, formState: { errors }, } = useForm<FormTypes>({ mode: "onBlur"});
+  const { register, handleSubmit, formState: { errors }, } = useForm<SignInProps>({ mode: "onBlur"});
 
   const [success, setSuccess] = useState(false);
 
   const [signIn, setSignIn] = useState<SignInData | null>(null);
 
-  const onValid = async (data: FormTypes) => {
+  const onValid = async (data: SignInProps) => {
     const reqData = {
       email: data.email,
-      password: data.pwd,
+      password: data.password,
     };
 
     try {
@@ -50,16 +46,16 @@ export default function Login() {
              id="email" name="email" type="text" placeholder="이메일을 입력해 주세요" />
              { errors.email && <small className={style.tagAlert} role="alert">{errors.email.message}</small>}
           </label><br />
-          <label className={style.containerLabel} htmlFor="pwd">
+          <label className={style.containerLabel} htmlFor="password">
             비밀번호<br />
-            <input className={`${style.containerInput} ${errors.pwd ? style.errorInput : ""}`} 
-            {...register("pwd", {required: "8자 이상 입력해 주세요.", 
+            <input className={`${style.containerInput} ${errors.password ? style.errorInput : ""}`} 
+            {...register("password", {required: "8자 이상 입력해 주세요.", 
             minLength: {
               value: 8,
               message: "8자 이상 입력해 주세요.",
             },})}
-            id="pwd" name="pwd" type="password" placeholder="비밀번호를 입력해 주세요" />
-            { errors.pwd && <small className={style.tagAlert} role="alert">{errors.pwd.message}</small> }
+            id="password" name="password" type="password" placeholder="비밀번호를 입력해 주세요" />
+            { errors.password && <small className={style.tagAlert} role="alert">{errors.password.message}</small> }
           </label><br />
           <input className={style.btnLogin} type="submit" value="로그인" />
         </form><br /><br />
