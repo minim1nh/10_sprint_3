@@ -24,6 +24,8 @@ export default function Login() {
       setSignIn(resData)
       console.log(JSON.stringify(resData));
       setSuccess(true);
+      //로그인 성공 시 화면 새로고침 추가 by 김주동
+      window.location.reload();
     } catch (e) {
       console.log(e);
       alert('이메일 또는 비밀번호가 일치하지 않습니다.');

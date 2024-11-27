@@ -19,12 +19,13 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { NotificationList, NotificationsData, ImageUploadProps } from '@/api/swagger/Wikid.types'
 import { useEffect, useState } from 'react'
 import { postImagesUpload } from '@/api/swagger/Image';
-
+import { useRouter } from "next/navigation";
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {notifies: NotificationsData | null}) => {
   const [notifies, setNotifies] = useState<NotificationsData | null>(props.notifies)
   const [open, setOpen] = useState(false)
+  const router = useRouter();
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -41,6 +42,7 @@ export const NotificationModal = (props: {notifies: NotificationsData | null}) =
       return
     }
     setOpen(false)
+    router.back()
   }
 
   useEffect(() => {
