@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/wililist/WikiList.module.scss";
 import { getProfiles } from "@/api/swagger/Profile";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   id: number;
@@ -24,6 +25,7 @@ export default function WikiListPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [searchName, setSearchName] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
 
   // 검색어 상태 디바운싱
   useEffect(() => {
@@ -72,11 +74,9 @@ export default function WikiListPage() {
     fetchProfiles();
   }, [page, searchName]);
 
-  // 페이지 변경
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setPage(newPage);
-    }
+  // 특정 위키 페이지로 이동
+  const handleCardClick = (profileCode: string) => {
+    router.push(`/wiki?code=${profileCode}`);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -105,7 +105,11 @@ export default function WikiListPage() {
       {/* 검색 결과 */}
       <ul className={styles.list}>
         {profiles.map((profile) => (
-          <li key={profile.id} className={styles.card}>
+          <li
+            key={profile.id}
+            className={styles.card}
+            onClick={() => handleCardClick(profile.code)}
+          >
             <div className={styles.cardContent}>
               <img
                 src={profile.image}
@@ -118,15 +122,6 @@ export default function WikiListPage() {
                 <p>직업: {profile.job}</p>
                 <p>국적: {profile.nationality}</p>
               </div>
-              {/* 링크 버튼 */}
-              <a
-                href={`https://wiki/${profile.code}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.profileLink}
-              >
-                위키 페이지
-              </a>
             </div>
           </li>
         ))}
@@ -136,7 +131,7 @@ export default function WikiListPage() {
       <div className={styles.pagination}>
         <button
           disabled={page === 1}
-          onClick={() => handlePageChange(page - 1)}
+          onClick={() => setPage(page - 1)}
           className={styles.pageButton}
         >
           &lt;
@@ -144,7 +139,7 @@ export default function WikiListPage() {
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
           <button
             key={pageNum}
-            onClick={() => handlePageChange(pageNum)}
+            onClick={() => setPage(pageNum)}
             className={`${styles.pageButton} ${
               pageNum === page ? styles.activePage : ""
             }`}
@@ -154,7 +149,7 @@ export default function WikiListPage() {
         ))}
         <button
           disabled={page === totalPages}
-          onClick={() => handlePageChange(page + 1)}
+          onClick={() => setPage(page + 1)}
           className={styles.pageButton}
         >
           &gt;

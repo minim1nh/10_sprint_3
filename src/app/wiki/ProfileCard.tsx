@@ -15,18 +15,21 @@ interface Profile {
   sns: string;
 }
 
-export default function ProfileCard() {
+interface ProfileCardProps {
+  code: string;
+}
+
+export default function ProfileCard({ code }: ProfileCardProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const teamId = "10-3";
-  const profileCode = "896ec7ff-2c6f-43be-999f-aa17d546a757";
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${profileCode}`;
+        const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
         const res = await axios.get(URL, {
           headers: {
             accept: "application/json",
@@ -48,14 +51,14 @@ export default function ProfileCard() {
         } else {
           setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
         }
-        console.error("Error to fetchProfile:", err);
         setProfile(null);
       } finally {
         setLoading(false);
       }
     }
-    fetchProfile();
-  }, [teamId, profileCode]);
+
+    if (code) fetchProfile();
+  }, [code]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -64,42 +67,40 @@ export default function ProfileCard() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <img src={profile.image} className={styles.image} alt="Profile Image" />
+        <img src={profile.image} className={styles.image} alt="Profile" />
       </div>
       <div className={styles.card}>
-        <div className={styles.info}>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>거주 도시</span>
-            <span className={styles.value}>{profile.city}</span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>MBTI</span>
-            <span className={styles.value}>{profile.mbti}</span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>직업</span>
-            <span className={styles.value}>{profile.job}</span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>SNS 계정</span>
-            <span className={styles.value}>
-              <a href={profile.sns} target="_blank" rel="noopener noreferrer">
-                {profile.sns}
-              </a>
-            </span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>생일</span>
-            <span className={styles.value}>{profile.birthday}</span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>혈액형</span>
-            <span className={styles.value}>{profile.bloodType}</span>
-          </div>
-          <div className={styles.infoRow}>
-            <span className={styles.label}>국적</span>
-            <span className={styles.value}>{profile.nationality}</span>
-          </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>거주 도시:</span>
+          <span className={styles.value}>{profile.city}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>MBTI:</span>
+          <span className={styles.value}>{profile.mbti}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>직업:</span>
+          <span className={styles.value}>{profile.job}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>SNS 계정:</span>
+          <span className={styles.value}>
+            <a href={profile.sns} target="_blank" rel="noopener noreferrer">
+              {profile.sns}
+            </a>
+          </span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>생일:</span>
+          <span className={styles.value}>{profile.birthday}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>혈액형:</span>
+          <span className={styles.value}>{profile.bloodType}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <span className={styles.label}>국적:</span>
+          <span className={styles.value}>{profile.nationality}</span>
         </div>
       </div>
     </div>

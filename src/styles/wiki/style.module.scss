@@ -1,26 +1,64 @@
 .container {
-  padding: 2rem;
-  max-width: 800px;
-  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 80px;
+}
+
+.profileContent {
+  flex: 3;
+  padding-right: 80px;
+}
+
+.profileCard {
+  flex: 1;
+  max-width: 320px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 48px;
+  font-weight: 600;
+  color: #474d66;
+  margin: 0;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  background-color: #e6f7ff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.link a {
+  text-decoration: none;
+  color: #4cbfa4;
+  font-size: 14px;
   font-weight: bold;
-  color: #333;
+  margin-left: 8px;
 }
 
-.content {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #444;
+.link a:hover {
+  text-decoration: underline;
 }
 
-.content p {
-  margin-bottom: 1rem;
+.linkIcon {
+  color: #4cbfa4;
 }
