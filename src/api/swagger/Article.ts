@@ -1,7 +1,15 @@
-import axios from 'axios';
-import SessionStorage from '@/api/storage/SessionStorage';
-import { teamId, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from './Wikid.types';
-import { getAccessToken } from '@/hooks/Token'
+import axios from "axios";
+import SessionStorage from "@/api/storage/SessionStorage";
+import {
+  teamId,
+  ArticlesProps,
+  ArticlesData,
+  ArticlesListData,
+  ArticlesDetailData,
+  ArticlesIdData,
+  ArticlesIdLikeData,
+} from "./Wikid.types";
+import { getAccessToken } from "@/hooks/Token";
 
 /**
  * 게시글 작성
@@ -186,7 +194,7 @@ export const deleteArticlesId = async (
     }
   } catch (error) {
     // console.error('Error to deleteArticlesId():', error)
-    throw error
+    throw error;
   }
 };
 
@@ -259,6 +267,6 @@ export const deleteArticlesIdLike = async (
     }
   } catch (error) {
     // console.error('Error to deleteArticlesIdLike():', error)
-    throw error
+    throw error;
   }
 };

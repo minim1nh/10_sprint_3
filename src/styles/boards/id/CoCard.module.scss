@@ -1,0 +1,70 @@
+@use "../../variables" as *;
+
+.articleContain {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin-top: 40px;
+  width: 95%;
+}
+
+.insideContain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 870px;
+  gap: 25px;
+  margin-bottom: 200px;
+}
+
+.innerContain {
+  display: flex;
+  width: 100%;
+  padding: 22px 20px;
+  justify-content: flex-start;
+  gap: 20px;
+  border-radius: 10px;
+  width: 95%;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.iconContain {
+  display: flex;
+  gap: 9px;
+}
+.userInfo {
+  width: 700px;
+  color: $gray-500;
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+  grid-template-columns: 10fr;
+}
+
+.topInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.name {
+  font-size: 18px;
+  color: $gray-500;
+  font-weight: 600;
+  line-height: 26px;
+}
+.contentContain {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.content {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  color: $gray-500;
+}
+.updatedAt {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  color: $gray-400;
+}
