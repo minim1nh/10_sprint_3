@@ -2,35 +2,46 @@
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesCode, patchProfilesCode } from "@/api/swagger/TestProfile";
+import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/app/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
 import ParticipateButton from "@/app/wiki/ParticipateButton";
 import LinkIcon from "../../../public/images/icon/ic_link.svg";
+import dynamic from "next/dynamic";
+
+// TinyMCE 동적 로드
+const Editor = dynamic(
+  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
+  {
+    ssr: false,
+    loading: () => <p>Loading editor...</p>,
+  }
+);
 
 interface Profile {
   name: string;
-  content: string;
+  content?: string;
   code: string;
 }
 
 export default function WikiPage() {
   const searchParams = useSearchParams();
-  const code = searchParams.get("code");
+  const code = searchParams.get("code") ?? "";
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [isProfileEditable, setIsProfileEditable] = useState<boolean>(false);
   const [newContent, setNewContent] = useState<string>("");
 
   useEffect(() => {
-    async function fetchProfile() {
-      if (!code) {
-        setError("URL에서 프로필 코드를 찾을 수 없습니다.");
-        setLoading(false);
-        return;
-      }
+    if (!code) {
+      setError("URL에서 프로필 코드를 찾을 수 없습니다.");
+      setLoading(false);
+      return;
+    }
 
+    async function fetchProfile() {
       try {
         const data = await getProfilesCode(code);
         setProfile(data);
@@ -65,11 +76,17 @@ export default function WikiPage() {
     }
   };
 
+  const toggleProfileEdit = () => {
+    setIsProfileEditable((prev) => !prev);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!profile) return <div>프로필 데이터가 없습니다.</div>;
 
-  const currentUrl = `http://localhost:3000/wiki?code=${code}`;
+  const currentUrl = `${
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  }/wiki?code=${code}`;
 
   return (
     <div className={styles.container}>
@@ -93,18 +110,35 @@ export default function WikiPage() {
         <div className={styles.content}>
           {!isEditable ? (
             profile.content ? (
-              <div dangerouslySetInnerHTML={{ __html: profile.content }} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html:
+                    profile.content || "<p>아직 작성된 내용이 없습니다.</p>",
+                }}
+              />
             ) : (
               <p>아직 작성된 내용이 없습니다.</p>
             )
           ) : (
             <div>
-              <textarea
-                className={styles.textarea}
+              <Editor
+                apiKey="elv4un103qy5smg6mvj731h6s50h30t4nphiry7beamg1u93"
                 value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
-                placeholder="내용을 입력하세요"
+                init={{
+                  inline: false,
+                  height: 500,
+                  menubar: true,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste help wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat",
+                }}
+                onEditorChange={(content) => setNewContent(content)}
               />
+
               <div className={styles.actions}>
                 <button className={styles.saveButton} onClick={handleSave}>
                   저장
@@ -121,7 +155,13 @@ export default function WikiPage() {
         </div>
       </div>
       <div className={styles.profileCard}>
-        {code && <ProfileCard code={code} />}
+        {code && (
+          <ProfileCard
+            code={code}
+            isEditable={isProfileEditable}
+            onToggleEdit={toggleProfileEdit}
+          />
+        )}
       </div>
     </div>
   );

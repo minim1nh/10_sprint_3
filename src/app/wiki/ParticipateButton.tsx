@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { postProfilesCodePing } from "@/api/swagger/TestProfile";
+import { postProfilesCodePing } from "@/api/swagger/Profile";
 import styles from "@/styles/wiki/ParticipateButton.module.scss";
 
 export default function ParticipateButton({

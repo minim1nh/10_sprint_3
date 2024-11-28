@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/styles/boards/ArticleImage.module.scss";
+import styles from "@/styles/boards/best/ArticleImage.module.scss";
 
 interface ImageProps {
   src: string | null;
@@ -34,8 +34,8 @@ const ArticleImage = ({ src, alt }: ImageProps) => {
         className={styles.image}
         onError={handleImageError}
         priority
-        width={250}
-        height={130}
+        width={300}
+        height={300}
       />
     </div>
   );

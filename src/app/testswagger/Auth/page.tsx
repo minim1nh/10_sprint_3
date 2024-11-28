@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useEffect, useState, forwardRef } from 'react'
-import { Stack, Snackbar, Button, Alert, AlertProps } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Stack, Button } from '@mui/material'
 import { SignUpProps, SignInProps, SignUpData, SignInData, RefreahData } from '@/api/swagger/Wikid.types';
 import { postSignUp, postSignIn, postRefreshToken } from '@/api/swagger/Auth';
 import { styled } from '@mui/material/styles';
+import { WikidSnackbar } from '@/components/common/WikidSnackbar';
 
 const Div = styled('div')(({ theme }) => ({
   ...theme.typography.button,
@@ -12,112 +13,88 @@ const Div = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
-  function SnackbarAlert(props, ref) {
-    return <Alert elevation={6} ref={ref} {...props} />
-  }
-)
-
 const AuthTest = () => {
   const [signUp, setSignUp] = useState<SignUpData | null>(null);
   const [signIn, setSignIn] = useState<SignInData | null>(null);
   const [token, setToken] = useState<RefreahData | null>(null);
-  const [open, setOpen] = useState(false)
+
   const [message, setMessage] = useState('')
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpen(false)
-  }
-
+  const [severity, setSeverity] = useState<'error' | 'warning' | 'info' | 'success'>('success')
+  
   useEffect(() => {
-  }, [signUp, signIn, token, open, message])
+  }, [signUp, signIn, token, message])
 
   const handleSignUp = async () => {
     const reqData = {
       //아래 내용을 수정하여 테스트 해주세요!!!
-      email: 'tiger002@gmail.com',
-      name: 'tiger002',
-      password: '1qa2ws3ed',
-      passwordConfirmation: '1qa2ws3ed',
+      email: 'fdragons1@gmail.com',
+      name: 'kimjoodong',
+      password: '1qa2ws3ed!!',
+      passwordConfirmation: '1qa2ws3ed!!',
     } as SignUpProps;
 
     try {
       const resData = await postSignUp(reqData);
       setSignUp(resData)
       console.log(JSON.stringify(resData));
+      setMessage('회원가입 성공')
+      setSeverity('success')
     } catch (error) {
       if (error instanceof Error) setMessage(error.message);
       else setMessage(String(error));
-      setOpen(true)
+      setSeverity('error')
     }
   };
 
   const handleSignIn = async () => {
     const reqData = {
       //아래 내용을 수정하여 테스트 해주세요!!!
-      email: 'tiger001@gmail.com',
-      password: '1qa2ws3ed',
+      email: 'fdragons1@gmail.com',
+      password: '1qa2ws3ed!!',
     } as SignInProps;
 
     try {
       const resData = await postSignIn(reqData);
       setSignIn(resData)
       console.log(JSON.stringify(resData));
+      setMessage('로그인 성공')
+      setSeverity('success')
     } catch (error) {
       if (error instanceof Error) setMessage(error.message);
       else setMessage(String(error));
-      setOpen(true)
-    }
+      setSeverity('warning')
+    } 
   };
 
   const handleRefreshToken = async () => {
-    //현재 로그인 사용자의 토큰을 갱신합니다.
+    //로컬스토리지에 저장된 refreshToken을 사용합니다.
+    //현재 로그인 사용자의 accessToken토큰을 갱신합니다.
     try {
       const resData = await postRefreshToken()
       setToken(resData)
       console.log(JSON.stringify(resData));
+      setMessage('토큰 갱신 성공')
+      setSeverity('success')
     } catch (error) {
       if (error instanceof Error) setMessage(error.message);
       else setMessage(String(error));
-      setOpen(true)
-    }
+      setSeverity('info')
+    } 
   }
 
   return (
     <>
       <Stack p={2}>
         <Button onClick={handleSignUp}>회원가입</Button>
-        {signUp ? <Div>{JSON.stringify(signUp)}</Div> :
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <SnackbarAlert onClose={handleClose} severity='error'>
-              {message}
-            </SnackbarAlert>
-          </Snackbar>
-        }
         <Button onClick={handleSignIn}>로그인</Button>
-        {signIn ? <Div>{JSON.stringify(signIn)}</Div> :
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <SnackbarAlert onClose={handleClose} severity='error'>
-              {message}
-            </SnackbarAlert>
-          </Snackbar>
-        }        
         <Button onClick={handleRefreshToken}>토큰갱신</Button>
-        {token && <Div>{JSON.stringify(token)}</Div>}
-        {token ? <Div>{JSON.stringify(token)}</Div> :
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <SnackbarAlert onClose={handleClose} severity='error'>
-              {message}
-            </SnackbarAlert>
-          </Snackbar>
-        }
       </Stack>
+
+      {signUp && <Div>회원가입정보:{JSON.stringify(signUp)}</Div>}
+      {signIn && <Div>로그인정보:{JSON.stringify(signIn)}</Div>}
+      {token && <Div>토큰갱신정보:{JSON.stringify(token)}</Div>}
+
+      <WikidSnackbar severity={severity} message={message} autoHideDuration={5000} />
     </>
   )
 }

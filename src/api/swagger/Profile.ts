@@ -1,27 +1,17 @@
-import axios from "axios";
-import LocalStorage from "@/api/storage/LocalStorage";
-import {
-  teamId,
-  ProfilesProps,
-  ProfilesData,
-  ProfileListData,
-  ProfilesCodeProps,
-  ProfilesCodePingData,
-  ProfilesCodePingProps,
-} from "./Wikid.types";
-import { getAccessToken } from "@/hooks/Token";
+import axios from 'axios';
+import SessionStorage from '@/api/storage/SessionStorage';
+import { teamId, ProfilesProps, ProfilesData, ProfileListData, ProfilesCodeProps, ProfilesCodePingData, ProfilesCodePingProps } from '@/api/swagger/Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * '프로필생성' 요청을 보내는 함수
  */
-export const postProfiles = async (
-  reqProps: ProfilesProps
-): Promise<ProfilesData | null> => {
+export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles`;
-  console.log("POST - URL: ", URL);
+  console.log("POST - postProfiles(): ", URL);
 
   try {
     const res = await axios.post(
@@ -41,13 +31,13 @@ export const postProfiles = async (
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`postProfiles`, resData);
+      SessionStorage.setItem(`postProfiles`, resData);
       return resData;
     } else {
       throw new Error("Failed to Profiles postProfiles()");
     }
   } catch (error) {
-    console.error("Error to Profiles postProfiles():", error);
+    //console.error('Error to Profiles postProfiles():', error);
     throw error;
   }
 };
@@ -62,7 +52,7 @@ export const getProfiles = async (
   name: string
 ): Promise<ProfileListData> => {
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles?page=${page}&pageSize=${pageSize}&name=${name}`;
-  console.log("GET - URL: ", URL);
+  console.log("GET - getProfiles(): ", URL);
 
   try {
     const res = await axios.get(URL, {
@@ -74,13 +64,13 @@ export const getProfiles = async (
 
     if (res.status === 200) {
       const resData = res.data as ProfileListData;
-      LocalStorage.setItem(`getProfiles`, resData);
+      SessionStorage.setItem(`getProfiles`, resData);
       return resData;
     } else {
       throw new Error("Failed to getMe()");
     }
   } catch (error) {
-    console.error("Error to getMe():", error);
+    //console.error('Error to getMe():', error);
     throw error;
   }
 };
@@ -92,7 +82,7 @@ export const getProfiles = async (
 export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
   const teamId = "10-3";
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
-  console.log("GET - URL: ", URL);
+  console.log("GET - getProfilesCode: ", URL);
 
   try {
     const res = await axios.get(URL, {
@@ -104,13 +94,13 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`getProfilesCode`, resData);
+      SessionStorage.setItem(`getProfilesCode`, resData);
       return resData;
     } else {
       throw new Error("Failed to getProfilesCode()");
     }
   } catch (error) {
-    console.error("Error to getProfilesCode():", error);
+    //console.error('Error to getProfilesCode():', error);
     throw error;
   }
 };
@@ -121,15 +111,12 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
  * 본인 프로필이 아닐 경우 content 만 수정 가능합니다. 나머지 필드는 무시됩니다.
  * 프로필을 수정하기 위해서는 '프로필 수정 중 갱신(pingProfileUpdate)' API를 사용하여 현재 유저가 수정 중임을 알려주어야 합니다.
  */
-export const patchProfilesCode = async (
-  code: string,
-  reqProps: ProfilesCodeProps
-): Promise<ProfilesData | null> => {
+export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProps): Promise<ProfilesData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
-  console.log("PATCH - URL: ", URL);
+  console.log("PATCH - patchProfilesCode(): ", URL);
 
   try {
     const res = await axios.patch(
@@ -160,13 +147,13 @@ export const patchProfilesCode = async (
 
     if (res.status === 200) {
       const resData = res.data as ProfilesData;
-      LocalStorage.setItem(`patchProfilesCode`, resData);
+      SessionStorage.setItem(`patchProfilesCode`, resData);
       return resData;
     } else {
       throw new Error("Failed to patchProfilesCode()");
     }
   } catch (error) {
-    console.error("Error to patchProfilesCode():", error);
+    //console.error('Error to patchProfilesCode():', error);
     throw error;
   }
 };
@@ -176,11 +163,9 @@ export const patchProfilesCode = async (
  * 5분 이내의 프로필 수정 여부 상태를 확인할 수 있습니다.
  * https://wikied-api.vercel.app/10-3/profiles/1/ping
  */
-export const getProfilesCodePing = async (
-  code: string
-): Promise<ProfilesCodePingData> => {
+export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePingData> => {
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}/ping`;
-  console.log("GET - URL: ", URL);
+  console.log("GET - getProfilesCodePing(): ", URL);
 
   try {
     const res = await axios.get(URL, {
@@ -192,13 +177,13 @@ export const getProfilesCodePing = async (
 
     if (res.status === 200) {
       const resData = res.data as ProfilesCodePingData;
-      LocalStorage.setItem(`getProfilesCodePing`, resData);
+      SessionStorage.setItem(`getProfilesCodePing`, resData);
       return resData;
     } else {
       throw new Error("Failed to getProfilesCodePing()");
     }
   } catch (error) {
-    console.error("Error to getProfilesCodePing():", error);
+    //console.error('Error to getProfilesCodePing():', error);
     throw error;
   }
 };
@@ -209,15 +194,12 @@ export const getProfilesCodePing = async (
  * 프로필 수정 중 상태를 갱신합니다. 5분 동안 프로필 수정 중 상태를 유지합니다.
  * 5분 이내에 갱신하지 않을 경우 프로필 수정이 불가능합니다.
  */
-export const postProfilesCodePing = async (
-  code: string,
-  reqProps: ProfilesCodePingProps
-): Promise<ProfilesCodePingData | null> => {
+export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodePingProps): Promise<ProfilesCodePingData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/profiles`;
-  console.log("POST - URL: ", URL);
+  const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}/ping`;
+  console.log("POST - postProfilesCodePing(): ", URL);
 
   try {
     const res = await axios.post(
@@ -236,13 +218,13 @@ export const postProfilesCodePing = async (
 
     if (res.status === 200) {
       const resData = res.data as ProfilesCodePingData;
-      LocalStorage.setItem(`postProfilesCodePing`, resData);
+      SessionStorage.setItem(`postProfilesCodePing`, resData);
       return resData;
     } else {
       throw new Error("Failed to Profiles postProfilesCodePing()");
     }
   } catch (error) {
-    console.error("Error to Profiles postProfilesCodePing():", error);
+    //console.error('Error to Profiles postProfilesCodePing():', error);
     throw error;
   }
 };

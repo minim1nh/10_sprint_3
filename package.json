@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.9.1",
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
+    "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.7",
     "material-icons": "^1.13.12",
     "next": "15.0.3",
@@ -21,6 +22,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-hook-form": "^7.53.2",
+    "tinymce": "^7.5.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {

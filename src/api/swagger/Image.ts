@@ -1,6 +1,6 @@
 import axios from 'axios';
-import LocalStorage from '@/api/storage/LocalStorage';
-import { teamId, ImageUploadProps, ImageUploadData } from './Wikid.types';
+import SessionStorage from '@/api/storage/SessionStorage';
+import { teamId, ImageUploadProps, ImageUploadData } from '@/api/swagger/Wikid.types';
 import { getAccessToken } from '@/hooks/Token'
 
 /**
@@ -9,34 +9,39 @@ import { getAccessToken } from '@/hooks/Token'
 export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<ImageUploadData | null> => {
 
   const accessToken = getAccessToken();
-  if(!accessToken) return null;
-
-  const URL = `https://wikied-api.vercel.app/${teamId}/images/upload`
-  console.log('POST - URL: ', URL)
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   // create formdata
   const formData = new FormData();
   formData.append('image', reqProps.path);
   
+  const URL = `https://wikied-api.vercel.app/${teamId}/images/upload`
+  console.log('POST - postImagesUpload(): ', URL)
+
   try {
-    const res = await axios.post(URL, {
-      data: formData,
-      headers: {
-        'accept': 'application/json',
-        'Content-Type': ' multipart/form-data',
-        'Authorization': `Bearer ${accessToken}`,
+    const res = await axios.post(
+      URL,
+      {
+        data: formData,
+      },
+      {
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': ' multipart/form-data',
+          'Authorization': `Bearer ${accessToken}`,
+          },
       }
-    });
+    );
 
     if (res.status === 200) {
       const resData = res.data as ImageUploadData;
-      LocalStorage.setItem(`postImagesUpload`, resData);
+      SessionStorage.setItem(`postImagesUpload`, resData);
       return resData;
     } else {
       throw new Error('Failed to postImagesUpload()');
     }
   } catch (error) {
-    console.error('Error to postImagesUpload():', error);
+      //console.error('Error to postImagesUpload():', error);
     throw error;
   }
 };

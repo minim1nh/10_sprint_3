@@ -1,15 +1,7 @@
-import axios from "axios";
-import LocalStorage from "@/api/storage/LocalStorage";
-import {
-  teamId,
-  ArticlesProps,
-  ArticlesData,
-  ArticlesListData,
-  ArticlesDetailData,
-  ArticlesIdData,
-  ArticlesIdLikeData,
-} from "./Wikid.types";
-import { getAccessToken } from "@/hooks/Token";
+import axios from 'axios';
+import SessionStorage from '@/api/storage/SessionStorage';
+import { teamId, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from '@/api/swagger/Wikid.types';
+import { getAccessToken } from '@/hooks/Token'
 
 /**
  * 게시글 작성
@@ -20,10 +12,10 @@ export const postArticles = async (
   reqProps: ArticlesProps
 ): Promise<ArticlesData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/10-3/articles`;
-  console.log("POST - URL: ", URL);
+  console.log("POST - postArticles(): ", URL);
 
   try {
     const res = await axios.post(
@@ -42,13 +34,13 @@ export const postArticles = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesData;
-      LocalStorage.setItem(`postArticles`, resData);
+      SessionStorage.setItem(`postArticles`, resData);
       return resData;
     } else {
       throw new Error("Failed to postArticles()");
     }
   } catch (error) {
-    console.error("Error to postArticles():", error);
+    //console.error('Error to postArticles():', error);
     throw error;
   }
 };
@@ -64,7 +56,7 @@ export const getArticles = async (
   keyword: string = ""
 ): Promise<ArticlesListData> => {
   const URL = `https://wikied-api.vercel.app/10-3/articles?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&keyword=${keyword}`;
-  console.log("GET - URL: ", URL);
+  console.log("GET - getArticles(): ", URL);
 
   try {
     const res = await axios.get(URL, {
@@ -76,13 +68,13 @@ export const getArticles = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesListData;
-      LocalStorage.setItem(`getArticles`, resData);
+      SessionStorage.setItem(`getArticles`, resData);
       return resData;
     } else {
       throw new Error("Failed to getArticles()");
     }
   } catch (error) {
-    console.error("Error to getArticles():", error);
+    //console.error('Error to getArticles():', error);
     throw error;
   }
 };
@@ -95,10 +87,10 @@ export const getArticlesId = async (
   articleId: number
 ): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/10-3/articles/${articleId}`;
-  console.log("GET - URL: ", URL);
+  console.log("GET - getArticlesId(): ", URL);
 
   try {
     const res = await axios.get(URL, {
@@ -111,13 +103,13 @@ export const getArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesDetailData;
-      LocalStorage.setItem(`getArticlesId`, resData);
+      SessionStorage.setItem(`getArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to getArticlesId()");
     }
   } catch (error) {
-    console.error("Error to getArticlesId():", error);
+    //console.error('Error to getArticlesId():', error);
     throw error;
   }
 };
@@ -131,10 +123,10 @@ export const patchArticlesId = async (
   reqProps: ArticlesProps
 ): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${articleId}`;
-  console.log("PATCH - URL: ", URL);
+  console.log("PATCH - patchArticlesId(): ", URL);
 
   try {
     const res = await axios.patch(
@@ -153,13 +145,13 @@ export const patchArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesDetailData;
-      LocalStorage.setItem(`patchArticlesId`, resData);
+      SessionStorage.setItem(`patchArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to patchArticlesId()");
     }
   } catch (error) {
-    console.error("Error to patchArticlesId():", error);
+    //console.error('Error to patchArticlesId():', error);
     throw error;
   }
 };
@@ -172,10 +164,10 @@ export const deleteArticlesId = async (
   articleId: number
 ): Promise<ArticlesIdData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}`;
-  console.log("DELETE - URL: ", URL);
+  console.log("DELETE - deleteArticlesId(): ", URL);
 
   try {
     const res = await axios.delete(URL, {
@@ -187,14 +179,14 @@ export const deleteArticlesId = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdData;
-      LocalStorage.setItem(`deleteArticlesId`, resData);
+      SessionStorage.setItem(`deleteArticlesId`, resData);
       return resData;
     } else {
       throw new Error("Failed to deleteArticlesId()");
     }
   } catch (error) {
-    console.error("Error to deleteArticlesId():", error);
-    throw error;
+    //console.error('Error to deleteArticlesId():', error)
+    throw error
   }
 };
 
@@ -206,10 +198,10 @@ export const postArticlesIdLike = async (
   articleId: number
 ): Promise<ArticlesIdLikeData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`;
-  console.log("POST - URL: ", URL);
+  console.log("POST - postArticlesIdLike(): ", URL);
 
   try {
     const res = await axios.post(
@@ -226,13 +218,13 @@ export const postArticlesIdLike = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdLikeData;
-      LocalStorage.setItem(`postArticlesIdLike`, resData);
+      SessionStorage.setItem(`postArticlesIdLike`, resData);
       return resData;
     } else {
       throw new Error("Failed to postArticlesIdLike()");
     }
   } catch (error) {
-    console.error("Error to postArticlesIdLike():", error);
+    //console.error('Error to postArticlesIdLike():', error);
     throw error;
   }
 };
@@ -245,10 +237,10 @@ export const deleteArticlesIdLike = async (
   articleId: number
 ): Promise<ArticlesIdLikeData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) return null;
+  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`;
-  console.log("DELETE - URL: ", URL);
+  console.log("DELETE - deleteArticlesIdLike(): ", URL);
 
   try {
     const res = await axios.delete(URL, {
@@ -260,13 +252,13 @@ export const deleteArticlesIdLike = async (
 
     if (res.status === 200) {
       const resData = res.data as ArticlesIdLikeData;
-      LocalStorage.setItem(`deleteArticlesIdLike`, resData);
+      SessionStorage.setItem(`deleteArticlesIdLike`, resData);
       return resData;
     } else {
       throw new Error("Failed to deleteArticlesIdLike()");
     }
   } catch (error) {
-    console.error("Error to deleteArticlesIdLike():", error);
-    throw error;
+    //console.error('Error to deleteArticlesIdLike():', error)
+    throw error
   }
 };

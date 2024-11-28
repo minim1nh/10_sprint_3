@@ -1,10 +1,10 @@
-@use "../variables" as *;
+@use "../../variables" as *;
 
 .articleContain {
   border-radius: 10px;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  width: 250px;
+  width: 280px;
   height: 220px;
   overflow: hidden;
 }
@@ -14,8 +14,14 @@
   flex-direction: column;
   gap: 10px;
 }
+.photoContain {
+  width: 280px;
+  height: 130px;
+  overflow: hidden;
+}
 .innerInfo {
   margin-left: 19px;
+  margin-top: 15px;
 }
 .contentTitle {
   font-size: 18px;
@@ -31,15 +37,14 @@
 }
 .userInfo {
   display: flex;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
   color: $gray-400;
   margin: 0;
   padding: 0;
-  gap: 45px;
+  gap: 70px;
+  margin-top: 5px;
 }
 
 .likeCount {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
 }
