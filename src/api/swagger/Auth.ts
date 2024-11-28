@@ -66,7 +66,6 @@ export const postSignIn = async (reqProps: SignInProps): Promise<SignInData> => 
     if (res.status === 200) {
       const signIn = res.data as SignInData;
       SessionStorage.setItem(`postSignIn`, signIn);
-      axios.defaults.headers.common.Authorization = `Bearer ${signIn.accessToken}`; 
       return signIn;
     } else {
       throw new Error('Failed to Auth postSignIn()');

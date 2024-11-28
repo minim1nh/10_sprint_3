@@ -20,6 +20,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
       {
         headers: {
           'accept': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         }
       }
     );
