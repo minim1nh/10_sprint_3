@@ -46,13 +46,28 @@ export default function Page() {
     fetchCommentsData();
   }, [id]);
 
-  const handleCommentAdded = () => {
-    fetchCommentsData();
+  const handleCommentAdded = (newComment: CommentsListData["list"][number]) => {
+    setCommentsData((prevCommentsData) => {
+      if (!prevCommentsData) {
+        return {
+          list: [newComment],
+          nextCursor: 0,
+        };
+      }
+      return {
+        ...prevCommentsData,
+        list: [newComment, ...prevCommentsData.list],
+        nextCursor: prevCommentsData.nextCursor,
+      };
+    });
   };
 
   if (!article) {
     return <div>게시글을 찾을 수 없습니다.</div>;
   }
+
+  // 댓글 개수를 직접 계산
+  const commentsCount = commentsData?.list.length || 0;
 
   return (
     <>
@@ -62,9 +77,10 @@ export default function Page() {
         <CommentForm
           articleId={parseInt(id, 10)}
           onCommentAdded={handleCommentAdded}
+          count={commentsCount}
         />
         {commentsData ? (
-          <CoCard {...commentsData} />
+          <CoCard comments={commentsData.list} />
         ) : (
           <div>댓글이 없습니다.</div>
         )}
