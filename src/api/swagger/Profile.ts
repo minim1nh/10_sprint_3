@@ -80,6 +80,7 @@ export const getProfiles = async (
  * https://wikied-api.vercel.app/10-3/profiles/1
  */
 export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
+  const teamId = "10-3";
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
   console.log("GET - getProfilesCode: ", URL);
 
