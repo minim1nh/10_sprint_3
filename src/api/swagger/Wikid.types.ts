@@ -128,7 +128,7 @@ export type ImageUploadData = {
 }
 
 export type ImageUploadProps = {
-  path: string;
+  file: File;
 }
 
 // Comments

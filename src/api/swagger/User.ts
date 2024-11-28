@@ -11,7 +11,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
   const accessToken = getAccessToken();
   if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/user/me`
+  const URL = `https://wikied-api.vercel.app/${teamId}/users/me`
   console.log('GET - getUsersMe(): ', URL)
 
   try {
@@ -25,7 +25,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as UserData;
       SessionStorage.setItem(`getUsersMe`, resData);
       return resData;
@@ -46,7 +46,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
   const accessToken = getAccessToken();
   if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/user/me/password`
+  const URL = `https://wikied-api.vercel.app/${teamId}/users/me/password`
   console.log('PATCH - patchUsersMePassword(): ', URL)
 
   try {
@@ -65,7 +65,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as UserData;
       SessionStorage.setItem(`patchUsersMePassword`, resData);
       return resData;

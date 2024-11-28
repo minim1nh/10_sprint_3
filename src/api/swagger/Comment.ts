@@ -28,7 +28,7 @@ export const postComments = async (articleId: number, reqProps: CommentsProps): 
       }
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsData;
       SessionStorage.setItem(`postComments`, resData);
       return resData;
@@ -59,7 +59,7 @@ export const getComments = async (articleId: number, limit: number, cursor?: num
       }
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsListData;
       SessionStorage.setItem(`getComments`, resData);
       return resData;
@@ -95,7 +95,7 @@ export const patchCommentsId = async (commentId: number, reqProps: CommentsProps
       }      
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsData;
       SessionStorage.setItem(`patchCommentsId`, resData);
       return resData;
@@ -129,7 +129,7 @@ export const deleteCommentsId = async (commentId: number): Promise<CommentsIdDat
       }
     })
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsIdData;
       SessionStorage.setItem(`deleteCommentsId`, resData);
       return resData;

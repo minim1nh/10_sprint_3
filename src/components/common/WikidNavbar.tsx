@@ -20,6 +20,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import useScreenWidth, {ScreenType} from '@/hooks/useScreenWidth'
 import SessionStorage from '@/api/storage/SessionStorage'
 import { isSignIn } from '@/hooks/Token'
+import { getUsersMe } from "@/api/swagger/User";
+import { UserData } from "@/api/swagger/Wikid.types";
 
 export const WikidNavbar = () => {
   const [isClient, setIsClient] = useState(false);
@@ -61,7 +63,23 @@ export const WikidNavbar = () => {
   const onClickAccountSettings = () => { onMenuIconClose(); router.push('/mypage') }
 
   //내 위키 메뉴 클릭 시 페이지 이동
-  const onClickMyWiki = () => { onMenuIconClose(); router.push('/wiki') }
+  const onClickMyWiki = async () => {
+    onMenuIconClose();
+    //TODO: 내 위키 코드 쿼리후 이동
+    try {
+      const resData = await getUsersMe();
+      console.log('getUsersMe() response: ', resData)
+      const profile = resData?.profile
+      const code = profile?.code
+      if(code) {
+        router.push(`/wiki/${code}`)
+      } else {
+        console.log('code is null')
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
   //로그아웃 메뉴 클릭 시 페이지 이동
   const onClickLogout = () => {
