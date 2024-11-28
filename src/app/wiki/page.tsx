@@ -6,8 +6,8 @@ import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/app/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
 import ParticipateButton from "@/app/wiki/ParticipateButton";
-import LinkIcon from "../../../public/images/icon/ic_link.svg";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
@@ -101,7 +101,14 @@ export default function WikiPage() {
         </header>
 
         <div className={styles.link}>
-          <LinkIcon className={styles.linkIcon} />
+          {/* Next.js Image 컴포넌트로 수정 */}
+          <Image
+            src="/images/icon/ic_link.svg"
+            alt="Link Icon"
+            className={styles.linkIcon}
+            width={24}
+            height={24}
+          />
           <a href={currentUrl} target="_blank" rel="noopener noreferrer">
             {currentUrl}
           </a>
