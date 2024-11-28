@@ -2,11 +2,19 @@
 
 import style from "@/styles/login/style.module.scss";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { postSignIn } from '@/api/swagger/Auth';
 import { SignInProps } from '@/api/swagger/Wikid.types';
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, } = useForm<SignInProps>({ mode: "onBlur"});
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if(isSuccess)
+      redirect('/');
+  }, [isSuccess]);
 
   const onValid = async (data: SignInProps) => {
     const reqData = {
@@ -17,7 +25,7 @@ export default function Login() {
     try {
       const resData = await postSignIn(reqData);
       console.log(JSON.stringify(resData));
-      window.location.reload();
+      setIsSuccess(true);
     } catch (e) {
       console.log(e);
       alert('이메일 또는 비밀번호가 일치하지 않습니다.');
