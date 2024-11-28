@@ -7,6 +7,9 @@ import { redirect } from "next/navigation";
 import { postSignIn } from '@/api/swagger/Auth';
 import { SignInProps } from '@/api/swagger/Wikid.types';
 
+//TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
+import { useRouter } from "next/navigation";
+
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, } = useForm<SignInProps>({ mode: "onBlur"});
   const [isSuccess, setIsSuccess] = useState(false);
@@ -16,11 +19,16 @@ export default function Login() {
       redirect('/');
   }, [isSuccess]);
 
+  
+  //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
+  const router = useRouter();
+
   const onValid = async (data: SignInProps) => {
     const reqData = {
       email: data.email,
       password: data.password,
     };
+
 
     try {
       const resData = await postSignIn(reqData);

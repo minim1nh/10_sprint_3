@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   Typography,
+  FormLabel,
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -19,12 +20,14 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { NotificationList, NotificationsData, ImageUploadProps } from '@/api/swagger/Wikid.types'
 import { useEffect, useState } from 'react'
 import { postImagesUpload } from '@/api/swagger/Image';
-
+import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {notifies: NotificationsData | null}) => {
   const [notifies, setNotifies] = useState<NotificationsData | null>(props.notifies)
   const [open, setOpen] = useState(false)
+  const router = useRouter();
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -41,6 +44,7 @@ export const NotificationModal = (props: {notifies: NotificationsData | null}) =
       return
     }
     setOpen(false)
+    router.back()
   }
 
   useEffect(() => {
@@ -225,6 +229,7 @@ export const ExitNotSavedModal = () => {
 //TODO: 이미지 삽입 모달 다이얼로그 (작업중)
 export const ImageInsertModal = () => {
 
+  const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [open, setOpen] = useState(false)
   useEffect(() => {
@@ -235,8 +240,9 @@ export const ImageInsertModal = () => {
     e.preventDefault();
     console.log("event", e);
     if (e.target.files) {
-      const ProductImg = [...e.target.files];
-      const images = ProductImg.map((image) => URL.createObjectURL(image));
+      const selectedFiles = [...e.target.files];
+      setFiles(selectedFiles);
+      const images = selectedFiles.map((file) => URL.createObjectURL(file));
       setImages(images);
     }
   };
@@ -246,7 +252,7 @@ export const ImageInsertModal = () => {
     reason?: string,
   ) => {
     const props: ImageUploadProps = {
-      path: images[0]
+      file: files[0]
     }
     console.log('handleClose', reason)
     if (reason === 'clickaway') {
@@ -281,8 +287,10 @@ export const ImageInsertModal = () => {
           <DialogContentText id='dialog-description' component={'span'}>
             <form>
               <p>
-                <label htmlFor="file">Upload images</label>
+                {/* <label htmlFor="file">이미지</label> */}
+                {/* <FormLabel filled={true} htmlFor="file">이미지</FormLabel> */}
                 <input
+                  // hidden={true}
                   type="file"
                   id="file"
                   onChange={handleImageChange}
@@ -299,7 +307,7 @@ export const ImageInsertModal = () => {
                   <div>
                     {images.map((image, index) => (
                       <p key={index}>
-                        <img src={image} alt="" />
+                        <Image src={image} width={302} height={268} alt="" />
                       </p>
                     ))}
                   </div>

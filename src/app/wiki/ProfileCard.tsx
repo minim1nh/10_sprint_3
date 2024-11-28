@@ -34,7 +34,7 @@ export default function ProfileCard() {
           },
         });
 
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 201) {
           setProfile(res.data);
           setError(null);
         } else {

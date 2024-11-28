@@ -13,17 +13,14 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
 
   // create formdata
   const formData = new FormData();
-  formData.append('image', reqProps.path);
+  formData.append('image', reqProps.file);
   
   const URL = `https://wikied-api.vercel.app/${teamId}/images/upload`
   console.log('POST - postImagesUpload(): ', URL)
 
   try {
     const res = await axios.post(
-      URL,
-      {
-        data: formData,
-      },
+      URL,formData,
       {
         headers: {
           'accept': 'application/json',
@@ -33,7 +30,7 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ImageUploadData;
       SessionStorage.setItem(`postImagesUpload`, resData);
       return resData;
