@@ -56,8 +56,8 @@ const AuthTest = () => {
   const handleSignIn = async () => {
     const reqData = {
       //아래 내용을 수정하여 테스트 해주세요!!!
-      email: "fdragons1@gmail.com",
-      password: "1qa2ws3ed!!",
+      email: "keroro@email.com",
+      password: "keroro1234!",
     } as SignInProps;
 
     try {
