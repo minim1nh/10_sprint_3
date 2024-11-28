@@ -2,19 +2,22 @@
 
 import style from "@/styles/login/style.module.scss";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { postSignIn } from '@/api/swagger/Auth';
-import { SignInProps, SignInData } from '@/api/swagger/Wikid.types';
+import { SignInProps } from '@/api/swagger/Wikid.types';
 
 //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
 import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, } = useForm<SignInProps>({ mode: "onBlur"});
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const [success, setSuccess] = useState(false);
-
-  const [signIn, setSignIn] = useState<SignInData | null>(null);
+  useEffect(() => {
+    if(isSuccess)
+      redirect('/');
+  }, [isSuccess]);
 
   
   //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
@@ -29,17 +32,11 @@ export default function Login() {
 
     try {
       const resData = await postSignIn(reqData);
-      setSignIn(resData)
       console.log(JSON.stringify(resData));
-      setSuccess(true);
-
-      //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
-      router.push('/');
-      setTimeout(() => window.location.reload(), 1000);
+      setIsSuccess(true);
     } catch (e) {
       console.log(e);
       alert('이메일 또는 비밀번호가 일치하지 않습니다.');
-      setSuccess(false);
     } 
   }
 

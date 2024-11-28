@@ -13,7 +13,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
 
   const URL = `https://wikied-api.vercel.app/${teamId}/users/me`
   console.log('GET - getUsersMe(): ', URL)
-
+  
   try {
     const res = await axios.get(
       URL,
