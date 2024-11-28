@@ -5,12 +5,14 @@ import styles from "@/styles/boards/best/ArticleImage.module.scss";
 interface ImageProps {
   src: string | null;
   alt: string;
+  width?: number;
+  height?: number;
 }
 
 const defaultImg =
   "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/path/to/default-image.jpg";
 
-const ArticleImage = ({ src, alt }: ImageProps) => {
+const ArticleImage = ({ src, alt, width = 300, height = 300 }: ImageProps) => {
   const [imageSrc, setImageSrc] = useState(src ?? defaultImg);
   const [isMounted, setIsMounted] = useState(true);
 
@@ -34,8 +36,8 @@ const ArticleImage = ({ src, alt }: ImageProps) => {
         className={styles.image}
         onError={handleImageError}
         priority
-        width={300}
-        height={300}
+        width={width}
+        height={height}
       />
     </div>
   );
