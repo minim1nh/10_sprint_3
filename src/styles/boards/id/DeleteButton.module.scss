@@ -1,0 +1,12 @@
+@use "../../variables" as *;
+
+.deleteButton {
+  background-color: $green-200;
+  color: $white;
+  border: none;
+  width: 140px;
+  height: 45px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
