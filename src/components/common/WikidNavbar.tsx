@@ -43,7 +43,7 @@ export const WikidNavbar = () => {
 
   const router = useRouter();
 
-  const isDesktop = (screenwidth > ScreenType.MOBILE) ? true : false;
+  const isMobile = (screenwidth < ScreenType.MOBILE) ? true : false;
 
   //로그인 클릭 시 페이지 이동
   const onClickLogin = () => { onMenuIconClose(); router.push('/login') }
@@ -57,8 +57,11 @@ export const WikidNavbar = () => {
   //알림 메뉴 클릭 시 페이지 이동
   const onClickNotification = () => { onMenuIconClose(); router.push('/notification') }
 
-  //마이페이지 메뉴 클릭 시 페이지 이동
-  const onClickMyPage = () => { onMenuIconClose(); router.push('/mypage') }
+  //계정설정 메뉴 클릭 시 페이지 이동
+  const onClickAccountSettings = () => { onMenuIconClose(); router.push('/mypage') }
+
+  //내 위키 메뉴 클릭 시 페이지 이동
+  const onClickMyWiki = () => { onMenuIconClose(); router.push('/wiki') }
 
   //로그아웃 메뉴 클릭 시 페이지 이동
   const onClickLogout = () => {
@@ -87,17 +90,22 @@ export const WikidNavbar = () => {
         MenuListProps={{
           'aria-labelledby': 'resources-button'
         }}>
-        {/* 로그인 전 메뉴 */}
-        {Boolean(isSignIn()) &&
+        {/* 로그인 && 모바일 메뉴 */}
+        {Boolean(isSignIn()) && (isMobile) &&
           <>
             <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
             <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
-            <MenuItem onClick={onClickNotification}>알림</MenuItem>
-            <MenuItem onClick={onClickMyPage} divider={true}>마이페이지</MenuItem>
+          </>
+        }
+        {/* 로그인 후속 메뉴 */}
+        {Boolean(isSignIn()) &&
+          <>
+            <MenuItem onClick={onClickAccountSettings}>계정설정</MenuItem>
+            <MenuItem onClick={onClickMyWiki} divider={true}>내 위키</MenuItem>
             <MenuItem onClick={onClickLogout}>로그아웃</MenuItem>
           </>
         }
-        {/* 로그인 전 메뉴 */}
+        {/* 초기 메뉴 */}
         {Boolean(!isSignIn()) &&
           <>
             <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
@@ -120,7 +128,7 @@ export const WikidNavbar = () => {
         </Typography>
 
         {/* 로그아웃(초기) 헤더 메뉴 */}
-        {(isClient) && (isDesktop) && Boolean(!isSignIn()) &&
+        {(isClient) && (!isMobile) && Boolean(!isSignIn()) &&
           // 로그아웃 상태 메뉴
           <>
             <Stack direction='row' sx={{ flexGrow: 1}} spacing={2} marginLeft={3} >
@@ -133,11 +141,11 @@ export const WikidNavbar = () => {
           </>
         }
         {/* 로그인(아이콘) 헤더 메뉴 */}
-        {(isClient) && (isDesktop) && Boolean(isSignIn()) &&
+        {(isClient) && (!isMobile) && Boolean(isSignIn()) &&
           <>
           <Stack direction='row' sx={{ flexGrow: 1}} spacing={2} marginLeft={3} >
-            <Button color='inherit'>위키목록</Button>
-            <Button color='inherit'>자유게시판</Button>
+            <Button onClick={onClickWikiList} color='inherit'>위키목록</Button>
+            <Button onClick={onClickBoards} color='inherit'>자유게시판</Button>
           </Stack>
           <Stack direction='row' >
             <IconButton onClick={onClickNotification}
@@ -153,7 +161,7 @@ export const WikidNavbar = () => {
         </>
         }        
         {/* Mobile 헤더 버거 메뉴 */}
-        {(isClient) && (!isDesktop) &&
+        {(isClient) && (isMobile) &&
         <>
           <Stack direction='row' sx={{ flexGrow: 999}} >
           </Stack>

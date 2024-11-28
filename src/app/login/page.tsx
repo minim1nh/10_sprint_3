@@ -6,6 +6,9 @@ import { useState } from "react";
 import { postSignIn } from '@/api/swagger/Auth';
 import { SignInProps, SignInData } from '@/api/swagger/Wikid.types';
 
+//TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
+import { useRouter } from "next/navigation";
+
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, } = useForm<SignInProps>({ mode: "onBlur"});
 
@@ -13,19 +16,26 @@ export default function Login() {
 
   const [signIn, setSignIn] = useState<SignInData | null>(null);
 
+  
+  //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
+  const router = useRouter();
+
   const onValid = async (data: SignInProps) => {
     const reqData = {
       email: data.email,
       password: data.password,
     };
 
+
     try {
       const resData = await postSignIn(reqData);
       setSignIn(resData)
       console.log(JSON.stringify(resData));
       setSuccess(true);
-      //로그인 성공 시 화면 새로고침 추가 by 김주동
-      window.location.reload();
+
+      //TODO: 로그인 성공 시 화면 새로고침 추가 by 김주동
+      router.push('/');
+      setTimeout(() => window.location.reload(), 1000);
     } catch (e) {
       console.log(e);
       alert('이메일 또는 비밀번호가 일치하지 않습니다.');
