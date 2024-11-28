@@ -11,9 +11,9 @@ export const getUsersMe = async (): Promise<UserData | null> => {
   const accessToken = getAccessToken();
   if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/user/me`
+  const URL = `https://wikied-api.vercel.app/${teamId}/users/me`
   console.log('GET - getUsersMe(): ', URL)
-
+  
   try {
     const res = await axios.get(
       URL,
@@ -46,7 +46,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
   const accessToken = getAccessToken();
   if (!accessToken) { console.log('None of LogIn!!!'); return null; }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/user/me/password`
+  const URL = `https://wikied-api.vercel.app/${teamId}/users/me/password`
   console.log('PATCH - patchUsersMePassword(): ', URL)
 
   try {
