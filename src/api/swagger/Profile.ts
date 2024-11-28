@@ -29,7 +29,7 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`postProfiles`, resData);
       return resData;
@@ -62,7 +62,7 @@ export const getProfiles = async (
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfileListData;
       SessionStorage.setItem(`getProfiles`, resData);
       return resData;
@@ -92,7 +92,7 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`getProfilesCode`, resData);
       return resData;
@@ -145,7 +145,7 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`patchProfilesCode`, resData);
       return resData;
@@ -175,7 +175,7 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesCodePingData;
       SessionStorage.setItem(`getProfilesCodePing`, resData);
       return resData;
@@ -216,7 +216,7 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesCodePingData;
       SessionStorage.setItem(`postProfilesCodePing`, resData);
       return resData;

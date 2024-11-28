@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import Image from "next/image";
 import {
   AppBar,
@@ -15,129 +14,124 @@ import {
   MenuItem,
 } from "@mui/material";
 // import NotificationsIcon from '@mui/icons-material/Notifications';
-// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import MenuIcon from '@mui/icons-material/Menu'
 import useScreenWidth, {ScreenType} from '@/hooks/useScreenWidth'
-import { isSignIn } from '@/hooks/Token'
 import SessionStorage from '@/api/storage/SessionStorage'
+import { isSignIn } from '@/hooks/Token'
+import { getUsersMe } from "@/api/swagger/User";
+import { UserData } from "@/api/swagger/Wikid.types";
 
 export const WikidNavbar = () => {
+  const [isClient, setIsClient] = useState(false);
+  const [dropdownMenuElement, setDropdownMenuElement] = useState<null | HTMLElement>(null);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const screenwidth = useScreenWidth();
-  const [openMenu, setOpenMenu] = useState<null | HTMLElement>(null);
-  const [clearStorage, setClearStorage] = useState(false);
-
+  
   useEffect(() => {
-    if (!clearStorage) {
-      // SessionStorage.clear()
-      setClearStorage(true)
-    }
-  }, [clearStorage])
-
-  const open = Boolean(openMenu)
+    setIsClient(true);
+  }, [])
 
   const onMenuIconOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenMenu(event.currentTarget);
+    setDropdownMenuElement(event.currentTarget);
+    setIsOpenMenu(true);
   };
+
   const onMenuIconClose = () => {
-    setOpenMenu(null);
+    setDropdownMenuElement(null);
+    setIsOpenMenu(false);
   };
 
   const router = useRouter();
 
+  const isMobile = (screenwidth < ScreenType.MOBILE) ? true : false;
+
   //로그인 클릭 시 페이지 이동
-  const onClickLogin = () => {
-    onMenuIconClose()
-    router.push('/login')
-  }
+  const onClickLogin = () => { onMenuIconClose(); router.push('/login') }
 
   //위키목록 클릭 시 페이지 이동
-  const onClickWikiList = () => {
-    onMenuIconClose();
-    router.push("/wikilist");
-  };
+  const onClickWikiList = () => { onMenuIconClose(); router.push("/wikilist") }
 
   //자유게시판 클릭 시 페이지 이동
-  const onClickBoards = () => {
-    onMenuIconClose()
-    router.push('/boards')
-  }
+  const onClickBoards = () => { onMenuIconClose(); router.push('/boards') }
 
   //알림 메뉴 클릭 시 페이지 이동
-  const onClickNotification = () => {
-    onMenuIconClose()
-    router.push('/notification')
-  }
+  const onClickNotification = () => { onMenuIconClose(); router.push('/notification') }
 
-  //마이페이지 메뉴 클릭 시 페이지 이동
-  const onClickMyPage = () => {
-    onMenuIconClose()
-    router.push('/mypage')
+  //계정설정 메뉴 클릭 시 페이지 이동
+  const onClickAccountSettings = () => { onMenuIconClose(); router.push('/mypage') }
+
+  //내 위키 메뉴 클릭 시 페이지 이동
+  const onClickMyWiki = async () => {
+    onMenuIconClose();
+    //TODO: 내 위키 코드 쿼리후 이동
+    try {
+      const resData = await getUsersMe();
+      console.log('getUsersMe() response: ', resData)
+      const profile = resData?.profile
+      const code = profile?.code
+      if(code) {
+        router.push(`/wiki/${code}`)
+      } else {
+        console.log('code is null')
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   //로그아웃 메뉴 클릭 시 페이지 이동
   const onClickLogout = () => {
-    onMenuIconClose()
-    //로그인 정보를 세션에서 삭제
-    SessionStorage.clear()
+    if(isClient) {
+      SessionStorage.clear();
+    }
+    onMenuIconClose();
     router.push('/')
   }
 
-  function signedInMenu(props: { signIn: boolean }) {
+  const resetDropdownMenu = () => {
     return (
-      (props.signIn === true) ? ( //로그인 정보가 있을 때
-        <Menu
-          id='resources-menu'
-          anchorEl={openMenu}
-          open={open}
-          onClose={onMenuIconClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-          MenuListProps={{
-            'aria-labelledby': 'resources-button'
-          }}>
-          <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
-          <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
-          {isSignIn() ? //로그인 정보가 있을 때
-            <>
-              <MenuItem onClick={onClickNotification}>알림</MenuItem>
-              <MenuItem onClick={onClickMyPage} divider={true}>마이페이지</MenuItem>
-              <MenuItem onClick={onClickLogout}>로그아웃</MenuItem>
-            </>
-            : //로그인 정보가 없을 때
-            <>
-              <MenuItem onClick={onClickLogin}>로그인</MenuItem>
-            </>
-          }
-        </Menu>
-      ) : ( //로그인 정보가 없을 때
-        <Menu
-          id='resources-menu'
-          anchorEl={openMenu}
-          open={open}
-          onClose={onMenuIconClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-          MenuListProps={{
-            'aria-labelledby': 'resources-button'
-          }}>
-          <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
-          <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
-          <MenuItem onClick={onClickLogin}>로그인</MenuItem>
-        </Menu>
-      )
+      <Menu
+        id='resources-menu'
+        anchorEl={dropdownMenuElement}
+        open={isOpenMenu}
+        onClose={onMenuIconClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        MenuListProps={{
+          'aria-labelledby': 'resources-button'
+        }}>
+        {/* 로그인 && 모바일 메뉴 */}
+        {Boolean(isSignIn()) && (isMobile) &&
+          <>
+            <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
+            <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
+          </>
+        }
+        {/* 로그인 후속 메뉴 */}
+        {Boolean(isSignIn()) &&
+          <>
+            <MenuItem onClick={onClickAccountSettings}>계정설정</MenuItem>
+            <MenuItem onClick={onClickMyWiki} divider={true}>내 위키</MenuItem>
+            <MenuItem onClick={onClickLogout}>로그아웃</MenuItem>
+          </>
+        }
+        {/* 초기 메뉴 */}
+        {Boolean(!isSignIn()) &&
+          <>
+            <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
+            <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
+            <MenuItem onClick={onClickLogin}>로그인</MenuItem>
+          </>
+        }
+      </Menu>
     )
   }
 
@@ -151,8 +145,9 @@ export const WikidNavbar = () => {
           wikied
         </Typography>
 
-        {/* DeskTop 헤더 버튼 메뉴 */}
-        {(screenwidth > ScreenType.MOBILE) &&
+        {/* 로그아웃(초기) 헤더 메뉴 */}
+        {(isClient) && (!isMobile) && Boolean(!isSignIn()) &&
+          // 로그아웃 상태 메뉴
           <>
             <Stack direction='row' sx={{ flexGrow: 1}} spacing={2} marginLeft={3} >
               <Button onClick={onClickWikiList} color='inherit'>위키목록</Button>
@@ -163,44 +158,43 @@ export const WikidNavbar = () => {
             </Stack>
           </>
         }
-        {/* DeskTop 헤더 아이콘 메뉴
-        {(screenwidth > ScreenType.MOBILE) && (isSignIn()) &&
+        {/* 로그인(아이콘) 헤더 메뉴 */}
+        {(isClient) && (!isMobile) && Boolean(isSignIn()) &&
           <>
-          <Stack direction='row' >
-            <Button color='inherit'>위키목록</Button>
-            <Button color='inherit'>자유게시판</Button>
+          <Stack direction='row' sx={{ flexGrow: 1}} spacing={2} marginLeft={3} >
+            <Button onClick={onClickWikiList} color='inherit'>위키목록</Button>
+            <Button onClick={onClickBoards} color='inherit'>자유게시판</Button>
           </Stack>
           <Stack direction='row' >
-            <IconButton size='large' edge='start' color='inherit' aria-label='AccountCircle'>
-              <Image src="/images/ic_Bell.svg" alt='Notifications' width={48} height={48} priority />
-              <NotificationsIcon />
+            <IconButton onClick={onClickNotification}
+              size='large' edge='start' color='inherit' aria-label='AccountCircle'>
+              <Image src="/images/img/img_Bell.svg" alt='' width={36} height={36} priority />
+              {/* <NotificationsIcon /> */}
             </IconButton>
-            <IconButton size='large' edge='start' color='inherit' aria-label='AccountCircle'>
+            <IconButton onClick={onMenuIconOpen}
+              size='large' edge='start' color='inherit' aria-label='AccountCircle'>
               <AccountCircleIcon />
             </IconButton>
           </Stack>
         </>
-        }         */}
+        }        
         {/* Mobile 헤더 버거 메뉴 */}
-        {(screenwidth < ScreenType.MOBILE) &&
+        {(isClient) && (isMobile) &&
         <>
           <Stack direction='row' sx={{ flexGrow: 999}} >
           </Stack>
           <Stack sx={{ flexGrow: 1}}>
             <IconButton sx={{ justifyContent: 'flex-end' }}
               onClick={onMenuIconOpen}
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='logo'>
+              size='large' edge='start' color='inherit' aria-label='logo'>
               <MenuIcon/>
             </IconButton>
           </Stack>
           </>
         }
 
-        {isSignIn() ? signedInMenu({ signIn: true }) : signedInMenu({ signIn: false })}
+        { resetDropdownMenu() }
       </Toolbar>
     </AppBar>
   )
-}
+  }
