@@ -15,7 +15,12 @@ const ArticleCard = ({
     <div className={styles.articleContain}>
       <div className={styles.innerContain}>
         <div className={styles.photoContain}>
-          <ArticleImage src={image} alt={`${id} 이미지`} />
+          <ArticleImage
+            src={image}
+            alt={`${id} 이미지`}
+            width={300}
+            height={300}
+          />
         </div>
         <div className={styles.innerInfo}>
           <div className={styles.contentTitle}>{title}</div>
