@@ -1,25 +1,35 @@
+"use client";
+
 import { useState } from "react";
-import { CommentsListData } from "@/api/swagger/Wikid.types";
-import DeleteComments from "@/components/boards/id/CommentDel";
 import Image from "next/image";
 import styles from "@/styles/boards/id/CoCard.module.scss";
+import { CommentsListData } from "@/api/swagger/Wikid.types";
+import DeleteComments from "@/components/boards/id/CommentDel";
+import EditComments from "@/components/boards/id/CommentEdit";
 
-type CoCardProps = CommentsListData;
+type CoCardProps = {
+  comments: CommentsListData["list"];
+};
 
-const CoCard = ({ list }: CoCardProps) => {
-  const [comments, setComments] = useState(list);
-
-  const handleCommentDelete = (deletedCommentId: number) => {
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment.id !== deletedCommentId)
+const CoCard = ({ comments }: CoCardProps) => {
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null); // 현재 수정 중인 댓글 ID
+  const [updatedComments, setUpdatedComments] = useState(comments);
+  const handleEditSuccess = (commentId: number, updatedContent: string) => {
+    setUpdatedComments((prev) =>
+      prev.map((comment) =>
+        comment.id === commentId
+          ? { ...comment, content: updatedContent }
+          : comment
+      )
     );
+    setEditingCommentId(null);
   };
 
   return (
     <div className={styles.articleContain}>
       <div className={styles.insideContain}>
-        {comments.map((comment) => (
-          <div key={`${comment.id}`} className={styles.innerContain}>
+        {updatedComments.map((comment) => (
+          <div key={comment.id} className={styles.innerContain}>
             <div className={styles.photoInfo}>
               <Image
                 src={comment.writer.image || "/images/icon/ic_profile.svg"}
@@ -33,21 +43,44 @@ const CoCard = ({ list }: CoCardProps) => {
               <div className={styles.topInfo}>
                 <p className={styles.name}>{comment.writer.name}</p>
                 <div className={styles.iconContain}>
-                  <Image
-                    src="/images/icon/ic_edit.svg"
-                    alt="edit"
-                    width={20}
-                    height={20}
-                  />
-                  <DeleteComments
-                    commentId={comment.id}
-                    onDelete={() => handleCommentDelete(comment.id)}
-                  />
+                  {editingCommentId === comment.id ? (
+                    <EditComments
+                      commentId={comment.id}
+                      currentContent={comment.content}
+                      onEditSuccess={(updatedContent) =>
+                        handleEditSuccess(comment.id, updatedContent)
+                      }
+                    />
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => setEditingCommentId(comment.id)}
+                        className={styles.editButton}
+                      >
+                        <Image
+                          src="/images/icon/ic_edit.svg"
+                          alt="edit"
+                          width={20}
+                          height={20}
+                        />
+                      </button>
+                      <DeleteComments
+                        commentId={comment.id}
+                        onDelete={() => {
+                          setUpdatedComments((prev) =>
+                            prev.filter((item) => item.id !== comment.id)
+                          );
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
-              <div className={styles.contentContain}>
-                <p className={styles.content}>{comment.content}</p>
-              </div>
+              {editingCommentId !== comment.id && (
+                <div className={styles.contentContain}>
+                  <p className={styles.content}>{comment.content}</p>
+                </div>
+              )}
               <p className={styles.updatedAt}>
                 {comment.updatedAt.slice(0, 10)}
               </p>

@@ -42,7 +42,9 @@ export const postComments = async (
     );
 
 
+
     if (res.status === 200 || res.status === 201) {
+
 
       const resData = res.data as CommentsData;
       SessionStorage.setItem(`postComments`, resData);
