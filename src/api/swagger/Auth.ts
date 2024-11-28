@@ -28,7 +28,7 @@ export const postSignUp = async (reqProps: SignUpProps): Promise<SignUpData> => 
       }
     );
 
-    if (res.status === 201) {
+    if (res.status === 200 || res.status === 201) {
       const signUp = res.data as SignUpData;
       LocalStorage.setItem(`postSignUp`, signUp);
       return signUp;
@@ -63,7 +63,7 @@ export const postSignIn = async (reqProps: SignInProps): Promise<SignInData> => 
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const signIn = res.data as SignInData;
       SessionStorage.setItem(`postSignIn`, signIn);
       return signIn;
@@ -103,7 +103,7 @@ export const postRefreshToken = async (): Promise<RefreahData | null> => {
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as RefreahData;
       LocalStorage.setItem(`postRefreshToken`, resData);
       signIn.accessToken = resData.accessToken;

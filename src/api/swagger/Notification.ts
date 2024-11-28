@@ -24,7 +24,7 @@ export const getNotifications = async (pageSize: number, page: number = 1): Prom
       }
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as NotificationsData;
       SessionStorage.setItem(`getNotifications`, resData);
       return resData;
@@ -56,7 +56,7 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
       }
     })
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as NotificationsIdData;
       SessionStorage.setItem(`deleteNotificationsId`, resData);
       return resData;

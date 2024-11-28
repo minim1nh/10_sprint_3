@@ -32,7 +32,7 @@ export const postArticles = async (
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesData;
       SessionStorage.setItem(`postArticles`, resData);
       return resData;
@@ -66,7 +66,7 @@ export const getArticles = async (
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesListData;
       SessionStorage.setItem(`getArticles`, resData);
       return resData;
@@ -101,7 +101,7 @@ export const getArticlesId = async (
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesDetailData;
       SessionStorage.setItem(`getArticlesId`, resData);
       return resData;
@@ -143,7 +143,7 @@ export const patchArticlesId = async (
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesDetailData;
       SessionStorage.setItem(`patchArticlesId`, resData);
       return resData;
@@ -177,7 +177,7 @@ export const deleteArticlesId = async (
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesIdData;
       SessionStorage.setItem(`deleteArticlesId`, resData);
       return resData;
@@ -216,7 +216,7 @@ export const postArticlesIdLike = async (
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesIdLikeData;
       SessionStorage.setItem(`postArticlesIdLike`, resData);
       return resData;
@@ -250,7 +250,7 @@ export const deleteArticlesIdLike = async (
       },
     });
 
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesIdLikeData;
       SessionStorage.setItem(`deleteArticlesIdLike`, resData);
       return resData;
