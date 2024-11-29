@@ -175,7 +175,7 @@ export const WikidNavbar = () => {
           <Stack direction='row' >
             <IconButton onClick={onClickNotification}
               size='large' edge='start' color='inherit' aria-label='AccountCircle'>
-              <Image src="/images/img/img_Bell.svg" alt='' width={36} height={36} priority />
+              <Image src="/images/icon/ic_alarm1.svg" alt='' width={24} height={24} priority />
               {/* <NotificationsIcon /> */}
             </IconButton>
             <IconButton onClick={onMenuIconOpen}

@@ -39,7 +39,7 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
     }
   } catch (error) {
     //console.error('Error to Profiles postProfiles():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -75,7 +75,7 @@ export const getProfiles = async (
     }
   } catch (error) {
     //console.error('Error to getMe():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -108,7 +108,7 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData | null
     }
   } catch (error) {
     //console.error('Error to getProfilesCode():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -164,7 +164,7 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
     }
   } catch (error) {
     //console.error('Error to patchProfilesCode():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -197,7 +197,7 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
     }
   } catch (error) {
     //console.error('Error to getProfilesCodePing():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -241,7 +241,7 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
     }
   } catch (error) {
     //console.error('Error to Profiles postProfilesCodePing():', error);
-    //throw error;
+    throw error;
   }
 
   return null

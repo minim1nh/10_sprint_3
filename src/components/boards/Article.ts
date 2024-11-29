@@ -29,6 +29,6 @@ export const getArticlesId = async (
     }
   } catch (error) {
     console.error("Error to getArticlesId():", error);
-    //throw error;
+    throw error;
   }
 };
