@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import LockIcon from '@mui/icons-material/Lock';
+import DeleteIcon from '@mui/icons-material/Delete';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { NotificationList, NotificationsData, ImageUploadProps, ProfilesCodePingProps } from '@/api/swagger/Wikid.types'
 import { useEffect, useState } from 'react'
@@ -25,6 +26,7 @@ import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import { isSignIn } from '@/hooks/Token';
 import { getProfilesCode, postProfilesCodePing } from '@/api/swagger/Profile';
+import { deleteNotificationsId } from '@/api/swagger/Notification';
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {notifies: NotificationsData | null}) => {
@@ -44,6 +46,12 @@ export const NotificationModal = (props: {notifies: NotificationsData | null}) =
     if(reason === 'delete') {
       const newlist = notifies?.list?.filter((item) => item.id !== id)
       setNotifies({ totalCount: (notifies?.totalCount ?? 0) - 1, list: newlist ?? [] })
+      try {
+        if(id)
+          deleteNotificationsId(id)
+      } catch (error) {
+        console.log('error', error)
+      }
       return
     }
     setOpen(false)
@@ -84,15 +92,21 @@ export const NotificationModal = (props: {notifies: NotificationsData | null}) =
                     <Box>
                       <IconButton>
                         <FiberManualRecordIcon />
+                        <Typography variant='subtitle1' color='text.primary'>
+                          {notify.id}
+                        </Typography>
                       </IconButton>
                     </Box>
                     <Box>
                       <IconButton onClick={(e) => handleClose(e, 'delete', notify.id)} >
-                        <CloseIcon />
+                        <Typography variant='subtitle2' color='text.secondary'>
+                          {notify.createdAt}
+                        </Typography>
+                        <DeleteIcon />
                       </IconButton>
                     </Box>                    
                   </Box>                  
-                  <Typography variant='body2' color='text.secondary'>
+                  <Typography variant='body1' color='text.secondary'>
                     {notify.content}
                   </Typography>
                 </CardContent>

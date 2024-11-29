@@ -71,7 +71,6 @@ export const WikidNavbar = () => {
   //내 위키 메뉴 클릭 시 페이지 이동
   const onClickMyWiki = async () => {
     onMenuIconClose();
-    //TODO: 내 위키 코드 쿼리후 이동
     try {
       const resData = await getUsersMe();
       console.log('getUsersMe() response: ', resData)
@@ -97,7 +96,6 @@ export const WikidNavbar = () => {
   }
 
   const resetDropdownMenu = () => {
-    console.log('check loggedIn: ', isLoggedIn)
     return (
       <Menu
         id='resources-menu'
