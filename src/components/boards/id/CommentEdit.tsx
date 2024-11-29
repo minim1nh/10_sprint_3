@@ -8,12 +8,14 @@ interface EditCommentsProps {
   commentId: number;
   currentContent: string;
   onEditSuccess: (updatedContent: string) => void;
+  onCancel: () => void;
 }
 
 const CommentEdit: React.FC<EditCommentsProps> = ({
   commentId,
   currentContent,
   onEditSuccess,
+  onCancel,
 }) => {
   const [content, setContent] = useState(currentContent);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,10 @@ const CommentEdit: React.FC<EditCommentsProps> = ({
     }
   };
 
+  const handleCancel = () => {
+    onCancel();
+  };
+
   return (
     <div className={styles.editContainer}>
       <textarea
@@ -46,13 +52,18 @@ const CommentEdit: React.FC<EditCommentsProps> = ({
         onChange={(e) => setContent(e.target.value)}
         disabled={isLoading}
       />
-      <button
-        className={styles.saveButton}
-        onClick={handleEditSubmit}
-        disabled={isLoading}
-      >
-        저장
-      </button>
+      <div className={styles.buttonsContainer}>
+        <button
+          className={styles.saveButton}
+          onClick={handleEditSubmit}
+          disabled={isLoading}
+        >
+          저장
+        </button>
+        <button className={styles.cancelButton} onClick={handleCancel}>
+          취소
+        </button>
+      </div>
     </div>
   );
 };

@@ -71,7 +71,6 @@ export const WikidNavbar = () => {
   //내 위키 메뉴 클릭 시 페이지 이동
   const onClickMyWiki = async () => {
     onMenuIconClose();
-    //TODO: 내 위키 코드 쿼리후 이동
     try {
       const resData = await getUsersMe();
       console.log('getUsersMe() response: ', resData)
@@ -97,7 +96,6 @@ export const WikidNavbar = () => {
   }
 
   const resetDropdownMenu = () => {
-    console.log('check loggedIn: ', isLoggedIn)
     return (
       <Menu
         id='resources-menu'
@@ -149,7 +147,7 @@ export const WikidNavbar = () => {
           <Image onClick={()=>router.push('/landingpage')} src="/images/img/img_W.svg" alt='Wikid Logo' width={48} height={48} priority />
         </IconButton>
         <Typography sx={{ flexGrow: -1, fontWeight: 800, fontSize: '24px', lineHeight: '28px', color: 'lightgray' }} width={100}>
-          wikied
+          WIKID
         </Typography>
 
         {/* 로그아웃(초기) 헤더 메뉴 */}
@@ -175,7 +173,7 @@ export const WikidNavbar = () => {
           <Stack direction='row' >
             <IconButton onClick={onClickNotification}
               size='large' edge='start' color='inherit' aria-label='AccountCircle'>
-              <Image src="/images/img/img_Bell.svg" alt='' width={36} height={36} priority />
+              <Image src="/images/icon/ic_alarm1.svg" alt='' width={24} height={24} priority />
               {/* <NotificationsIcon /> */}
             </IconButton>
             <IconButton onClick={onMenuIconOpen}

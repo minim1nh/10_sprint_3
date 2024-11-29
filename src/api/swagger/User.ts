@@ -35,7 +35,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
     }
   } catch (error) {
     //console.error('Error to getUsersMe():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -78,7 +78,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
     }
   } catch (error) {
     //console.error('Error to patchUsersMePassword():', error);
-    //throw error;
+    throw error;
   }
 
   return null;

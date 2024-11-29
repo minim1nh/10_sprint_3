@@ -12,12 +12,12 @@ const AddButton: React.FC<AddBoardButtonProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleClick = () => {
+  const onClickBoards = () => {
     router.push("/addboard");
   };
 
   return (
-    <button onClick={handleClick} className={styles.addBoardButton}>
+    <button onClick={onClickBoards} className={styles.addBoardButton}>
       {label}
     </button>
   );

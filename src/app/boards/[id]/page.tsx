@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getArticlesId } from "@/components/boards/Article";
+import { getArticlesId } from "@/api/swagger/Article";
 import { getComments } from "@/api/swagger/Comment";
 import {
   ArticlesDetailData,
@@ -63,10 +63,9 @@ export default function Page() {
   };
 
   if (!article) {
-    return <div>게시글을 찾을 수 없습니다.</div>;
+    return <div></div>;
   }
 
-  // 댓글 개수를 직접 계산
   const commentsCount = commentsData?.list.length || 0;
 
   return (
@@ -79,11 +78,7 @@ export default function Page() {
           onCommentAdded={handleCommentAdded}
           count={commentsCount}
         />
-        {commentsData ? (
-          <CoCard comments={commentsData.list} />
-        ) : (
-          <div>댓글이 없습니다.</div>
-        )}
+        {commentsData ? <CoCard comments={commentsData.list} /> : <div></div>}
       </div>
     </>
   );

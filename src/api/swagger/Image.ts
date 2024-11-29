@@ -40,7 +40,7 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
     }
   } catch (error) {
       //console.error('Error to postImagesUpload():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
