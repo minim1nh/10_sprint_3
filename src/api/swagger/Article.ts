@@ -35,14 +35,17 @@ export const postArticles = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesData;
       SessionStorage.setItem(`postArticles`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to postArticles()");
     }
   } catch (error) {
     //console.error('Error to postArticles():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };
 
 /**
@@ -54,7 +57,7 @@ export const getArticles = async (
   pageSize: number = 10,
   orderBy: string = "recent",
   keyword: string = ""
-): Promise<ArticlesListData> => {
+): Promise<ArticlesListData | null> => {
   const URL = `https://wikied-api.vercel.app/10-3/articles?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&keyword=${keyword}`;
   console.log("GET - getArticles(): ", URL);
 
@@ -69,14 +72,17 @@ export const getArticles = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesListData;
       SessionStorage.setItem(`getArticles`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getArticles()");
     }
   } catch (error) {
     //console.error('Error to getArticles():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };
 
 /**
@@ -104,14 +110,17 @@ export const getArticlesId = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesDetailData;
       SessionStorage.setItem(`getArticlesId`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getArticlesId()");
     }
   } catch (error) {
     //console.error('Error to getArticlesId():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };
 
 /**
@@ -152,8 +161,10 @@ export const patchArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to patchArticlesId():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };
 
 /**
@@ -186,8 +197,10 @@ export const deleteArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to deleteArticlesId():', error)
-    throw error
+    //throw error
   }
+
+  return null;
 };
 
 /**
@@ -225,8 +238,10 @@ export const postArticlesIdLike = async (
     }
   } catch (error) {
     //console.error('Error to postArticlesIdLike():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };
 
 /**
@@ -253,12 +268,15 @@ export const deleteArticlesIdLike = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ArticlesIdLikeData;
       SessionStorage.setItem(`deleteArticlesIdLike`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to deleteArticlesIdLike()");
     }
   } catch (error) {
     //console.error('Error to deleteArticlesIdLike():', error)
-    throw error
+    //throw error
   }
+
+  return null;
 };

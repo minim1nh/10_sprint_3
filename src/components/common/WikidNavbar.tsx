@@ -21,16 +21,22 @@ import useScreenWidth, {ScreenType} from '@/hooks/useScreenWidth'
 import SessionStorage from '@/api/storage/SessionStorage'
 import { isSignIn } from '@/hooks/Token'
 import { getUsersMe } from "@/api/swagger/User";
-import { UserData } from "@/api/swagger/Wikid.types";
 
 export const WikidNavbar = () => {
   const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dropdownMenuElement, setDropdownMenuElement] = useState<null | HTMLElement>(null);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const screenwidth = useScreenWidth();
   
   useEffect(() => {
     setIsClient(true);
+    const interval = setInterval(() => {
+      setIsClient(prev => prev);
+      setIsLoggedIn(isSignIn() ? true : false);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [])
 
   const onMenuIconOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -72,7 +78,7 @@ export const WikidNavbar = () => {
       const profile = resData?.profile
       const code = profile?.code
       if(code) {
-        router.push(`/wiki/${code}`)
+        router.push(`/wiki?code=${code}`)
       } else {
         console.log('code is null')
       }
@@ -87,10 +93,11 @@ export const WikidNavbar = () => {
       SessionStorage.clear();
     }
     onMenuIconClose();
-    router.push('/')
+    router.push('/landingpage')
   }
 
   const resetDropdownMenu = () => {
+    console.log('check loggedIn: ', isLoggedIn)
     return (
       <Menu
         id='resources-menu'
@@ -109,14 +116,14 @@ export const WikidNavbar = () => {
           'aria-labelledby': 'resources-button'
         }}>
         {/* 로그인 && 모바일 메뉴 */}
-        {Boolean(isSignIn()) && (isMobile) &&
+        {(isLoggedIn) && (isMobile) &&
           <>
             <MenuItem onClick={onClickWikiList}>위키목록</MenuItem>
             <MenuItem onClick={onClickBoards} divider={true}>자유계시판</MenuItem>
           </>
         }
         {/* 로그인 후속 메뉴 */}
-        {Boolean(isSignIn()) &&
+        {(isLoggedIn) &&
           <>
             <MenuItem onClick={onClickAccountSettings}>계정설정</MenuItem>
             <MenuItem onClick={onClickMyWiki} divider={true}>내 위키</MenuItem>
@@ -159,7 +166,7 @@ export const WikidNavbar = () => {
           </>
         }
         {/* 로그인(아이콘) 헤더 메뉴 */}
-        {(isClient) && (!isMobile) && Boolean(isSignIn()) &&
+        {(isClient) && (!isMobile) && (isLoggedIn) &&
           <>
           <Stack direction='row' sx={{ flexGrow: 1}} spacing={2} marginLeft={3} >
             <Button onClick={onClickWikiList} color='inherit'>위키목록</Button>

@@ -11,17 +11,20 @@ import {
   Card,
   CardContent,
   Typography,
-  FormLabel,
+  TextField,
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import LockIcon from '@mui/icons-material/Lock';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { NotificationList, NotificationsData, ImageUploadProps } from '@/api/swagger/Wikid.types'
+import { NotificationList, NotificationsData, ImageUploadProps, ProfilesCodePingProps } from '@/api/swagger/Wikid.types'
 import { useEffect, useState } from 'react'
 import { postImagesUpload } from '@/api/swagger/Image';
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
+import { isSignIn } from '@/hooks/Token';
+import { getProfilesCode, postProfilesCodePing } from '@/api/swagger/Profile';
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {notifies: NotificationsData | null}) => {
@@ -102,28 +105,122 @@ export const NotificationModal = (props: {notifies: NotificationsData | null}) =
   )
 }
 
-//TODO: 위키 참여 인증 모달 다이얼로그(작업중)
+//위키 참여 인증 모달 다이얼로그
 export const CertificationModal = () => {
+  const [code, setCode] = useState('')
+  const [question, setQuestion] = useState('') // from getProfilesCode(code)
+  const [answer, setAnswer] = useState('') // to postProfilesCodePing(code, { answer })
+  const [result, setResult] = useState('')
+
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    console.log('CertificationModal')
+    async function initialize() {
+      const signin = isSignIn()
+      if (signin) {
+        setCode(signin.user.profile.code)
+        const profilecode = await getProfilesCode(signin.user.profile.code)
+        if (profilecode) {
+          setQuestion(profilecode.securityQuestion)
+        }
+      }
+    }
+    initialize()
+    setOpen(true)
+  }, [])
+
+  const handleClose = async (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    console.log('handleClose', reason)
+    if (reason === 'clickaway') {
+      return
+    }
+    if(reason === 'confirm') {
+      try {
+        const props = {
+          securityAnswer: answer
+        } as ProfilesCodePingProps
+
+        const respostanswer = await postProfilesCodePing(code, props)
+        if (respostanswer) {
+          // 성공적으로 인증이 완료되었습니다.
+          setResult('정답이 맞습니다.')
+          setTimeout(() => setOpen(false), 1000)
+        } else {
+          // 인증 실패 또는 오류 처리
+          setResult('정답이 아닙니다. 다시 생각해 보세요.')
+        }
+      } catch (error) {
+        //console.error('Error fetching profile:', error)
+        //throw error
+      }
+      return
+    }
+  }
+
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Open dialog</Button>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby='dialog-title'
-        aria-describedby='dialog-description'>
-        <DialogTitle id='dialog-title'>Submit the test?</DialogTitle>
+        aria-describedby='dialog-description'
+        fullWidth
+        maxWidth="sm"
+        >
+        <DialogTitle id="dialog-title">
+          <Box display="flex" justifyContent={'end'}>
+            <IconButton onClick={() => setOpen(false)}>
+                <CloseIcon />
+            </IconButton>
+          </Box>
+          <Box display="flex" justifyContent={'center'}>
+            <IconButton>
+                <LockIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{margin:'10px'}} display="flex" justifyContent={'center'}>
+            <Typography sx={{fontSize:'14px'}} align='center' color='gray' component={'pre'}>
+              {"다음 퀴즈를 맞추고\n위키를 작성해 보세요."}
+            </Typography>
+          </Box>
+        </DialogTitle> 
         <DialogContent>
           <DialogContentText id='dialog-description' component={'span'}>
-            Are you sure you want to submit the test? You will not be able to
-            edit it after submitting.
+            <Box display="flex" justifyContent={'left'}>
+              <Typography sx={{marginTop:'10px', fontSize:'18px', fontStyle:'bold'}} color='#474D66' component={'span'}>
+                {question}
+              </Typography>
+            </Box>
+            <Box display="flex" justifyContent={'center'}>
+              <TextField id="standard-basic" label="답안을 입력해 주세요." variant="outlined"
+                sx={{marginTop:'10px', backgroundColor:'#FBEDED', borderRadius:'10px'}} 
+                fullWidth={true}
+                onChange= {(e) => {
+                  setResult('')
+                  setAnswer(e.target.value)
+                }}
+              />
+            </Box>
+            <Box display="flex" justifyContent={'left'}>
+              <Typography sx={{marginTop:'10px', fontSize:'12px'}} color='#D14343' variant='subtitle2' component={'span'}>
+                {result}
+              </Typography>
+            </Box>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => setOpen(false)} autoFocus>Submit</Button>
+          <Button onClick={(e) => handleClose(e, 'confirm')} sx={{margin:'16px', backgroundColor:'#4CBFA4'}} variant="contained" fullWidth={true}>확인</Button>
         </DialogActions>
+        <DialogContent>
+          <DialogContentText id='dialog-description' component={'span'}>
+          <Typography sx={{fontSize:'12px'}} align='center' color='#8F95B2' component={'pre'}>
+                {'위키드는 지인들과 함께하는 즐거운 공간입니다.\n지인에게 상처를 주지 않도록 작성해 주세요.'}
+          </Typography>
+          </DialogContentText>
+        </DialogContent>
       </Dialog>
     </>
   )
@@ -226,7 +323,7 @@ export const ExitNotSavedModal = () => {
   )
 }
 
-//TODO: 이미지 삽입 모달 다이얼로그 (작업중)
+//이미지 삽입 모달 다이얼로그
 export const ImageInsertModal = () => {
 
   const [files, setFiles] = useState<File[]>([]);
