@@ -12,7 +12,7 @@ export default function ParticipateButton({
 }) {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
-  const [securityAnswer, setSecurityAnswer] = useState(""); // 입력한 정답
+  const [securityAnswer, setSecurityAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 

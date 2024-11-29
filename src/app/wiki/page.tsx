@@ -7,14 +7,14 @@ import ProfileCard from "@/app/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
 import ParticipateButton from "@/app/wiki/ParticipateButton";
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
-  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
+  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor as any),
   {
     ssr: false,
-    loading: () => <p>Loading editor...</p>,
   }
 );
 
@@ -22,6 +22,14 @@ interface Profile {
   name: string;
   content?: string;
   code: string;
+  city?: string;
+  mbti?: string;
+  job?: string;
+  sns?: string;
+  birthday?: string;
+  nickname?: string;
+  bloodType?: string;
+  nationality?: string;
 }
 
 export default function WikiPage() {
@@ -31,8 +39,11 @@ export default function WikiPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [isProfileEditable, setIsProfileEditable] = useState<boolean>(false);
   const [newContent, setNewContent] = useState<string>("");
+
+  // 스낵바 상태
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     if (!code) {
@@ -44,11 +55,14 @@ export default function WikiPage() {
     async function fetchProfile() {
       try {
         const data = await getProfilesCode(code);
-        setProfile(data);
-        setNewContent(data.content || "");
-        setError(null);
+        if (data) {
+          setProfile(data);
+          setNewContent(data.content || "");
+          setError(null);
+        } else {
+          setError("프로필 데이터를 찾을 수 없습니다.");
+        }
       } catch (err) {
-        console.error("프로필 데이터를 불러오는 중 오류가 발생했습니다:", err);
         setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -65,22 +79,29 @@ export default function WikiPage() {
     }
 
     try {
-      await patchProfilesCode(code, { content: newContent });
+      await patchProfilesCode(code, { content: newContent } as any);
       const updatedProfile = await getProfilesCode(code);
       setProfile(updatedProfile);
       setIsEditable(false);
-      setError(null);
+      setSnackbarMessage("내용 수정이 완료되었습니다.");
+      setSnackbarOpen(true);
     } catch (err) {
-      console.error("내용 저장 중 오류가 발생했습니다:", err);
       setError("내용 저장 중 오류가 발생했습니다.");
     }
   };
 
-  const toggleProfileEdit = () => {
-    setIsProfileEditable((prev) => !prev);
+  const handleParticipate = () => {
+    setIsEditable(true);
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  if (loading) {
+    return null;
+  }
+
   if (error) return <div>Error: {error}</div>;
   if (!profile) return <div>프로필 데이터가 없습니다.</div>;
 
@@ -95,23 +116,22 @@ export default function WikiPage() {
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{profile.name}</h1>
             {!isEditable && (
-              <ParticipateButton onCorrectAnswer={() => setIsEditable(true)} />
+              <ParticipateButton onCorrectAnswer={handleParticipate} />
             )}
           </div>
         </header>
 
         <div className={styles.link}>
-          {/* Next.js Image 컴포넌트로 수정 */}
-          <Image
-            src="/images/icon/ic_link.svg"
-            alt="Link Icon"
-            className={styles.linkIcon}
-            width={24}
-            height={24}
-          />
-          <a href={currentUrl} target="_blank" rel="noopener noreferrer">
+          <span
+            onClick={() => {
+              navigator.clipboard.writeText(currentUrl);
+              setSnackbarMessage("링크가 복사되었습니다.");
+              setSnackbarOpen(true);
+            }}
+            className={styles.copyLink}
+          >
             {currentUrl}
-          </a>
+          </span>
         </div>
 
         <div className={styles.content}>
@@ -130,20 +150,13 @@ export default function WikiPage() {
             <div>
               <Editor
                 apiKey="elv4un103qy5smg6mvj731h6s50h30t4nphiry7beamg1u93"
-                value={newContent}
+                value={newContent || ""}
                 init={{
-                  inline: false,
                   height: 500,
-                  menubar: true,
-                  plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table paste help wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat",
+                  plugins: "advlist autolink link lists ",
+                  toolbar: "undo redo | bold italic | link",
                 }}
-                onEditorChange={(content) => setNewContent(content)}
+                onEditorChange={(content: string) => setNewContent(content)}
               />
 
               <div className={styles.actions}>
@@ -162,14 +175,20 @@ export default function WikiPage() {
         </div>
       </div>
       <div className={styles.profileCard}>
-        {code && (
-          <ProfileCard
-            code={code}
-            isEditable={isProfileEditable}
-            onToggleEdit={toggleProfileEdit}
-          />
-        )}
+        <ProfileCard code={code} profile={profile} />
       </div>
+
+      {/* 스낵바 */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
