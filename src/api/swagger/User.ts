@@ -28,6 +28,7 @@ export const getUsersMe = async (): Promise<UserData | null> => {
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as UserData;
       SessionStorage.setItem(`getUsersMe`, resData);
+
       return resData;
     } else {
       throw new Error('Failed to getUsersMe()');
@@ -36,6 +37,8 @@ export const getUsersMe = async (): Promise<UserData | null> => {
     //console.error('Error to getUsersMe():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -68,6 +71,7 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as UserData;
       SessionStorage.setItem(`patchUsersMePassword`, resData);
+
       return resData;
     } else {
       throw new Error('Failed to patchUsersMePassword()');
@@ -76,4 +80,6 @@ export const patchUsersMePassword = async (reqProps: PasswordProps): Promise<Use
     //console.error('Error to patchUsersMePassword():', error);
     throw error;
   }
+
+  return null;
 };

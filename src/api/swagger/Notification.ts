@@ -35,6 +35,8 @@ export const getNotifications = async (pageSize: number, page: number = 1): Prom
     //console.error('Error to getNotifications():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -59,6 +61,7 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as NotificationsIdData;
       SessionStorage.setItem(`deleteNotificationsId`, resData);
+
       return resData;
     } else {
       throw new Error('Failed to deleteNotificationsId()');
@@ -67,4 +70,6 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
     //console.error('Error to deleteNotificationsId():', error)
     throw error
   }
+
+  return null;
 }

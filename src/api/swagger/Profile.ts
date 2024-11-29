@@ -32,6 +32,7 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`postProfiles`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to Profiles postProfiles()");
@@ -40,6 +41,8 @@ export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesDat
     //console.error('Error to Profiles postProfiles():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -50,7 +53,7 @@ export const getProfiles = async (
   page: number,
   pageSize: number,
   name: string
-): Promise<ProfileListData> => {
+): Promise<ProfileListData | null> => {
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles?page=${page}&pageSize=${pageSize}&name=${name}`;
   console.log("GET - getProfiles(): ", URL);
 
@@ -65,6 +68,7 @@ export const getProfiles = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfileListData;
       SessionStorage.setItem(`getProfiles`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getMe()");
@@ -73,13 +77,15 @@ export const getProfiles = async (
     //console.error('Error to getMe():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
  * 개별 프로필 조회 함수
  * https://wikied-api.vercel.app/10-3/profiles/1
  */
-export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
+export const getProfilesCode = async (code: string): Promise<ProfilesData | null> => {
   const teamId = "10-3";
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
   console.log("GET - getProfilesCode: ", URL);
@@ -95,6 +101,7 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`getProfilesCode`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getProfilesCode()");
@@ -103,6 +110,8 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData> => {
     //console.error('Error to getProfilesCode():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -148,6 +157,7 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesData;
       SessionStorage.setItem(`patchProfilesCode`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to patchProfilesCode()");
@@ -156,6 +166,8 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
     //console.error('Error to patchProfilesCode():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -163,7 +175,7 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
  * 5분 이내의 프로필 수정 여부 상태를 확인할 수 있습니다.
  * https://wikied-api.vercel.app/10-3/profiles/1/ping
  */
-export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePingData> => {
+export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePingData | null> => {
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}/ping`;
   console.log("GET - getProfilesCodePing(): ", URL);
 
@@ -178,6 +190,7 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesCodePingData;
       SessionStorage.setItem(`getProfilesCodePing`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getProfilesCodePing()");
@@ -186,6 +199,8 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
     //console.error('Error to getProfilesCodePing():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -219,6 +234,7 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ProfilesCodePingData;
       SessionStorage.setItem(`postProfilesCodePing`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to Profiles postProfilesCodePing()");
@@ -227,4 +243,6 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
     //console.error('Error to Profiles postProfilesCodePing():', error);
     throw error;
   }
+
+  return null
 };

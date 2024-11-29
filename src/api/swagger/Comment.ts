@@ -41,13 +41,10 @@ export const postComments = async (
       }
     );
 
-
-
     if (res.status === 200 || res.status === 201) {
-
-
       const resData = res.data as CommentsData;
       SessionStorage.setItem(`postComments`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to postComments()");
@@ -56,6 +53,8 @@ export const postComments = async (
     //console.error('Error to postComments():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -66,7 +65,7 @@ export const getComments = async (
   articleId: number,
   limit: number,
   cursor?: number
-): Promise<CommentsListData> => {
+): Promise<CommentsListData | null> => {
   const baseurl = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/comments?limit=${limit}`;
   const URL = cursor ? baseurl + `&cursor=${cursor}` : baseurl;
   console.log("GET - URL: ", URL);
@@ -82,6 +81,7 @@ export const getComments = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsListData;
       SessionStorage.setItem(`getComments`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to getComments()");
@@ -90,6 +90,8 @@ export const getComments = async (
     //console.error('Error to getComments():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -127,6 +129,7 @@ export const patchCommentsId = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsData;
       SessionStorage.setItem(`patchCommentsId`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to patchCommentsId()");
@@ -135,6 +138,8 @@ export const patchCommentsId = async (
     //console.error('Error to patchCommentsId():', error);
     throw error;
   }
+
+  return null;
 };
 
 /**
@@ -164,6 +169,7 @@ export const deleteCommentsId = async (
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as CommentsIdData;
       SessionStorage.setItem(`deleteCommentsId`, resData);
+
       return resData;
     } else {
       throw new Error("Failed to deleteCommentsId()");
@@ -172,4 +178,6 @@ export const deleteCommentsId = async (
     //console.error('Error to deleteCommentsId():', error)
     throw error;
   }
+
+  return null;
 };

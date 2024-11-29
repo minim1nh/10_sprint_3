@@ -104,6 +104,7 @@ const AuthTest = () => {
       <WikidSnackbar
         severity={severity}
         message={message}
+
         autoHideDuration={3000}
       />
     </>
