@@ -36,7 +36,7 @@ const IdCard = ({
               <p className={styles.updatedAt}>{updatedAt.slice(0, 10)}</p>
             </div>
             <div className={styles.likeCount}>
-              <LikeCount likeCount={likeCount} />
+              <LikeCount articleId={id} likeCount={likeCount} />
             </div>
           </div>
           <div className={styles.photoContain}>

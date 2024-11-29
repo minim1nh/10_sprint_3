@@ -12,8 +12,9 @@ type CoCardProps = {
 };
 
 const CoCard = ({ comments }: CoCardProps) => {
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null); // 현재 수정 중인 댓글 ID
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [updatedComments, setUpdatedComments] = useState(comments);
+
   const handleEditSuccess = (commentId: number, updatedContent: string) => {
     setUpdatedComments((prev) =>
       prev.map((comment) =>
@@ -22,6 +23,10 @@ const CoCard = ({ comments }: CoCardProps) => {
           : comment
       )
     );
+    setEditingCommentId(null);
+  };
+
+  const handleCancelEdit = () => {
     setEditingCommentId(null);
   };
 
@@ -43,15 +48,7 @@ const CoCard = ({ comments }: CoCardProps) => {
               <div className={styles.topInfo}>
                 <p className={styles.name}>{comment.writer.name}</p>
                 <div className={styles.iconContain}>
-                  {editingCommentId === comment.id ? (
-                    <EditComments
-                      commentId={comment.id}
-                      currentContent={comment.content}
-                      onEditSuccess={(updatedContent) =>
-                        handleEditSuccess(comment.id, updatedContent)
-                      }
-                    />
-                  ) : (
+                  {editingCommentId !== comment.id && (
                     <>
                       <button
                         onClick={() => setEditingCommentId(comment.id)}
@@ -76,11 +73,22 @@ const CoCard = ({ comments }: CoCardProps) => {
                   )}
                 </div>
               </div>
-              {editingCommentId !== comment.id && (
-                <div className={styles.contentContain}>
+
+              <div className={styles.contentContain}>
+                {editingCommentId === comment.id ? (
+                  <EditComments
+                    commentId={comment.id}
+                    currentContent={comment.content}
+                    onEditSuccess={(updatedContent) =>
+                      handleEditSuccess(comment.id, updatedContent)
+                    }
+                    onCancel={handleCancelEdit}
+                  />
+                ) : (
                   <p className={styles.content}>{comment.content}</p>
-                </div>
-              )}
+                )}
+              </div>
+
               <p className={styles.updatedAt}>
                 {comment.updatedAt.slice(0, 10)}
               </p>

@@ -29,7 +29,7 @@ const ArticleCard = ({
               <p className={styles.name}>{writer.name}</p>
               <p className={styles.updatedAt}>{updatedAt.slice(0, 10)}</p>
             </div>
-            <LikeCount likeCount={likeCount} />
+            <LikeCount likeCount={likeCount} articleId={id} />{" "}
           </div>
         </div>
       </div>

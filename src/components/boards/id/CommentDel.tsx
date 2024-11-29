@@ -1,5 +1,6 @@
 import { deleteCommentsId } from "@/api/swagger/Comment";
 import Image from "next/image";
+import styles from "@/styles/boards/id/CoCard.module.scss";
 
 interface DeleteCommentsProps {
   commentId: number;
@@ -27,6 +28,7 @@ const DeleteComments: React.FC<DeleteCommentsProps> = ({
     <button onClick={handleDelete}>
       <Image
         src="/images/icon/ic_delete.svg"
+        className={styles.deleteButton}
         alt="delete"
         width={20}
         height={20}

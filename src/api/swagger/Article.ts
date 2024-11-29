@@ -1,7 +1,14 @@
-import axios from 'axios';
-import SessionStorage from '@/api/storage/SessionStorage';
-import { teamId, ArticlesProps, ArticlesData, ArticlesListData, ArticlesDetailData, ArticlesIdData, ArticlesIdLikeData } from '@/api/swagger/Wikid.types';
-import { getAccessToken } from '@/hooks/Token'
+import axios from "axios";
+import SessionStorage from "@/api/storage/SessionStorage";
+import {
+  teamId,
+  ArticlesProps,
+  ArticlesListData,
+  ArticlesDetailData,
+  ArticlesIdData,
+  ArticlesIdLikeData,
+} from "@/api/swagger/Wikid.types";
+import { getAccessToken } from "@/hooks/Token";
 
 /**
  * 게시글 작성
@@ -10,9 +17,12 @@ import { getAccessToken } from '@/hooks/Token'
 export const postArticles = async (
   articleId: number,
   reqProps: ArticlesProps
-): Promise<ArticlesData | null> => {
+): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/10-3/articles`;
   console.log("POST - postArticles(): ", URL);
@@ -21,7 +31,9 @@ export const postArticles = async (
     const res = await axios.post(
       URL,
       {
+        title: reqProps.title,
         content: reqProps.content,
+        image: reqProps.image,
       },
       {
         headers: {
@@ -33,7 +45,7 @@ export const postArticles = async (
     );
 
     if (res.status === 200 || res.status === 201) {
-      const resData = res.data as ArticlesData;
+      const resData = res.data as ArticlesDetailData;
       SessionStorage.setItem(`postArticles`, resData);
 
       return resData;
@@ -93,7 +105,10 @@ export const getArticlesId = async (
   articleId: number
 ): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/10-3/articles/${articleId}`;
   console.log("GET - getArticlesId(): ", URL);
@@ -132,7 +147,10 @@ export const patchArticlesId = async (
   reqProps: ArticlesProps
 ): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/comments/${articleId}`;
   console.log("PATCH - patchArticlesId(): ", URL);
@@ -141,7 +159,9 @@ export const patchArticlesId = async (
     const res = await axios.patch(
       URL,
       {
+        title: reqProps.title,
         content: reqProps.content,
+        image: reqProps.image,
       },
       {
         headers: {
@@ -175,7 +195,10 @@ export const deleteArticlesId = async (
   articleId: number
 ): Promise<ArticlesIdData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}`;
   console.log("DELETE - deleteArticlesId(): ", URL);
@@ -197,7 +220,7 @@ export const deleteArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to deleteArticlesId():', error)
-    throw error
+    throw error;
   }
 
   return null;
@@ -211,7 +234,10 @@ export const postArticlesIdLike = async (
   articleId: number
 ): Promise<ArticlesIdLikeData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`;
   console.log("POST - postArticlesIdLike(): ", URL);
@@ -252,7 +278,10 @@ export const deleteArticlesIdLike = async (
   articleId: number
 ): Promise<ArticlesIdLikeData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}/like`;
   console.log("DELETE - deleteArticlesIdLike(): ", URL);
@@ -275,7 +304,7 @@ export const deleteArticlesIdLike = async (
     }
   } catch (error) {
     //console.error('Error to deleteArticlesIdLike():', error)
-    throw error
+    throw error;
   }
 
   return null;
