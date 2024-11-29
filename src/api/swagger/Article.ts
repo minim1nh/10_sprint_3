@@ -42,7 +42,7 @@ export const postArticles = async (
     }
   } catch (error) {
     //console.error('Error to postArticles():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -79,7 +79,7 @@ export const getArticles = async (
     }
   } catch (error) {
     //console.error('Error to getArticles():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -117,7 +117,7 @@ export const getArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to getArticlesId():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -161,7 +161,7 @@ export const patchArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to patchArticlesId():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -197,7 +197,7 @@ export const deleteArticlesId = async (
     }
   } catch (error) {
     //console.error('Error to deleteArticlesId():', error)
-    //throw error
+    throw error
   }
 
   return null;
@@ -238,7 +238,7 @@ export const postArticlesIdLike = async (
     }
   } catch (error) {
     //console.error('Error to postArticlesIdLike():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -275,7 +275,7 @@ export const deleteArticlesIdLike = async (
     }
   } catch (error) {
     //console.error('Error to deleteArticlesIdLike():', error)
-    //throw error
+    throw error
   }
 
   return null;

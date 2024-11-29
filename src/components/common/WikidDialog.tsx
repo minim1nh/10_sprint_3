@@ -154,7 +154,7 @@ export const CertificationModal = () => {
         }
       } catch (error) {
         //console.error('Error fetching profile:', error)
-        //throw error
+        throw error
       }
       return
     }

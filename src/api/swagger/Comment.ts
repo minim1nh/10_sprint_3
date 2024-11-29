@@ -51,7 +51,7 @@ export const postComments = async (
     }
   } catch (error) {
     //console.error('Error to postComments():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -88,7 +88,7 @@ export const getComments = async (
     }
   } catch (error) {
     //console.error('Error to getComments():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -136,7 +136,7 @@ export const patchCommentsId = async (
     }
   } catch (error) {
     //console.error('Error to patchCommentsId():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -176,7 +176,7 @@ export const deleteCommentsId = async (
     }
   } catch (error) {
     //console.error('Error to deleteCommentsId():', error)
-    //throw error;
+    throw error;
   }
 
   return null;

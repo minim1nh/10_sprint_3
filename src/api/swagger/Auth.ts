@@ -38,7 +38,7 @@ export const postSignUp = async (reqProps: SignUpProps): Promise<SignUpData | nu
     }
   } catch (error) {
     //console.error('Error to Auth postSignUp()', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -76,7 +76,7 @@ export const postSignIn = async (reqProps: SignInProps): Promise<SignInData | nu
     }
   } catch (error) {
     //console.error('Error to Auth postSignIn()', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -121,7 +121,7 @@ export const postRefreshToken = async (): Promise<RefreahData | null> => {
     }
   } catch (error) {
     //console.error('Error to Auth postRefreshToken()', error);
-    //throw error;
+    throw error;
   }
 
   return null;

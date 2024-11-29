@@ -33,7 +33,7 @@ export const getNotifications = async (pageSize: number, page: number = 1): Prom
     }
   } catch (error) {
     //console.error('Error to getNotifications():', error);
-    //throw error;
+    throw error;
   }
 
   return null;
@@ -68,7 +68,7 @@ export const deleteNotificationsId = async (id: number): Promise<NotificationsId
     }
   } catch (error) {
     //console.error('Error to deleteNotificationsId():', error)
-    //throw error
+    throw error
   }
 
   return null;
