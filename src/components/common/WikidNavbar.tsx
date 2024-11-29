@@ -147,7 +147,7 @@ export const WikidNavbar = () => {
           <Image onClick={()=>router.push('/landingpage')} src="/images/img/img_W.svg" alt='Wikid Logo' width={48} height={48} priority />
         </IconButton>
         <Typography sx={{ flexGrow: -1, fontWeight: 800, fontSize: '24px', lineHeight: '28px', color: 'lightgray' }} width={100}>
-          wikied
+          WIKID
         </Typography>
 
         {/* 로그아웃(초기) 헤더 메뉴 */}
