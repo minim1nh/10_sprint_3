@@ -33,12 +33,15 @@ export const postImagesUpload = async (reqProps: ImageUploadProps): Promise<Imag
     if (res.status === 200 || res.status === 201) {
       const resData = res.data as ImageUploadData;
       SessionStorage.setItem(`postImagesUpload`, resData);
+
       return resData;
     } else {
       throw new Error('Failed to postImagesUpload()');
     }
   } catch (error) {
       //console.error('Error to postImagesUpload():', error);
-    throw error;
+    //throw error;
   }
+
+  return null;
 };

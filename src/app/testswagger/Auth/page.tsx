@@ -101,8 +101,11 @@ const AuthTest = () => {
       {signIn && <Div>로그인정보:{JSON.stringify(signIn)}</Div>}
       {token && <Div>토큰갱신정보:{JSON.stringify(token)}</Div>}
 
-      <WikidSnackbar severity={severity} message={message} autoHideDuration={3000} />
-
+      <WikidSnackbar
+        severity={severity}
+        message={message}
+        autoHideDuration={5000}
+      />
     </>
   );
 };
