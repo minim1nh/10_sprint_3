@@ -1,9 +1,23 @@
+@use "../../variables" as *;
 .likeContain {
-  padding: 0;
-  margin: 0;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .likeIcon {
-  padding: 0;
-  margin: 0;
+  display: flex;
+  padding: 2px 2px;
+  align-items: center;
+  cursor: pointer;
+  background-color: $white;
+  gap: 5px;
+
+  .likeButton {
+    width: 22px;
+    height: 22px;
+  }
+  .likeNumber {
+    font-size: 15px;
+  }
 }

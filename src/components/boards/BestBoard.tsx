@@ -33,9 +33,16 @@ const BestBoards = () => {
         <AddButton label="게시물 등록하기" />
       </div>
       <div className={styles.container}>
-        {articles.map((article: ArticlesData) => (
+        {articles.map((article) => (
           <Link key={article.id} href={`/boards/${article.id}`}>
-            <ArticleCard {...article} />
+            <ArticleCard
+              id={article.id}
+              title={article.title}
+              image={article.image}
+              writer={article.writer}
+              likeCount={article.likeCount}
+              updatedAt={article.updatedAt}
+            />
           </Link>
         ))}
       </div>
