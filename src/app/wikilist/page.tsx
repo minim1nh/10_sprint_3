@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import styles from "@/styles/wililist/WikiList.module.scss";
 import { getProfiles } from "@/api/swagger/Profile";
 import { useRouter } from "next/navigation";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 interface Profile {
   id: number;
@@ -26,6 +28,9 @@ export default function WikiListPage() {
   const [searchName, setSearchName] = useState("");
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   // 검색어 상태 디바운싱
   useEffect(() => {
@@ -74,12 +79,14 @@ export default function WikiListPage() {
     fetchProfiles();
   }, [page, searchName]);
 
-  // 특정 위키 페이지로 이동
   const handleCardClick = (profileCode: string) => {
     router.push(`/wiki?code=${profileCode}`);
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -102,29 +109,59 @@ export default function WikiListPage() {
         </div>
       </div>
 
+      {/* 검색 결과 텍스트 */}
+      {searchName && profiles.length > 0 && (
+        <p className={styles.searchResultText}>
+          "{searchName}"님을 총 {profiles.length}명 찾았습니다.
+        </p>
+      )}
+      {searchName && profiles.length === 0 && (
+        <p className={styles.searchResultText}>
+          "{searchName}"님을 찾을 수 없습니다.
+        </p>
+      )}
+
       {/* 검색 결과 */}
       <ul className={styles.list}>
-        {profiles.map((profile) => (
-          <li
-            key={profile.id}
-            className={styles.card}
-            onClick={() => handleCardClick(profile.code)}
-          >
-            <div className={styles.cardContent}>
-              <img
-                src={profile.image}
-                alt={`${profile.name}의 아바타`}
-                className={styles.avatar}
-              />
-              <div className={styles.info}>
-                <h2>{profile.name}</h2>
-                <p>도시: {profile.city}</p>
-                <p>직업: {profile.job}</p>
-                <p>국적: {profile.nationality}</p>
+        {profiles.map((profile) => {
+          const wikiUrl = `${
+            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+          }/wiki/${profile.name}`;
+
+          return (
+            <li
+              key={profile.id}
+              className={styles.card}
+              onClick={() => handleCardClick(profile.code)}
+            >
+              <div className={styles.cardContent}>
+                <img
+                  src={profile.image || "/images/icon/ic_profile.svg"}
+                  alt={"Profile Image"}
+                  className={styles.avatar}
+                />
+                <div className={styles.info}>
+                  <h2>{profile.name}</h2>
+                  <p>도시: {profile.city}</p>
+                  <p>직업: {profile.job}</p>
+                  <p>국적: {profile.nationality}</p>
+                </div>
+                {/* 링크 추가 */}
+                <div
+                  className={styles.linkContainer}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(wikiUrl);
+                    setSnackbarMessage("링크가 복사되었습니다.");
+                    setSnackbarOpen(true);
+                  }}
+                >
+                  <span className={styles.linkText}>{wikiUrl}</span>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
 
       {/* 페이지네이션 */}
@@ -155,6 +192,18 @@ export default function WikiListPage() {
           &gt;
         </button>
       </div>
+
+      {/* 스낵바 */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

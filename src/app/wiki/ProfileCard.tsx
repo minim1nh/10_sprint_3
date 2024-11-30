@@ -13,50 +13,83 @@ interface Profile {
   bloodType: string;
   nationality: string;
   sns: string;
+  nickname: string;
 }
 
 interface ProfileCardProps {
   code: string;
+  isEditable: boolean;
+  onSave: (updatedProfile: Partial<Profile>) => void;
 }
 
-export default function ProfileCard({ code }: ProfileCardProps) {
+export default function ProfileCard({
+  code,
+  isEditable,
+  onSave,
+}: ProfileCardProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [editedProfile, setEditedProfile] = useState<Partial<Profile> | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const teamId = "10-3";
 
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
-        const res = await axios.get(URL, {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+  const fields: { label: string; field: keyof Profile }[] = [
+    { label: "거주 도시", field: "city" },
+    { label: "MBTI", field: "mbti" },
+    { label: "직업", field: "job" },
+    { label: "SNS 계정", field: "sns" },
+    { label: "생일", field: "birthday" },
+    { label: "별명", field: "nickname" },
+    { label: "혈액형", field: "bloodType" },
+    { label: "국적", field: "nationality" },
+  ];
 
-        if (res.status === 200 || res.status === 201) {
-          setProfile(res.data);
-          setError(null);
-        } else {
-          throw new Error(`Failed to fetch profile data: ${res.status}`);
-        }
-      } catch (err: any) {
-        if (err.response?.status === 404) {
-          setError(
-            "프로필 데이터를 찾을 수 없습니다. 올바른 코드를 입력하세요."
-          );
-        } else {
-          setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
-        }
-        setProfile(null);
-      } finally {
-        setLoading(false);
+  const fetchProfile = async () => {
+    try {
+      const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
+      const res = await axios.get(URL, {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.status === 200 || res.status === 201) {
+        setProfile(res.data);
+        setEditedProfile(res.data);
+        setError(null);
+      } else {
+        throw new Error(`Failed to fetch profile data: ${res.status}`);
       }
+    } catch (err: any) {
+      if (err.response?.status === 404) {
+        setError("프로필 데이터를 찾을 수 없습니다. 올바른 코드를 입력하세요.");
+      } else {
+        setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
+      }
+      setProfile(null);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  const handleInputChange = (field: keyof Profile, value: string) => {
+    setEditedProfile((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSave = () => {
+    if (editedProfile) {
+      onSave(editedProfile);
+    }
+  };
+
+  useEffect(() => {
     if (code) fetchProfile();
   }, [code]);
 
@@ -67,42 +100,42 @@ export default function ProfileCard({ code }: ProfileCardProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <img src={profile.image} className={styles.image} alt="Profile" />
+        {isEditable ? (
+          <input
+            type="text"
+            value={editedProfile?.image || ""}
+            onChange={(e) => handleInputChange("image", e.target.value)}
+            placeholder="이미지 URL 입력"
+            className={styles.imageInput}
+          />
+        ) : (
+          <img src={profile.image} className={styles.image} alt="Profile" />
+        )}
       </div>
       <div className={styles.card}>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>거주 도시:</span>
-          <span className={styles.value}>{profile.city}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>MBTI:</span>
-          <span className={styles.value}>{profile.mbti}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>직업:</span>
-          <span className={styles.value}>{profile.job}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>SNS 계정:</span>
-          <span className={styles.value}>
-            <a href={profile.sns} target="_blank" rel="noopener noreferrer">
-              {profile.sns}
-            </a>
-          </span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>생일:</span>
-          <span className={styles.value}>{profile.birthday}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>혈액형:</span>
-          <span className={styles.value}>{profile.bloodType}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>국적:</span>
-          <span className={styles.value}>{profile.nationality}</span>
-        </div>
+        {fields.map(({ label, field }) => (
+          <div className={styles.infoRow} key={field}>
+            <span className={styles.label}>{label}:</span>
+            {isEditable ? (
+              <input
+                type="string"
+                value={editedProfile?.[field] || ""}
+                onChange={(e) => handleInputChange(field, e.target.value)}
+                placeholder={`${label} 입력`}
+              />
+            ) : (
+              <span className={styles.value}>{profile[field] || "없음"}</span>
+            )}
+          </div>
+        ))}
       </div>
+      {isEditable && (
+        <div className={styles.actions}>
+          <button className={styles.saveButton} onClick={handleSave}>
+            저장
+          </button>
+        </div>
+      )}
     </div>
   );
 }
