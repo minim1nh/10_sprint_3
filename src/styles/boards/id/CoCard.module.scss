@@ -3,8 +3,7 @@
 .articleContain {
   display: flex;
   justify-content: center;
-  max-width: 1200px;
-  width: 95%;
+  width: 100%;
 }
 
 .insideContain {
@@ -12,7 +11,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 870px;
+  width: 100%;
   gap: 25px;
   margin-bottom: 200px;
 }
@@ -24,7 +23,6 @@
   justify-content: flex-start;
   gap: 20px;
   border-radius: 10px;
-  width: 95%;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
 }
 .iconContain {

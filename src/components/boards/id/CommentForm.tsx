@@ -28,6 +28,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
       if (response) {
         setContent("");
         onSuccess();
+        window.location.reload();
       }
     } catch (error) {
       console.error("댓글 작성 실패:", error);
