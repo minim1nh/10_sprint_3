@@ -1,0 +1,127 @@
+@use "../../variables" as *;
+.articleForm {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin-top: 40px;
+  width: 95%;
+}
+.innerContain {
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 30px 30px;
+}
+
+.topContain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+.buttonContain {
+  display: flex;
+  gap: 15px;
+}
+.titleForm {
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid $gray-200;
+  font-size: 24px;
+  font-weight: bold;
+
+  color: $gray-500;
+  &::placeholder {
+    font-size: 15px;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+.contentForm {
+  border-radius: 10px;
+  padding: 5px 5px 200px 5px;
+  border-top: 1px solid $gray-100;
+  border-bottom: 1px solid $gray-100;
+  color: $gray-500;
+  font-size: 14px;
+
+  &::placeholder {
+    font-size: 16px;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .previewImage {
+    display: flex;
+    overflow: hidden;
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+    justify-content: flex-start;
+  }
+  .previewImage1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $gray-200;
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+  }
+  .confirmButton,
+  .removeButton {
+    padding: 10px 20px;
+    background-color: $green-200;
+    color: $white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .confirmButton:hover {
+    background-color: $green;
+  }
+}
+
+.imageConfirmed {
+  text-align: center;
+
+  .confirmedImage {
+    max-width: 200px;
+    margin-top: 10px;
+  }
+}
+.previewImage {
+  height: 100%;
+  overflow: hidden;
+}
+.submitButton {
+  padding: 12px 20px;
+  background-color: $green-200;
+  color: $white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+
+  &:disabled {
+    background-color: $gray-200;
+    cursor: not-allowed;
+  }
+}
