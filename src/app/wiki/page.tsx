@@ -3,12 +3,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
-import ProfileCard from "@/app/wiki/ProfileCard";
+import ProfileCard from "@/components/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
-import ParticipateButton from "@/app/wiki/ParticipateButton";
+import ParticipateButton from "@/components/wiki/ParicipateButton";
 import dynamic from "next/dynamic";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import SnackbarNotification from "@/components/wiki/SnackbarNotification";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
@@ -57,7 +56,7 @@ export default function WikiPage() {
     timerRef.current = setTimeout(() => {
       setShowAlert(true);
       setIsEditable(false);
-    }, 300);
+    }, 300000);
   };
 
   useEffect(() => {
@@ -152,7 +151,7 @@ export default function WikiPage() {
         <header className={styles.header}>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{profile.name}</h1>
-            {!isEditable && (
+            {!isEditable && profile.content && (
               <ParticipateButton onCorrectAnswer={handleParticipate} />
             )}
           </div>
@@ -176,12 +175,23 @@ export default function WikiPage() {
             profile.content ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html:
-                    profile.content || "<p>아직 작성된 내용이 없습니다.</p>",
+                  __html: profile.content,
                 }}
               />
             ) : (
-              <p>아직 작성된 내용이 없습니다.</p>
+              // 콘텐츠가 없을 때의 새로운 디자인
+              <div className={styles.emptyContent}>
+                <p className={styles.emptyMessage}>
+                  아직 작성된 내용이 없네요. <br />
+                  위키에 참여해 보세요!
+                </p>
+                <button
+                  className={styles.startButton}
+                  onClick={() => setIsEditable(true)}
+                >
+                  시작하기
+                </button>
+              </div>
             )
           ) : (
             <div>
@@ -221,16 +231,11 @@ export default function WikiPage() {
         </div>
       )}
 
-      <Snackbar
+      <SnackbarNotification
         open={snackbarOpen}
-        autoHideDuration={3000}
+        message={snackbarMessage}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success">
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      />
     </div>
   );
 }
