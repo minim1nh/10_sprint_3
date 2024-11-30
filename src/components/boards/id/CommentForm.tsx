@@ -3,17 +3,16 @@
 import { useState } from "react";
 import { postComments } from "@/api/swagger/Comment";
 import styles from "@/styles/boards/id/CommentForm.module.scss";
-import { CommentsListData } from "@/api/swagger/Wikid.types";
 
 interface CommentFormProps {
   articleId: number;
-  onCommentAdded: (newComment: CommentsListData["list"][number]) => void;
   count: number;
+  onSuccess: () => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
   articleId,
-  onCommentAdded,
+  onSuccess,
   count,
 }) => {
   const [content, setContent] = useState<string>("");
@@ -28,7 +27,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
       const response = await postComments(articleId, { content });
       if (response) {
         setContent("");
-        onCommentAdded(response);
+        onSuccess();
       }
     } catch (error) {
       console.error("댓글 작성 실패:", error);

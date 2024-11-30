@@ -1,16 +1,23 @@
 "use client";
-import { useState } from "react";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { postArticles } from "@/api/swagger/Article";
-import { postImagesUpload } from "@/api/swagger/Image";
 import { ArticlesProps } from "@/api/swagger/Wikid.types";
 import styles from "@/styles/addboard/ArticleAdd.module.scss";
+import { ImageInsertModal } from "@/components/common/WikidImage";
+import Link from "next/link";
 
 const ArticleForm = () => {
+  const [isClient, setIsClient] = useState(false);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isImageConfirmed, setIsImageConfirmed] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -20,44 +27,12 @@ const ArticleForm = () => {
     return `${year}.${month}.${day}.`;
   };
 
-  const calculateCharacterCount = (text: string) => {
-    const withSpaces = text.length;
-    const withoutSpaces = text.replace(/\s/g, "").length;
-    return { withSpaces, withoutSpaces };
-  };
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    if (file) {
-      setImage(file);
-      const previewUrl = URL.createObjectURL(file);
-      setImageUrl(previewUrl);
-      setIsImageConfirmed(false);
-    }
-  };
-
-  const handleImageConfirm = async () => {
-    if (image) {
-      try {
-        const formData = new FormData();
-        formData.append("image", image);
-        const res = await postImagesUpload({ file: image });
-        if (res) {
-          setImageUrl(res.url);
-          setIsImageConfirmed(true);
-        }
-      } catch (error) {
-        console.error("이미지 업로드 실패", error);
-      }
-    }
   };
 
   const handleSubmit = async () => {
@@ -76,23 +51,32 @@ const ArticleForm = () => {
     }
   };
 
-  const isFormValid = title && content && imageUrl && isImageConfirmed;
+  const isFormValid = title && content && imageUrl;
 
-  const { withSpaces, withoutSpaces } = calculateCharacterCount(content);
+  const handleImageDelete = () => {
+    setImageUrl(null);
+    setIsModalOpen(true); // 이미지 삭제 후 모달을 다시 여는 부분
+  };
 
   return (
     <div className={styles.articleForm}>
       <div className={styles.formGroup}>
         <div className={styles.topContain}>
           <h6 className={styles.titleName}>게시물 등록하기</h6>
-
-          <button
-            className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
-            onClick={handleSubmit}
-            disabled={!isFormValid}
-          >
-            등록하기
-          </button>
+          <div className={styles.buttonContain}>
+            <Link href="/boards">
+              <button
+                className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
+                onClick={handleSubmit}
+                disabled={!isFormValid}
+              >
+                등록하기
+              </button>
+            </Link>
+            <Link href="/boards">
+              <button className={styles.submitButton}>뒤로가기</button>
+            </Link>
+          </div>
         </div>
         <span className={styles.date}>{getCurrentDate()}</span>
         <input
@@ -103,11 +87,7 @@ const ArticleForm = () => {
           placeholder="제목을 입력해주세요"
         />
       </div>
-
       <div className={styles.formGroup}>
-        <p className={styles.characterCount}>
-          공백 포함: 총 {withSpaces}자 | 공백제외: 총 {withoutSpaces}자
-        </p>
         <input
           type="text"
           value={content}
@@ -115,37 +95,46 @@ const ArticleForm = () => {
           onChange={handleContentChange}
           placeholder="본문을 입력해주세요"
         />
+
+        {imageUrl && (
+          <div className={styles.imagePreview}>
+            <h6>등록된 이미지</h6>
+            <div className={styles.imageWrapper}>
+              <Image
+                src={imageUrl}
+                width={302}
+                height={268}
+                alt="Uploaded Image"
+              />
+              {/* X 버튼 추가 */}
+              <button
+                className={styles.deleteImageButton}
+                onClick={handleImageDelete}
+              >
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className={styles.formGroup}>
-        <label>이미지 업로드</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {imageUrl && !isImageConfirmed && (
-          <div className={styles.previewContainer}>
-            <img
-              src={imageUrl}
-              alt="미리보기"
-              className={styles.previewImage}
-            />
-            <button
-              className={styles.confirmButton}
-              onClick={handleImageConfirm}
-            >
-              확인
-            </button>
-          </div>
-        )}
-        {imageUrl && isImageConfirmed && (
-          <div className={styles.imageConfirmed}>
-            <p>이미지 업로드 완료!</p>
-            <img
-              src={imageUrl}
-              alt="업로드된 이미지"
-              className={styles.confirmedImage}
-            />
-          </div>
-        )}
+      <div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className={styles.submitButton}
+        >
+          이미지 선택
+        </button>
       </div>
+
+      {isModalOpen && (
+        <ImageInsertModal
+          onClose={(url: string) => {
+            setImageUrl(url);
+            setIsModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };

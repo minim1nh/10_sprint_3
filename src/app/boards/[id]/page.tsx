@@ -25,47 +25,40 @@ export default function Page() {
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      const fetchArticle = async () => {
-        const data = await getArticlesId(parseInt(id, 10));
-        if (data) {
-          setArticle(data);
-        }
-      };
-
-      fetchArticle();
-    }
-  }, [id]);
-
-  const fetchCommentsData = async () => {
+  const fetchData = async () => {
     if (!id) return;
-    const commentData = await getComments(parseInt(id, 10), 10, 0);
-    setCommentsData(commentData);
+
+    const fetchArticle = getArticlesId(parseInt(id, 10));
+    const fetchComments = getComments(parseInt(id, 10), 10, 0);
+
+    const [articleData, commentsData] = await Promise.all([
+      fetchArticle,
+      fetchComments,
+    ]);
+
+    if (articleData) setArticle(articleData);
+    if (commentsData) setCommentsData(commentsData);
   };
 
   useEffect(() => {
-    fetchCommentsData();
+    fetchData();
   }, [id]);
-
-  const handleCommentAdded = (newComment: CommentsListData["list"][number]) => {
-    setCommentsData((prevCommentsData) => {
-      if (!prevCommentsData) {
-        return {
-          list: [newComment],
-          nextCursor: 0,
-        };
-      }
-      return {
-        ...prevCommentsData,
-        list: [newComment, ...prevCommentsData.list],
-        nextCursor: prevCommentsData.nextCursor,
-      };
-    });
-  };
 
   const handleEditToggle = () => {
     setIsEditing((prev) => !prev);
+  };
+
+  const handleArticleUpdateSuccess = () => {
+    fetchData();
+    setIsEditing(false);
+  };
+
+  const handleCommentSubmitSuccess = () => {
+    fetchData();
+  };
+
+  const handleCommentEditSuccess = () => {
+    fetchData();
   };
 
   if (!article) {
@@ -81,9 +74,7 @@ export default function Page() {
           <FixCard
             articleId={parseInt(id, 10)}
             onCancel={handleEditToggle}
-            onSuccess={() => {
-              handleEditToggle();
-            }}
+            onSuccess={handleArticleUpdateSuccess}
           />
         ) : (
           <IdCard {...article} onEdit={handleEditToggle} />
@@ -91,10 +82,17 @@ export default function Page() {
         <BoardButton />
         <CommentForm
           articleId={parseInt(id, 10)}
-          onCommentAdded={handleCommentAdded}
+          onSuccess={fetchData}
           count={commentsCount}
         />
-        {commentsData ? <CoCard comments={commentsData.list} /> : <div></div>}
+        {commentsData ? (
+          <CoCard
+            comments={commentsData.list}
+            onCommentEditSuccess={handleCommentEditSuccess}
+          />
+        ) : (
+          <div></div>
+        )}
       </div>
     </>
   );
