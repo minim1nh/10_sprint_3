@@ -4,7 +4,7 @@
 
   justify-content: center;
   max-width: 1200px;
-  width: 95%;
+  width: 100%;
 }
 .commentForm {
   display: flex;
@@ -15,7 +15,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  width: 870px;
+  width: 100%;
   gap: 14px;
 }
 .titleContain {
@@ -45,7 +45,6 @@
   border-radius: 10px;
   resize: none;
   font-size: 14px;
-  width: 95%;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
 
   &::placeholder {

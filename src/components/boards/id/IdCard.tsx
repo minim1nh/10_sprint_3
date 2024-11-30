@@ -1,8 +1,10 @@
-import ArticleImage from "../ArticleImage";
+import { useEffect, useState } from "react";
+import { getUsersMe } from "@/api/swagger/User";
 import { ArticlesDetailData } from "@/api/swagger/Wikid.types";
 import styles from "@/styles/boards/id/IdCard.module.scss";
 import LikeCount from "../LikeCount";
 import DeleteArticle from "./DeleteButton";
+import ArticleImage from "../ArticleImage";
 
 const IdCard = ({
   id,
@@ -14,6 +16,20 @@ const IdCard = ({
   updatedAt,
   onEdit,
 }: ArticlesDetailData & { onEdit: () => void }) => {
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const currentUser = await getUsersMe();
+      if (currentUser) {
+        setCurrentUserId(currentUser.id);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const isEditable = currentUserId === writer.id;
+
   return (
     <div className={styles.articleContain}>
       <div className={styles.innerContain}>
@@ -21,10 +37,12 @@ const IdCard = ({
           <div className={styles.innerInfo1}>
             <div className={styles.contentTitle}>{title}</div>
             <div className={styles.buttonContain}>
-              <button className={styles.editButton} onClick={onEdit}>
-                수정하기
-              </button>
-              <DeleteArticle articleId={id} />
+              {isEditable && (
+                <button className={styles.editButton} onClick={onEdit}>
+                  수정하기
+                </button>
+              )}
+              {isEditable && <DeleteArticle articleId={id} />}
             </div>
           </div>
           <div className={styles.userInfo}>

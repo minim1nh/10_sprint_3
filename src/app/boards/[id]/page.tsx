@@ -68,32 +68,30 @@ export default function Page() {
   const commentsCount = commentsData?.list.length || 0;
 
   return (
-    <>
-      <div className={styles.articleContainer}>
-        {isEditing ? (
-          <FixCard
-            articleId={parseInt(id, 10)}
-            onCancel={handleEditToggle}
-            onSuccess={handleArticleUpdateSuccess}
-          />
-        ) : (
-          <IdCard {...article} onEdit={handleEditToggle} />
-        )}
-        <BoardButton />
-        <CommentForm
+    <div className={styles.articleContainer}>
+      {isEditing ? (
+        <FixCard
           articleId={parseInt(id, 10)}
-          onSuccess={fetchData}
-          count={commentsCount}
+          onCancel={handleEditToggle}
+          onSuccess={handleArticleUpdateSuccess}
         />
-        {commentsData ? (
-          <CoCard
-            comments={commentsData.list}
-            onCommentEditSuccess={handleCommentEditSuccess}
-          />
-        ) : (
-          <div></div>
-        )}
-      </div>
-    </>
+      ) : (
+        <IdCard {...article} onEdit={handleEditToggle} />
+      )}
+      <BoardButton />
+      <CommentForm
+        articleId={parseInt(id, 10)}
+        onSuccess={fetchData}
+        count={commentsCount}
+      />
+      {commentsData ? (
+        <CoCard
+          comments={commentsData.list}
+          onCommentEditSuccess={handleCommentEditSuccess}
+        />
+      ) : (
+        <div></div>
+      )}
+    </div>
   );
 }

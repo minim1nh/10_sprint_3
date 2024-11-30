@@ -101,6 +101,7 @@ const FixCard: React.FC<ArticleFormProps> = ({
               onChange={handleTitleChange}
               placeholder="제목을 입력해주세요"
               disabled={isLoading}
+              maxLength={30}
             />
             <div className={styles.buttonContain}>
               <button
@@ -116,43 +117,44 @@ const FixCard: React.FC<ArticleFormProps> = ({
             </div>
           </div>
         </div>
+        <div className={styles.imageContainer}>
+          <div className={styles.imageContain}>
+            {imageUrl ? (
+              <div className={styles.imagePreview}>
+                <Image
+                  src={imageUrl}
+                  width={200}
+                  height={200}
+                  alt="Image Preview"
+                />
+                <button
+                  onClick={handleImageRemove}
+                  className={styles.removeImageButton}
+                >
+                  X
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setOpenImageModal(true)}
+                className={styles.uploadButton}
+              >
+                이미지 등록
+              </button>
+            )}
+          </div>
+        </div>
         <div className={styles.formGroup}>
-          <input
-            type="text"
+          <textarea
             value={content}
+            onChange={(e) => setContent(e.target.value)}
             className={styles.contentForm}
-            onChange={handleContentChange}
             placeholder="본문을 입력해주세요"
             disabled={isLoading}
+            rows={10}
           />
         </div>
-        <div className={styles.imageContainer}>
-          {imageUrl ? (
-            <div className={styles.imagePreview}>
-              <Image
-                src={imageUrl}
-                width={150}
-                height={150}
-                alt="Image Preview"
-              />
-              <button
-                onClick={handleImageRemove}
-                className={styles.removeImageButton}
-              >
-                X
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setOpenImageModal(true)}
-              className={styles.uploadButton}
-            >
-              이미지 등록
-            </button>
-          )}
-        </div>
       </div>
-
       {openImageModal && <ImageInsertModal onClose={handleImageSelect} />}
     </div>
   );

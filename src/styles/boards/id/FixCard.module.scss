@@ -2,9 +2,8 @@
 .articleForm {
   display: flex;
   justify-content: center;
-  max-width: 1200px;
-  margin-top: 40px;
-  width: 95%;
+  width: 100%;
+  margin-top: 20px;
 }
 .innerContain {
   background-color: $white;
@@ -12,6 +11,7 @@
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   padding: 30px 30px;
+  width: 100%;
 }
 
 .topContain {
@@ -45,13 +45,16 @@
   flex-direction: column;
 }
 .contentForm {
-  border-radius: 10px;
-  padding: 5px 5px 200px 5px;
+  width: 100%;
+  min-height: 85px;
+  padding: 8px;
   border-top: 1px solid $gray-100;
   border-bottom: 1px solid $gray-100;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: none;
+  overflow-wrap: break-word;
   color: $gray-500;
-  font-size: 14px;
-
   &::placeholder {
     font-size: 16px;
   }
@@ -59,54 +62,32 @@
     outline: none;
   }
 }
-.previewContainer {
+.imageContainer {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-
-  .previewImage {
-    display: flex;
-    overflow: hidden;
-    width: 400px;
-    height: 300px;
-    border-radius: 10px;
-    justify-content: flex-start;
-  }
-  .previewImage1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid $gray-200;
-    width: 400px;
-    height: 300px;
-    border-radius: 10px;
-  }
-  .confirmButton,
-  .removeButton {
-    padding: 10px 20px;
-    background-color: $green-200;
-    color: $white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .confirmButton:hover {
-    background-color: $green;
-  }
 }
 
-.imageConfirmed {
-  text-align: center;
-
-  .confirmedImage {
-    max-width: 200px;
-    margin-top: 10px;
-  }
+.imageContain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.confirmButton,
+.removeButton {
+  padding: 10px 20px;
+  background-color: $green-200;
+  color: $white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.confirmButton:hover {
+  background-color: $green;
+}
+
 .previewImage {
   height: 100%;
   overflow: hidden;

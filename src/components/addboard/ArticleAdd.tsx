@@ -28,7 +28,9 @@ const ArticleForm = () => {
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    if (e.target.value.length <= 30) {
+      setTitle(e.target.value);
+    }
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,34 +53,46 @@ const ArticleForm = () => {
     }
   };
 
+  const getContentLength = () => {
+    const lengthWithSpaces = content.length;
+    const lengthWithoutSpaces = content.replace(/\s/g, "").length;
+    return { lengthWithSpaces, lengthWithoutSpaces };
+  };
+
   const isFormValid = title && content && imageUrl;
 
   const handleImageDelete = () => {
     setImageUrl(null);
-    setIsModalOpen(true); // 이미지 삭제 후 모달을 다시 여는 부분
+    setIsModalOpen(true);
   };
 
   return (
     <div className={styles.articleForm}>
-      <div className={styles.formGroup}>
-        <div className={styles.topContain}>
+      <div className={styles.topContain}>
+        <div className={styles.topContain1}>
           <h6 className={styles.titleName}>게시물 등록하기</h6>
-          <div className={styles.buttonContain}>
-            <Link href="/boards">
-              <button
-                className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
-                onClick={handleSubmit}
-                disabled={!isFormValid}
-              >
-                등록하기
-              </button>
-            </Link>
-            <Link href="/boards">
-              <button className={styles.submitButton}>뒤로가기</button>
-            </Link>
+          <div className={styles.littleContain}>
+            <p className={styles.date}>등록일</p>
+            <span className={styles.date}>{getCurrentDate()}</span>
           </div>
         </div>
-        <span className={styles.date}>{getCurrentDate()}</span>
+        <div className={styles.buttonContain}>
+          <Link href="/boards">
+            <button className={styles.submitButton1}>목록으로</button>
+          </Link>
+          <Link href="/boards">
+            <button
+              className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
+              onClick={handleSubmit}
+              disabled={!isFormValid}
+            >
+              등록하기
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className={styles.titleContainer}>
         <input
           className={styles.titleForm}
           type="text"
@@ -86,7 +100,12 @@ const ArticleForm = () => {
           onChange={handleTitleChange}
           placeholder="제목을 입력해주세요"
         />
+        <span className={styles.charCount}>{title.length}/30</span>
       </div>
+      <p className={styles.textCount}>
+        공백 포함: {getContentLength().lengthWithSpaces}자 | 공백 제외:{" "}
+        {getContentLength().lengthWithoutSpaces}자
+      </p>
       <div className={styles.formGroup}>
         <input
           type="text"
@@ -98,15 +117,13 @@ const ArticleForm = () => {
 
         {imageUrl && (
           <div className={styles.imagePreview}>
-            <h6>등록된 이미지</h6>
             <div className={styles.imageWrapper}>
               <Image
                 src={imageUrl}
-                width={302}
-                height={268}
+                width={200}
+                height={190}
                 alt="Uploaded Image"
               />
-              {/* X 버튼 추가 */}
               <button
                 className={styles.deleteImageButton}
                 onClick={handleImageDelete}
@@ -119,12 +136,14 @@ const ArticleForm = () => {
       </div>
 
       <div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className={styles.submitButton}
-        >
-          이미지 선택
-        </button>
+        <div className={styles.lastButton}>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className={styles.submitButton}
+          >
+            이미지 선택
+          </button>
+        </div>
       </div>
 
       {isModalOpen && (

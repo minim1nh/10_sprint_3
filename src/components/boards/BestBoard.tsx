@@ -14,7 +14,14 @@ const BestBoards = () => {
   const handleLoad = useCallback(async (pageSize: number) => {
     try {
       const response = await getArticles(1, pageSize, "like", "");
-      const list = response.list || [];
+
+      if (!response || !response.list) {
+        console.warn("Invalid API response:", response);
+        setArticles([]);
+        return;
+      }
+
+      const list = response.list;
       setArticles(list);
     } catch (error) {
       console.error("Error fetching articles:", error);

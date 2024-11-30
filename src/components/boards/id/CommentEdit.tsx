@@ -31,6 +31,7 @@ const CommentEdit: React.FC<EditCommentsProps> = ({
       const updatedComment = await patchCommentsId(commentId, { content });
       if (updatedComment) {
         onEditSuccess(updatedComment.content);
+        window.location.reload();
       }
     } catch (error) {
       console.error("댓글 수정 실패:", error);
