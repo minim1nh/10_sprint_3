@@ -46,6 +46,7 @@
   border-radius: 10px;
   margin-bottom: 10px;
   padding: 14px 20px;
+  outline: none;
 }
 
 .containerInput::placeholder {
@@ -60,6 +61,7 @@
 
 .errorInput {
   background-color: $red-100;
+  margin-bottom: 0px;
 }
 .errorInput:focus {
   border-color: $red;
