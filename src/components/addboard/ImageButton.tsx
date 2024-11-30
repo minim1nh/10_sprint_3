@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "@/styles/addboard/ImageButton.module.scss";
-import { ImageInsertModal } from "@/components/common/WikidDialog";
+import { ImageInsertModal } from "@/components/common/WikidImage";
+import SessionStorage from "@/api/storage/SessionStorage";
 import { useState } from "react";
 
 const ImageButton = () => {

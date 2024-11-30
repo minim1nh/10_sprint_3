@@ -9,20 +9,23 @@ import EditComments from "@/components/boards/id/CommentEdit";
 
 type CoCardProps = {
   comments: CommentsListData["list"];
+  onCommentEditSuccess: (
+    updatedComment: CommentsListData["list"][number]
+  ) => void;
 };
 
-const CoCard = ({ comments }: CoCardProps) => {
+const CoCard = ({ comments, onCommentEditSuccess }: CoCardProps) => {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [updatedComments, setUpdatedComments] = useState(comments);
 
   const handleEditSuccess = (commentId: number, updatedContent: string) => {
-    setUpdatedComments((prev) =>
-      prev.map((comment) =>
-        comment.id === commentId
-          ? { ...comment, content: updatedContent }
-          : comment
-      )
+    const updatedComment = updatedComments.find(
+      (comment) => comment.id === commentId
     );
+    if (updatedComment) {
+      const updatedCommentData = { ...updatedComment, content: updatedContent };
+      onCommentEditSuccess(updatedCommentData);
+    }
     setEditingCommentId(null);
   };
 
