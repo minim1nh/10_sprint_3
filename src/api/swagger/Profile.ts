@@ -51,11 +51,7 @@ export const postProfiles = async (
       throw new Error("Failed to Profiles postProfiles()");
     }
   } catch (error) {
-<<<<<<< HEAD
-    console.error("Error to Profiles postProfiles():", error);
-=======
     //console.error('Error to Profiles postProfiles():', error);
->>>>>>> 97827246c67efbacc4eeff5de053fb26eea5e6fb
     throw error;
   }
 
@@ -191,8 +187,6 @@ export const patchProfilesCode = async (
     //console.error('Error to patchProfilesCode():', error);
     throw error;
   }
-
-  return null;
 };
 
 /**
@@ -226,8 +220,6 @@ export const getProfilesCodePing = async (
     //console.error('Error to getProfilesCodePing():', error);
     throw error;
   }
-
-  return null;
 };
 
 /**

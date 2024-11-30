@@ -12,11 +12,8 @@ const IdCard = ({
   writer,
   likeCount,
   updatedAt,
-}: ArticlesDetailData) => {
-  const handleEdit = () => {
-    console.log("수정하기 버튼 클릭");
-  };
-
+  onEdit,
+}: ArticlesDetailData & { onEdit: () => void }) => {
   return (
     <div className={styles.articleContain}>
       <div className={styles.innerContain}>
@@ -24,7 +21,7 @@ const IdCard = ({
           <div className={styles.innerInfo1}>
             <div className={styles.contentTitle}>{title}</div>
             <div className={styles.buttonContain}>
-              <button className={styles.editButton} onClick={handleEdit}>
+              <button className={styles.editButton} onClick={onEdit}>
                 수정하기
               </button>
               <DeleteArticle articleId={id} />

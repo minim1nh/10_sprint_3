@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/app/wiki/ProfileCard";
@@ -41,9 +41,24 @@ export default function WikiPage() {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [newContent, setNewContent] = useState<string>("");
 
+  // 알림 상태
+  const [showAlert, setShowAlert] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   // 스낵바 상태
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  // 타이머 초기화 함수
+  const resetTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setShowAlert(true);
+      setIsEditable(false);
+    }, 300);
+  };
 
   useEffect(() => {
     if (!code) {
@@ -70,7 +85,23 @@ export default function WikiPage() {
     }
 
     fetchProfile();
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [code]);
+
+  useEffect(() => {
+    if (isEditable) {
+      resetTimer();
+    } else {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    }
+  }, [isEditable]);
 
   const handleSave = async () => {
     if (!code || !newContent.trim()) {
@@ -96,6 +127,12 @@ export default function WikiPage() {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleEditorChange = (content: string) => {
+    setNewContent(content);
+    setShowAlert(false);
+    resetTimer();
   };
 
   if (loading) {
@@ -156,7 +193,7 @@ export default function WikiPage() {
                   plugins: "advlist autolink link lists ",
                   toolbar: "undo redo | bold italic | link",
                 }}
-                onEditorChange={(content: string) => setNewContent(content)}
+                onEditorChange={handleEditorChange}
               />
 
               <div className={styles.actions}>
@@ -178,7 +215,12 @@ export default function WikiPage() {
         <ProfileCard code={code} profile={profile} />
       </div>
 
-      {/* 스낵바 */}
+      {showAlert && (
+        <div className={styles.alertBox}>
+          <p>5분 동안 입력이 없습니다. 위키 페이지로 돌아갑니다.</p>
+        </div>
+      )}
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}

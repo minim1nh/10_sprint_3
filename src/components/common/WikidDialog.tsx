@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { isSignIn } from "@/hooks/Token";
 import { getProfilesCode, postProfilesCodePing } from "@/api/swagger/Profile";
+import { deleteNotificationsId } from "@/api/swagger/Notification";
 
 //알림 모달 다이얼로그
 export const NotificationModal = (props: {
@@ -51,6 +52,7 @@ export const NotificationModal = (props: {
     if (reason === "clickaway") {
       return;
     }
+
     if (reason === "delete") {
       const newlist = notifies?.list?.filter((item) => item.id !== id);
       setNotifies({
@@ -106,6 +108,10 @@ export const NotificationModal = (props: {
                     <Box>
                       <IconButton>
                         <FiberManualRecordIcon />
+
+                        <Typography variant="subtitle1" color="text.primary">
+                          {notify.id}
+                        </Typography>
                       </IconButton>
                     </Box>
                     <Box>
@@ -181,7 +187,7 @@ export const CertificationModal = () => {
         }
       } catch (error) {
         //console.error('Error fetching profile:', error)
-        //throw error
+        throw error;
       }
       return;
     }
