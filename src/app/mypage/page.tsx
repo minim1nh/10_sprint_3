@@ -2,11 +2,11 @@
 
 import style from "@/styles/mypage/style.module.scss";
 import { useForm } from "react-hook-form";
-import { patchUsersMePassword } from '@/api/swagger/User';
+import { getUsersMe, patchUsersMePassword } from '@/api/swagger/User';
 import { PasswordProps } from '@/api/swagger/Wikid.types';
 
 export default function MyPage() {
-  const { register, handleSubmit, formState: { errors }, } = useForm<PasswordProps>({ mode: "onBlur"});
+  const { register, getValues, handleSubmit, formState: { errors }, } = useForm<PasswordProps>({ mode: "onBlur"});
 
   const onValid = async (data: PasswordProps) => {
     const reqData = {
@@ -20,7 +20,7 @@ export default function MyPage() {
       console.log(JSON.stringify(resData));
     } catch (e) {
       console.log(e);
-      alert('변경실패');
+      alert('변경에 실패하였습니다.');
     } 
   }
 
@@ -35,17 +35,21 @@ export default function MyPage() {
               value: 8,
               message: "8자 이상 입력해 주세요.",
             },})} id="currentPassword" name="currentPassword" type="password" placeholder="기존 비밀번호" />
-          <input className={style.containerInput} {...register("password", {required: "8자 이상 입력해 주세요.", 
+            { errors.currentPassword && <small className={style.tagAlert} role="alert">{errors.currentPassword.message}</small> }
+            <input className={style.containerInput} {...register("password", {required: "8자 이상 입력해 주세요.", 
             minLength: {
               value: 8,
               message: "8자 이상 입력해 주세요.",
             },})} id="password" name="password" type="password" placeholder="새 비밀번호" />
             { errors.password && <small className={style.tagAlert} role="alert">{errors.password.message}</small> }
           <input className={style.containerInput} {...register("passwordConfirmation", {required: "8자 이상 입력해 주세요.", 
-            minLength: {
-              value: 8,
-              message: "8자 이상 입력해 주세요.",
+            validate: {
+              check: (val) => {
+                if(getValues("password") !== val)
+                  return "비밀번호가 일치하지 않습니다.";
+              }
             },})} id="passwordConfirmation" name="passwordConfirmation" type="password" placeholder="새 비밀번호 확인" />
+            { errors.passwordConfirmation && <small className={style.tagAlert} role="alert">{errors.passwordConfirmation.message}</small> }
         </label>
         <input className={style.btn} type="submit" value="변경하기" />
       </form>
