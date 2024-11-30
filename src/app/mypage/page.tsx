@@ -47,7 +47,7 @@ export default function MyPage() {
             { errors.password && <small className={style.tagAlert} role="alert">{errors.password.message}</small> }
           
           <input className={`${style.containerInput} ${errors.passwordConfirmation ? style.errorInput : ""}`} 
-          {...register("passwordConfirmation", {required: "8자 이상 입력해 주세요.", 
+          {...register("passwordConfirmation", {required: "비밀번호가 일치하지 않습니다.", 
             validate: {
               check: (val) => {
                 if(getValues("password") !== val)
