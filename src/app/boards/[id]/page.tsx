@@ -11,6 +11,7 @@ import IdCard from "@/components/boards/id/IdCard";
 import CoCard from "@/components/boards/id/CoCard";
 import BoardButton from "@/components/boards/id/BoardButton";
 import CommentForm from "@/components/boards/id/CommentForm";
+import FixCard from "@/components/boards/id/FixCard";
 import styles from "@/styles/boards/ArticleId.module.scss";
 import { useParams } from "next/navigation";
 
@@ -22,6 +23,7 @@ export default function Page() {
   const [commentsData, setCommentsData] = useState<CommentsListData | null>(
     null
   );
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -62,6 +64,10 @@ export default function Page() {
     });
   };
 
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
   if (!article) {
     return <div></div>;
   }
@@ -71,7 +77,17 @@ export default function Page() {
   return (
     <>
       <div className={styles.articleContainer}>
-        <IdCard {...article} />
+        {isEditing ? (
+          <FixCard
+            articleId={parseInt(id, 10)}
+            onCancel={handleEditToggle}
+            onSuccess={() => {
+              handleEditToggle();
+            }}
+          />
+        ) : (
+          <IdCard {...article} onEdit={handleEditToggle} />
+        )}
         <BoardButton />
         <CommentForm
           articleId={parseInt(id, 10)}

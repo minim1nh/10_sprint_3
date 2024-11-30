@@ -1,0 +1,16 @@
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.searchImage {
+  width: 20px;
+  height: 20px;
+}

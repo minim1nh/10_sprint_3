@@ -161,7 +161,7 @@ export type CommentsIdData = {
 
 // Articles
 export type ArticlesProps = {
-  image: string;
+  image?: string;
   content: string;
   title: string;
 };
