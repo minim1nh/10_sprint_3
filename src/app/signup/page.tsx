@@ -5,12 +5,16 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { postSignUp } from '@/api/swagger/Auth';
-import { SignUpData, SignUpProps } from '@/api/swagger/Wikid.types';
+import { SignUpProps } from '@/api/swagger/Wikid.types';
 
 export default function Signup() {
-  const { register, handleSubmit, formState: { errors }, } = useForm<SignUpProps>({ mode: "onBlur"});
+  const { register, getValues, handleSubmit, formState: { errors }, } = useForm<SignUpProps>({ mode: "onBlur"});
   const [isSuccess, setIsSuccess] = useState(false);
 
+  useEffect(() => {
+    if(isSuccess)
+      redirect('/login');
+  }, [isSuccess]);
 
   const onValid = async (data: SignUpProps) => {
     const reqData = {
@@ -20,14 +24,15 @@ export default function Signup() {
       passwordConfirmation: data.passwordConfirmation
     };
 
-
+    
     try {
       const resData = await postSignUp(reqData);
       console.log(JSON.stringify(resData));
+      alert('가입이 완료되었습니다.');
       setIsSuccess(true);
     } catch (e) {
       console.log(e);
-      alert('이메일 또는 비밀번호가 일치하지 않습니다.');
+      alert('회원가입에 실패했습니다.');
     } 
   }
 
@@ -37,7 +42,7 @@ export default function Signup() {
         <form className={style.containerForm} onSubmit={handleSubmit(onValid)}>
           <label className={style.containerLabel} htmlFor="name">
             이름<br />
-            <input className={style.containerInput}
+            <input className={`${style.containerInput} ${errors.name ? style.errorInput : ""}`}
               {...register("name", { required: "필수 항목입니다.", 
               maxLength: {
                 value: 10,
@@ -48,7 +53,7 @@ export default function Signup() {
           </label><br />
           <label className={style.containerLabel} htmlFor="email">
             이메일<br />
-            <input className={style.containerInput}
+            <input className={`${style.containerInput} ${errors.email ? style.errorInput : ""}`}
               {...register("email", { required: "이메일 형식으로 작성해 주세요.", 
               pattern: {
                 value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,4}$/i,
@@ -59,7 +64,7 @@ export default function Signup() {
           </label><br />
           <label className={style.containerLabel} htmlFor="password">
             비밀번호<br />
-            <input className={style.containerInput}
+            <input className={`${style.containerInput} ${errors.password ? style.errorInput : ""}`}
               {...register("password", {required: "8자 이상 입력해 주세요.", 
               minLength: {
                 value: 8,
@@ -70,16 +75,18 @@ export default function Signup() {
           </label><br />
           <label className={style.containerLabel} htmlFor="passwordConfirmation">
             비밀번호 확인<br />
-            <input className={style.containerInput}
-            {...register("email", { required: "이메일 형식으로 작성해 주세요.", 
-              pattern: {
-                value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,4}$/i,
-                message: "이메일 형식으로 작성해 주세요.",
+            <input className={`${style.containerInput} ${errors.passwordConfirmation ? style.errorInput : ""}`}
+            {...register("passwordConfirmation", { required: "비밀번호가 일치하지 않습니다.", 
+              validate: {
+                check: (val) => {
+                  if(getValues("password") !== val)
+                    return "비밀번호가 일치하지 않습니다.";
+                }
               },})}
               id="passwordConfirmation" name="passwordConfirmation" type="password" placeholder="비밀번호를 입력해 주세요" />
             { errors.passwordConfirmation && <small className={style.tagAlert} role="alert">{errors.passwordConfirmation.message}</small> }
             </label><br />
-          <input className={style.btnSignup} type="button" value="가입하기" />
+          <input className={style.btnSignup} type="submit" value="가입하기" />
         </form><br /><br />
         <div className={style.containerLogin}>이미 회원이신가요?&nbsp;&nbsp;<a href="/login">로그인하기</a></div>
     </div>

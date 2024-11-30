@@ -33,7 +33,7 @@
   font-weight: 400;
   line-height: 24px;
   color: $gray-500;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .containerInput {
@@ -58,9 +58,11 @@
   border: 2px solid $green-200;
 }
 
-.errerInput {
-  border-color: $red;
+.errorInput {
   background-color: $red-100;
+}
+.errorInput:focus {
+  border-color: $red;
 }
 .tagAlert {
   color: $red;
