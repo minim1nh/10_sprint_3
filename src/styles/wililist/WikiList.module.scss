@@ -9,8 +9,7 @@
 }
 
 .search {
-  width: 860px;
-  padding: 20px;
+  width: 820px;
 }
 .searchWrapper {
   position: relative;
@@ -64,6 +63,7 @@
 .card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin-bottom: 15px;
@@ -90,13 +90,15 @@
   flex: 1;
 }
 
-.profileLink {
-  color: #0070f3;
-  text-decoration: none;
+.linkText {
+  color: #4cbfa4;
   font-size: 14px;
+  font-weight: bold;
+  word-break: break-all;
 }
 
-.profileLink:hover {
+.linkText:hover {
+  color: #379e83;
   text-decoration: underline;
 }
 
@@ -145,4 +147,9 @@
 .profileLink:hover {
   background-color: #d8f3eb;
   text-decoration: underline;
+}
+
+.searchResultText {
+  font-size: 16px;
+  color: #666;
 }

@@ -1,14 +1,27 @@
-import axios from 'axios';
-import SessionStorage from '@/api/storage/SessionStorage';
-import { teamId, ProfilesProps, ProfilesData, ProfileListData, ProfilesCodeProps, ProfilesCodePingData, ProfilesCodePingProps } from '@/api/swagger/Wikid.types';
-import { getAccessToken } from '@/hooks/Token'
+import axios from "axios";
+import SessionStorage from "@/api/storage/SessionStorage";
+import {
+  teamId,
+  ProfilesProps,
+  ProfilesData,
+  ProfileListData,
+  ProfilesCodeProps,
+  ProfilesCodePingData,
+  ProfilesCodePingProps,
+} from "@/api/swagger/Wikid.types";
+import { getAccessToken } from "@/hooks/Token";
 
 /**
  * '프로필생성' 요청을 보내는 함수
  */
-export const postProfiles = async (reqProps: ProfilesProps): Promise<ProfilesData | null> => {
+export const postProfiles = async (
+  reqProps: ProfilesProps
+): Promise<ProfilesData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles`;
   console.log("POST - postProfiles(): ", URL);
@@ -85,7 +98,9 @@ export const getProfiles = async (
  * 개별 프로필 조회 함수
  * https://wikied-api.vercel.app/10-3/profiles/1
  */
-export const getProfilesCode = async (code: string): Promise<ProfilesData | null> => {
+export const getProfilesCode = async (
+  code: string
+): Promise<ProfilesData | null> => {
   const teamId = "10-3";
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
   console.log("GET - getProfilesCode: ", URL);
@@ -120,9 +135,15 @@ export const getProfilesCode = async (code: string): Promise<ProfilesData | null
  * 본인 프로필이 아닐 경우 content 만 수정 가능합니다. 나머지 필드는 무시됩니다.
  * 프로필을 수정하기 위해서는 '프로필 수정 중 갱신(pingProfileUpdate)' API를 사용하여 현재 유저가 수정 중임을 알려주어야 합니다.
  */
-export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProps): Promise<ProfilesData | null> => {
+export const patchProfilesCode = async (
+  code: string,
+  reqProps: ProfilesCodeProps
+): Promise<ProfilesData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}`;
   console.log("PATCH - patchProfilesCode(): ", URL);
@@ -166,8 +187,6 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
     //console.error('Error to patchProfilesCode():', error);
     throw error;
   }
-
-  return null;
 };
 
 /**
@@ -175,7 +194,9 @@ export const patchProfilesCode = async (code: string, reqProps: ProfilesCodeProp
  * 5분 이내의 프로필 수정 여부 상태를 확인할 수 있습니다.
  * https://wikied-api.vercel.app/10-3/profiles/1/ping
  */
-export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePingData | null> => {
+export const getProfilesCodePing = async (
+  code: string
+): Promise<ProfilesCodePingData | null> => {
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}/ping`;
   console.log("GET - getProfilesCodePing(): ", URL);
 
@@ -199,8 +220,6 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
     //console.error('Error to getProfilesCodePing():', error);
     throw error;
   }
-
-  return null;
 };
 
 /**
@@ -209,9 +228,15 @@ export const getProfilesCodePing = async (code: string): Promise<ProfilesCodePin
  * 프로필 수정 중 상태를 갱신합니다. 5분 동안 프로필 수정 중 상태를 유지합니다.
  * 5분 이내에 갱신하지 않을 경우 프로필 수정이 불가능합니다.
  */
-export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodePingProps): Promise<ProfilesCodePingData | null> => {
+export const postProfilesCodePing = async (
+  code: string,
+  reqProps: ProfilesCodePingProps
+): Promise<ProfilesCodePingData | null> => {
   const accessToken = getAccessToken();
-  if (!accessToken) { console.log('None of LogIn!!!'); return null; }
+  if (!accessToken) {
+    console.log("None of LogIn!!!");
+    return null;
+  }
 
   const URL = `https://wikied-api.vercel.app/${teamId}/profiles/${code}/ping`;
   console.log("POST - postProfilesCodePing(): ", URL);
@@ -244,5 +269,5 @@ export const postProfilesCodePing = async (code: string, reqProps: ProfilesCodeP
     throw error;
   }
 
-  return null
+  return null;
 };
