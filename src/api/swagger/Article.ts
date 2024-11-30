@@ -152,7 +152,7 @@ export const patchArticlesId = async (
     return null;
   }
 
-  const URL = `https://wikied-api.vercel.app/${teamId}/comments/${articleId}`;
+  const URL = `https://wikied-api.vercel.app/${teamId}/articles/${articleId}`;
   console.log("PATCH - patchArticlesId(): ", URL);
 
   try {
