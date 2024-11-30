@@ -151,7 +151,7 @@ export default function WikiPage() {
         <header className={styles.header}>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{profile.name}</h1>
-            {!isEditable && profile.content && (
+            {!isEditable && (
               <ParticipateButton onCorrectAnswer={handleParticipate} />
             )}
           </div>
@@ -179,18 +179,11 @@ export default function WikiPage() {
                 }}
               />
             ) : (
-              // 콘텐츠가 없을 때의 새로운 디자인
               <div className={styles.emptyContent}>
                 <p className={styles.emptyMessage}>
                   아직 작성된 내용이 없네요. <br />
                   위키에 참여해 보세요!
                 </p>
-                <button
-                  className={styles.startButton}
-                  onClick={() => setIsEditable(true)}
-                >
-                  시작하기
-                </button>
               </div>
             )
           ) : (
@@ -222,7 +215,17 @@ export default function WikiPage() {
         </div>
       </div>
       <div className={styles.profileCard}>
-        <ProfileCard code={code} profile={profile} />
+        <ProfileCard
+          code={code}
+          isEditable={isEditable}
+          setEditable={setIsEditable}
+          onSave={(updatedProfile: Partial<Profile>) => {
+            setProfile((prev) => ({
+              ...prev!,
+              ...updatedProfile,
+            }));
+          }}
+        />
       </div>
 
       {showAlert && (

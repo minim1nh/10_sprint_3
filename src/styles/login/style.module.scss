@@ -59,8 +59,10 @@
 }
 
 .errorInput {
-  border-color: $red;
   background-color: $red-100;
+}
+.errorInput:focus {
+  border-color: $red;
 }
 .tagAlert {
   color: $red;

@@ -1,16 +1,23 @@
 "use client";
-import { useState } from "react";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { postArticles } from "@/api/swagger/Article";
-import { postImagesUpload } from "@/api/swagger/Image";
 import { ArticlesProps } from "@/api/swagger/Wikid.types";
 import styles from "@/styles/addboard/ArticleAdd.module.scss";
+import { ImageInsertModal } from "@/components/common/WikidImage";
+import Link from "next/link";
 
 const ArticleForm = () => {
+  const [isClient, setIsClient] = useState(false);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isImageConfirmed, setIsImageConfirmed] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -20,44 +27,14 @@ const ArticleForm = () => {
     return `${year}.${month}.${day}.`;
   };
 
-  const calculateCharacterCount = (text: string) => {
-    const withSpaces = text.length;
-    const withoutSpaces = text.replace(/\s/g, "").length;
-    return { withSpaces, withoutSpaces };
-  };
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    if (e.target.value.length <= 30) {
+      setTitle(e.target.value);
+    }
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    if (file) {
-      setImage(file);
-      const previewUrl = URL.createObjectURL(file);
-      setImageUrl(previewUrl);
-      setIsImageConfirmed(false);
-    }
-  };
-
-  const handleImageConfirm = async () => {
-    if (image) {
-      try {
-        const formData = new FormData();
-        formData.append("image", image);
-        const res = await postImagesUpload({ file: image });
-        if (res) {
-          setImageUrl(res.url);
-          setIsImageConfirmed(true);
-        }
-      } catch (error) {
-        console.error("이미지 업로드 실패", error);
-      }
-    }
   };
 
   const handleSubmit = async () => {
@@ -76,25 +53,46 @@ const ArticleForm = () => {
     }
   };
 
-  const isFormValid = title && content && imageUrl && isImageConfirmed;
+  const getContentLength = () => {
+    const lengthWithSpaces = content.length;
+    const lengthWithoutSpaces = content.replace(/\s/g, "").length;
+    return { lengthWithSpaces, lengthWithoutSpaces };
+  };
 
-  const { withSpaces, withoutSpaces } = calculateCharacterCount(content);
+  const isFormValid = title && content && imageUrl;
+
+  const handleImageDelete = () => {
+    setImageUrl(null);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className={styles.articleForm}>
-      <div className={styles.formGroup}>
-        <div className={styles.topContain}>
+      <div className={styles.topContain}>
+        <div className={styles.topContain1}>
           <h6 className={styles.titleName}>게시물 등록하기</h6>
-
-          <button
-            className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
-            onClick={handleSubmit}
-            disabled={!isFormValid}
-          >
-            등록하기
-          </button>
+          <div className={styles.littleContain}>
+            <p className={styles.date}>등록일</p>
+            <span className={styles.date}>{getCurrentDate()}</span>
+          </div>
         </div>
-        <span className={styles.date}>{getCurrentDate()}</span>
+        <div className={styles.buttonContain}>
+          <Link href="/boards">
+            <button className={styles.submitButton1}>목록으로</button>
+          </Link>
+          <Link href="/boards">
+            <button
+              className={`${styles.submitButton} ${!isFormValid ? styles.disabled : ""}`}
+              onClick={handleSubmit}
+              disabled={!isFormValid}
+            >
+              등록하기
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className={styles.titleContainer}>
         <input
           className={styles.titleForm}
           type="text"
@@ -102,12 +100,13 @@ const ArticleForm = () => {
           onChange={handleTitleChange}
           placeholder="제목을 입력해주세요"
         />
+        <span className={styles.charCount}>{title.length}/30</span>
       </div>
-
+      <p className={styles.textCount}>
+        공백 포함: {getContentLength().lengthWithSpaces}자 | 공백 제외:{" "}
+        {getContentLength().lengthWithoutSpaces}자
+      </p>
       <div className={styles.formGroup}>
-        <p className={styles.characterCount}>
-          공백 포함: 총 {withSpaces}자 | 공백제외: 총 {withoutSpaces}자
-        </p>
         <input
           type="text"
           value={content}
@@ -115,37 +114,46 @@ const ArticleForm = () => {
           onChange={handleContentChange}
           placeholder="본문을 입력해주세요"
         />
+
+        {imageUrl && (
+          <div className={styles.imagePreview}>
+            <div className={styles.imageWrapper}>
+              <Image
+                src={imageUrl}
+                width={200}
+                height={190}
+                alt="Uploaded Image"
+              />
+              <button
+                className={styles.deleteImageButton}
+                onClick={handleImageDelete}
+              >
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className={styles.formGroup}>
-        <label>이미지 업로드</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {imageUrl && !isImageConfirmed && (
-          <div className={styles.previewContainer}>
-            <img
-              src={imageUrl}
-              alt="미리보기"
-              className={styles.previewImage}
-            />
-            <button
-              className={styles.confirmButton}
-              onClick={handleImageConfirm}
-            >
-              확인
-            </button>
-          </div>
-        )}
-        {imageUrl && isImageConfirmed && (
-          <div className={styles.imageConfirmed}>
-            <p>이미지 업로드 완료!</p>
-            <img
-              src={imageUrl}
-              alt="업로드된 이미지"
-              className={styles.confirmedImage}
-            />
-          </div>
-        )}
+      <div>
+        <div className={styles.lastButton}>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className={styles.submitButton}
+          >
+            이미지 선택
+          </button>
+        </div>
       </div>
+
+      {isModalOpen && (
+        <ImageInsertModal
+          onClose={(url: string) => {
+            setImageUrl(url);
+            setIsModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };
