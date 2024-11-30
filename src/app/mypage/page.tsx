@@ -30,19 +30,24 @@ export default function MyPage() {
       <form className={style.containerForm} onSubmit={handleSubmit(onValid)}>
         <label className={style.containerLabel}>
           비밀번호 변경<br />
-          <input className={style.containerInput} {...register("currentPassword", {required: "기존 비밀번호를 입력해 주세요.", 
+          <input className={`${style.containerInput} ${errors.currentPassword ? style.errorInput : ""}`}
+           {...register("currentPassword", {required: "기존 비밀번호를 입력해 주세요.", 
             minLength: {
               value: 8,
               message: "8자 이상 입력해 주세요.",
             },})} id="currentPassword" name="currentPassword" type="password" placeholder="기존 비밀번호" />
             { errors.currentPassword && <small className={style.tagAlert} role="alert">{errors.currentPassword.message}</small> }
-            <input className={style.containerInput} {...register("password", {required: "8자 이상 입력해 주세요.", 
+            
+          <input className={`${style.containerInput} ${errors.password ? style.errorInput : ""}`}
+             {...register("password", {required: "8자 이상 입력해 주세요.", 
             minLength: {
               value: 8,
               message: "8자 이상 입력해 주세요.",
             },})} id="password" name="password" type="password" placeholder="새 비밀번호" />
             { errors.password && <small className={style.tagAlert} role="alert">{errors.password.message}</small> }
-          <input className={style.containerInput} {...register("passwordConfirmation", {required: "8자 이상 입력해 주세요.", 
+          
+          <input className={`${style.containerInput} ${errors.passwordConfirmation ? style.errorInput : ""}`} 
+          {...register("passwordConfirmation", {required: "8자 이상 입력해 주세요.", 
             validate: {
               check: (val) => {
                 if(getValues("password") !== val)

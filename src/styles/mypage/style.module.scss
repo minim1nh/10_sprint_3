@@ -54,6 +54,20 @@
   color: $gray-400;
 }
 
+.containerInput:focus {
+  border: 2px solid $green-200;
+}
+
+.errorInput {
+  background-color: $red-100;
+}
+.errorInput:focus {
+  border-color: $red;
+}
+.tagAlert {
+  color: $red;
+}
+
 .btn {
   position: relative;
   width: 100px;
