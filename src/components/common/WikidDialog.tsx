@@ -76,65 +76,63 @@ export const NotificationModal = (props: {
   }, [props]);
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="dialog-title">
-          <Box display="flex" alignItems="center">
-            <Box flexGrow={1}>{`알림 ${notifies?.totalCount}개`}</Box>
-            <Box>
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="dialog-title">
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1}>{`알림 ${notifies?.totalCount}개`}</Box>
+          <Box>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
           </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="dialog-description" component={"span"}>
-            {notifies?.list?.map((notify: NotificationList, index: number) => (
-              <Card key={index} sx={{ marginBottom: "10px" }}>
-                <CardContent>
-                  <Box
-                    display="flex"
-                    alignItems="left"
-                    justifyContent="space-between"
-                  >
-                    <Box>
-                      <IconButton>
-                        <FiberManualRecordIcon />
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description" component={"span"}>
+          {notifies?.list?.map((notify: NotificationList, index: number) => (
+            <Card key={index} sx={{ marginBottom: "10px" }}>
+              <CardContent>
+                <Box
+                  display="flex"
+                  alignItems="left"
+                  justifyContent="space-between"
+                >
+                  <Box>
+                    <IconButton>
+                      <FiberManualRecordIcon />
 
-                        <Typography variant="subtitle1" color="text.primary">
-                          {notify.id}
-                        </Typography>
-                      </IconButton>
-                    </Box>
-                    <Box>
-                      <IconButton
-                        onClick={(e) => handleClose(e, "delete", notify.id)}
-                      >
-                        <Typography variant="subtitle2" color="text.secondary">
-                          {notify.createdAt}
-                        </Typography>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
+                      <Typography variant="subtitle1" color="text.primary">
+                        {notify.id}
+                      </Typography>
+                    </IconButton>
                   </Box>
-                  <Typography variant="body1" color="text.secondary">
-                    {notify.content}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
+                  <Box>
+                    <IconButton
+                      onClick={(e) => handleClose(e, "delete", notify.id)}
+                    >
+                      <Typography variant="subtitle2" color="text.secondary">
+                        {notify.createdAt}
+                      </Typography>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                </Box>
+                <Typography variant="body1" color="text.secondary">
+                  {notify.content}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </DialogContentText>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -194,103 +192,101 @@ export const CertificationModal = () => {
   };
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="dialog-title">
-          <Box display="flex" justifyContent={"end"}>
-            <IconButton onClick={() => setOpen(false)}>
-              <CloseIcon />
-            </IconButton>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="dialog-title">
+        <Box display="flex" justifyContent={"end"}>
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Box display="flex" justifyContent={"center"}>
+          <IconButton>
+            <LockIcon />
+          </IconButton>
+        </Box>
+        <Box sx={{ margin: "10px" }} display="flex" justifyContent={"center"}>
+          <Typography
+            sx={{ fontSize: "14px" }}
+            align="center"
+            color="gray"
+            component={"pre"}
+          >
+            {"다음 퀴즈를 맞추고\n위키를 작성해 보세요."}
+          </Typography>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description" component={"span"}>
+          <Box display="flex" justifyContent={"left"}>
+            <Typography
+              sx={{ marginTop: "10px", fontSize: "18px", fontStyle: "bold" }}
+              color="#474D66"
+              component={"span"}
+            >
+              {question}
+            </Typography>
           </Box>
           <Box display="flex" justifyContent={"center"}>
-            <IconButton>
-              <LockIcon />
-            </IconButton>
+            <TextField
+              id="standard-basic"
+              label="답안을 입력해 주세요."
+              variant="outlined"
+              sx={{
+                marginTop: "10px",
+                backgroundColor: "#FBEDED",
+                borderRadius: "10px",
+              }}
+              fullWidth={true}
+              onChange={(e) => {
+                setResult("");
+                setAnswer(e.target.value);
+              }}
+            />
           </Box>
-          <Box sx={{ margin: "10px" }} display="flex" justifyContent={"center"}>
+          <Box display="flex" justifyContent={"left"}>
             <Typography
-              sx={{ fontSize: "14px" }}
-              align="center"
-              color="gray"
-              component={"pre"}
+              sx={{ marginTop: "10px", fontSize: "12px" }}
+              color="#D14343"
+              variant="subtitle2"
+              component={"span"}
             >
-              {"다음 퀴즈를 맞추고\n위키를 작성해 보세요."}
+              {result}
             </Typography>
           </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="dialog-description" component={"span"}>
-            <Box display="flex" justifyContent={"left"}>
-              <Typography
-                sx={{ marginTop: "10px", fontSize: "18px", fontStyle: "bold" }}
-                color="#474D66"
-                component={"span"}
-              >
-                {question}
-              </Typography>
-            </Box>
-            <Box display="flex" justifyContent={"center"}>
-              <TextField
-                id="standard-basic"
-                label="답안을 입력해 주세요."
-                variant="outlined"
-                sx={{
-                  marginTop: "10px",
-                  backgroundColor: "#FBEDED",
-                  borderRadius: "10px",
-                }}
-                fullWidth={true}
-                onChange={(e) => {
-                  setResult("");
-                  setAnswer(e.target.value);
-                }}
-              />
-            </Box>
-            <Box display="flex" justifyContent={"left"}>
-              <Typography
-                sx={{ marginTop: "10px", fontSize: "12px" }}
-                color="#D14343"
-                variant="subtitle2"
-                component={"span"}
-              >
-                {result}
-              </Typography>
-            </Box>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={(e) => handleClose(e, "confirm")}
-            sx={{ margin: "16px", backgroundColor: "#4CBFA4" }}
-            variant="contained"
-            fullWidth={true}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(e) => handleClose(e, "confirm")}
+          sx={{ margin: "16px", backgroundColor: "#4CBFA4" }}
+          variant="contained"
+          fullWidth={true}
+        >
+          확인
+        </Button>
+      </DialogActions>
+      <DialogContent>
+        <DialogContentText id="dialog-description" component={"span"}>
+          <Typography
+            sx={{ fontSize: "12px" }}
+            align="center"
+            color="#8F95B2"
+            component={"pre"}
           >
-            확인
-          </Button>
-        </DialogActions>
-        <DialogContent>
-          <DialogContentText id="dialog-description" component={"span"}>
-            <Typography
-              sx={{ fontSize: "12px" }}
-              align="center"
-              color="#8F95B2"
-              component={"pre"}
-            >
-              {
-                "위키드는 지인들과 함께하는 즐거운 공간입니다.\n지인에게 상처를 주지 않도록 작성해 주세요."
-              }
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
+            {
+              "위키드는 지인들과 함께하는 즐거운 공간입니다.\n지인에게 상처를 주지 않도록 작성해 주세요."
+            }
+          </Typography>
+        </DialogContentText>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -303,45 +299,43 @@ export const DisconnectedModal = () => {
   }, []);
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="dialog-title">
-          <Box display="flex" justifyContent={"end"}>
-            <IconButton onClick={() => setOpen(false)}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            id="dialog-description"
-            sx={{ fontSize: "18px", fontWeight: "bold" }}
-          >
-            {`5분 이상 글을 쓰지 않아 접속이 끊어졌어요.`}
-          </DialogContentText>
-          <DialogContentText id="dialog-description">
-            {"위키 참여하기를 통해 다시 위키를 수정해 주세요."}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setOpen(false)}
-            variant="contained"
-            color="primary"
-            sx={{ backgroundColor: "#4CBFA4" }}
-          >
-            확인
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="dialog-title">
+        <Box display="flex" justifyContent={"end"}>
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText
+          id="dialog-description"
+          sx={{ fontSize: "18px", fontWeight: "bold" }}
+        >
+          {`5분 이상 글을 쓰지 않아 접속이 끊어졌어요.`}
+        </DialogContentText>
+        <DialogContentText id="dialog-description">
+          {"위키 참여하기를 통해 다시 위키를 수정해 주세요."}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => setOpen(false)}
+          variant="contained"
+          color="primary"
+          sx={{ backgroundColor: "#4CBFA4" }}
+        >
+          확인
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
@@ -355,52 +349,52 @@ export const ExitNotSavedModal = () => {
   }, []);
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="dialog-title">
-          <Box display="flex" justifyContent={"end"}>
-            <IconButton onClick={() => setOpen(false)}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            id="dialog-description"
-            sx={{ fontSize: "18px", fontWeight: "bold" }}
-          >
-            {"저장하지 않고 나가시겠어요?"}
-          </DialogContentText>
-          <DialogContentText id="dialog-description">
-            {"작성하신 모든 내용이 사라집니다."}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setOpen(false)}
-            variant="contained"
-            color="error"
-          >
-            페이지 나가기
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="dialog-title">
+        <Box display="flex" justifyContent={"end"}>
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText
+          id="dialog-description"
+          sx={{ fontSize: "18px", fontWeight: "bold" }}
+        >
+          {"저장하지 않고 나가시겠어요?"}
+        </DialogContentText>
+        <DialogContentText id="dialog-description">
+          {"작성하신 모든 내용이 사라집니다."}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => setOpen(false)}
+          variant="contained"
+          color="error"
+        >
+          페이지 나가기
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
 //이미지 삽입 모달 다이얼로그
-export const ImageInsertModal = () => {
+export const ImageInsertModal = (props: { callbackhandler: (url: string) => void }) => {
+  const { callbackhandler } = props;
   const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setOpen(true);
   }, []);
@@ -416,7 +410,7 @@ export const ImageInsertModal = () => {
     }
   };
 
-  const handleClose = (
+  const handleClose = async (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
@@ -427,11 +421,11 @@ export const ImageInsertModal = () => {
     if (reason === "clickaway") {
       return;
     }
-    if (reason === "upload") {
-      // 이미지 전송
+    if (reason === "upload") { // 이미지 전송
       console.log("image upload path: ", props);
       try {
-        postImagesUpload(props);
+        const res = await postImagesUpload(props);
+        callbackhandler(res?.url ?? '');
       } catch (error) {
         console.log("error", error);
       }
@@ -440,78 +434,76 @@ export const ImageInsertModal = () => {
   };
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-      >
-        <DialogTitle id="dialog-title">
-          <Box display="flex" justifyContent={"end"}>
-            <IconButton onClick={() => setOpen(false)}>
-              <CloseIcon />
-            </IconButton>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title">
+        <Box display="flex" justifyContent={"end"}>
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description" component={"span"}>
+          <form>
+            <p>
+              {/* <label htmlFor="file">이미지</label> */}
+              {/* <FormLabel filled={true} htmlFor="file">이미지</FormLabel> */}
+              <input
+                // hidden={true}
+                type="file"
+                id="file"
+                onChange={handleImageChange}
+                accept="image/png, image/jpg, image/jpeg"
+              // multiple
+              />
+            </p>
+          </form>
+        </DialogContentText>
+        <DialogContentText id="dialog-description" component={"span"}>
+          <Box>
+            <div className="">
+              {images.length > 0 && (
+                <div>
+                  {images.map((image, index) => (
+                    <p key={index}>
+                      <Image src={image} width={302} height={268} alt="" />
+                    </p>
+                  ))}
+                </div>
+              )}
+              {images.length == 0 && (
+                <IconButton
+                  disabled={true}
+                  sx={{
+                    bgcolor: "background.paper",
+                    boxShadow: 1,
+                    borderRadius: 2,
+                    p: 1,
+                    minWidth: 354,
+                    minHeight: 206,
+                  }}
+                >
+                  <CameraAltIcon />
+                </IconButton>
+              )}
+            </div>
           </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="dialog-description" component={"span"}>
-            <form>
-              <p>
-                {/* <label htmlFor="file">이미지</label> */}
-                {/* <FormLabel filled={true} htmlFor="file">이미지</FormLabel> */}
-                <input
-                  // hidden={true}
-                  type="file"
-                  id="file"
-                  onChange={handleImageChange}
-                  accept="image/png, image/jpg, image/jpeg"
-                  // multiple
-                />
-              </p>
-            </form>
-          </DialogContentText>
-          <DialogContentText id="dialog-description" component={"span"}>
-            <Box>
-              <div className="">
-                {images.length > 0 && (
-                  <div>
-                    {images.map((image, index) => (
-                      <p key={index}>
-                        <Image src={image} width={302} height={268} alt="" />
-                      </p>
-                    ))}
-                  </div>
-                )}
-                {images.length == 0 && (
-                  <IconButton
-                    disabled={true}
-                    sx={{
-                      bgcolor: "background.paper",
-                      boxShadow: 1,
-                      borderRadius: 2,
-                      p: 1,
-                      minWidth: 354,
-                      minHeight: 206,
-                    }}
-                  >
-                    <CameraAltIcon />
-                  </IconButton>
-                )}
-              </div>
-            </Box>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={(e) => handleClose(e, "upload")}
-            variant="contained"
-            color="secondary"
-          >
-            삽입하기
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(e) => handleClose(e, "upload")}
+          variant="contained"
+          color="secondary"
+        >
+          삽입하기
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
