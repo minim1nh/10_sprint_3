@@ -14,10 +14,7 @@ import { getAccessToken } from "@/hooks/Token";
  * 게시글 작성
  * https://wikied-api.vercel.app/10-3/articles
  */
-export const postArticles = async (
-  articleId: number,
-  reqProps: ArticlesProps
-): Promise<ArticlesDetailData | null> => {
+export const postArticles = async (articleId: number, reqProps: ArticlesProps): Promise<ArticlesDetailData | null> => {
   const accessToken = getAccessToken();
   if (!accessToken) {
     console.log("None of LogIn!!!");
