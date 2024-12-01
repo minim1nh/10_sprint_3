@@ -1,9 +1,10 @@
 'use client'
 
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { NotificationModal, CertificationModal, DisconnectedModal, ExitNotSavedModal, ImageInsertModal } from '@/components/common/WikidDialog';
 import { NotificationsData } from '@/api/swagger/Wikid.types';
-import { useState } from 'react';
+import { getNotifications } from '@/api/swagger/Notification';
+import { useEffect, useState } from 'react';
 
 const UserTest = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
@@ -11,24 +12,34 @@ const UserTest = () => {
   const [isDisconnectedModalOpen, setIsDisconnectedModalOpen] = useState(false);
   const [isExitNotSavedModalOpen, setIsExitNotSavedModalOpen] = useState(false);
   const [isImageInsertModalOpen, setIsImageInsertModalOpen] = useState(false);
+  const [url, setUrl] = useState('');
+  const [notifies, setNotifies] = useState<NotificationsData | null>(null);
 
-  const notifies: NotificationsData = {
-    totalCount: 2,
-    list: [
-      {
-        id: 1,
-        content: '테스트 알림 내용1',
-        createdAt: '2024-11-24 10:00',
-      },
-      {
-        id: 2,
-        content: '테스트 알림 내용2',
-        createdAt: '2024-11-25 10:00',
-      },
-    ]
+  
+  useEffect(() => {
+    //for ImageInsertModal
+    if (isImageInsertModalOpen) {
+      setUrl('')
+    }
+  
+  }, [isImageInsertModalOpen])
+
+  //for NotificationModal
+  const initNotifies = () => {
+    const fetchNotifications = async () => {
+      const res = await getNotifications(999)
+      setNotifies(res);
+    }
+    
+    fetchNotifications();  
+  }
+
+  const handleImageUpload = (url: string) => {
+    setUrl(url)
   }
 
   const handleNotificationModal = () => {
+    initNotifies();
     setIsNotificationModalOpen(true)
     setIsCertificationModalOpen(false)
     setIsDisconnectedModalOpen(false)
@@ -73,11 +84,13 @@ const UserTest = () => {
         <Button variant='outlined' onClick={() => handleExitNotSavedModal()}>저장하지않고 나가기 모달</Button>
         <Button variant='outlined' onClick={() => handleImageInsertModal()}>이미지 삽입 모달</Button>
       </Box>
+      <br />
       {isNotificationModalOpen && <NotificationModal notifies={notifies} />}
       {isCertificationModalOpen && <CertificationModal />}
       {isDisconnectedModalOpen && <DisconnectedModal />}
       {isExitNotSavedModalOpen && <ExitNotSavedModal />}
-      {isImageInsertModalOpen && <ImageInsertModal />}
+      {isImageInsertModalOpen && <ImageInsertModal callbackhandler={handleImageUpload} />}
+      {url && <Typography variant='h6'>업로드한 이미지: {url}</Typography>}
     </>
   )
 }
