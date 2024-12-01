@@ -23,7 +23,15 @@ const AllBoards = () => {
     async (page: number, pageSize: number, sort: string) => {
       try {
         const response = await getArticles(page, pageSize, sort, "");
-        const list = response.list || [];
+
+        if (!response || !response.list) {
+          console.error("No articles data available.");
+          setArticles([]);
+          setFilteredArticles([]);
+          return;
+        }
+
+        const list = response.list;
 
         let sortedArticles: ArticlesData[] = [];
 
