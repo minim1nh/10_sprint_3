@@ -53,10 +53,6 @@ export default function Page() {
     setIsEditing(false);
   };
 
-  const handleCommentSubmitSuccess = () => {
-    fetchData();
-  };
-
   const handleCommentEditSuccess = () => {
     fetchData();
   };

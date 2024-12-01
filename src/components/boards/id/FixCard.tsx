@@ -51,10 +51,6 @@ const FixCard: React.FC<ArticleFormProps> = ({
     setTitle(e.target.value);
   };
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(e.target.value);
-  };
-
   const handleCancel = () => {
     onCancel();
   };
