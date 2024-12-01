@@ -81,18 +81,18 @@ export type ProfileListData = {
 };
 
 export type ProfilesCodeProps = {
-  securityAnswer: string;
-  securityQuestion: string;
-  nationality: string;
-  family: string;
-  bloodType: string;
-  nickname: string;
-  birthday: string;
-  sns: string;
-  job: string;
-  mbti: string;
-  city: string;
-  image: string;
+  securityAnswer?: string;
+  securityQuestion?: string;
+  nationality?: string;
+  family?: string;
+  bloodType?: string;
+  nickname?: string;
+  birthday?: string;
+  sns?: string;
+  job?: string;
+  mbti?: string;
+  city?: string;
+  image?: string;
   content: string;
 };
 

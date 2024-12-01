@@ -11,7 +11,19 @@ import SnackbarNotification from "@/components/wiki/SnackbarNotification";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
-  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
+  () =>
+    import("@tinymce/tinymce-react").then((mod) => mod.Editor) as Promise<
+      React.FC<{
+        apiKey: string;
+        value: string;
+        onEditorChange: (content: string) => void;
+        init: {
+          height: number;
+          plugins: string;
+          toolbar: string;
+        };
+      }>
+    >,
   {
     ssr: false,
   }

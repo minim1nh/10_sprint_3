@@ -67,8 +67,7 @@ export default function WikiListPage() {
           setTotalPages(1);
         }
         setError(null);
-      } catch (err: string) {
-        setError(err.message || "데이터를 가져오는 중 오류가 발생했습니다.");
+      } catch {
         setProfiles([]);
         setTotalPages(1);
       } finally {
