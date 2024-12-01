@@ -1,4 +1,6 @@
 import Image from "next/image";
+import WikiButton from "@/components/landingpage/wikiButton";
+import WikiButton2 from "@/components/landingpage/wikiButton2";
 import styles from "@/styles/landingpage/styles.module.scss";
 
 const Landing: React.FC = () => {
@@ -12,6 +14,7 @@ const Landing: React.FC = () => {
             <h3 className={styles.title2}>나만의&nbsp;</h3>
             <h3 className={styles.title2}>위키</h3>
           </div>
+          <WikiButton />
           <Image
             src="/images/img/img_Main1.svg"
             alt="Main Image"
@@ -120,12 +123,12 @@ const Landing: React.FC = () => {
                   src="/images/img/img_Main4.svg"
                   alt="Main Image 4"
                   width={700}
-                  height={300}
+                  height={250}
                 />
               </div>
             </div>
             <div className={styles.behindContain2}>
-              <div className={styles.iconContain5}>
+              <div className={styles.iconContain6}>
                 <Image
                   src="/images/img/img_bell.svg"
                   alt="icon5"
@@ -137,8 +140,8 @@ const Landing: React.FC = () => {
                 <Image
                   src="/images/img/img_Main5.svg"
                   alt="Main Image 5"
-                  width={400}
-                  height={400}
+                  width={470}
+                  height={300}
                 />
               </div>
             </div>
@@ -146,6 +149,7 @@ const Landing: React.FC = () => {
         </div>
         <div className={styles.titleContain6}>
           <h3 className={styles.title4}>나만의 위키 만들어보기</h3>
+          <WikiButton2 />
         </div>
       </div>
       <footer className={styles.footer}>
