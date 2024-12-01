@@ -4,9 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/components/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
+import StartButton from "@/components/wiki/StartButton";
 import ParticipateButton from "@/components/wiki/ParicipateButton";
 import dynamic from "next/dynamic";
 import SnackbarNotification from "@/components/wiki/SnackbarNotification";
+
 import {
   Dialog,
   DialogTitle,
@@ -143,6 +145,9 @@ export default function WikiPage() {
     setIsEditable(true);
   };
 
+  const handleStartSuccess = () => {
+    setIsEditable(true);
+  };
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -203,12 +208,7 @@ export default function WikiPage() {
                   아직 작성된 내용이 없네요. <br />
                   위키에 참여해 보세요!
                 </p>
-                <button
-                  className={styles.startButton}
-                  onClick={handleParticipate}
-                >
-                  시작하기
-                </button>
+                <StartButton onCorrectAnswer={handleStartSuccess} />
               </div>
             )
           ) : (
