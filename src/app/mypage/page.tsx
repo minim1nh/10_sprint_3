@@ -3,7 +3,7 @@
 import style from "@/styles/mypage/style.module.scss";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getUsersMe, patchUsersMePassword } from '@/api/swagger/User';
 import { PasswordProps, ProfilesProps } from '@/api/swagger/Wikid.types';
 import { postProfiles } from "@/api/swagger/Profile";
@@ -13,14 +13,29 @@ type wikiFormInput = ProfilesProps;
 
 export default function MyPage() {
   const [isWikiExist, setIsWikiExist] = useState(false);
+  const router = useRouter();
 
   const passwordForm = useForm<passFormInput>({ mode: "onBlur"});
   const wikiForm = useForm<wikiFormInput>({ mode: "onBlur"});
 
   useEffect(() => {
-    if(isWikiExist)
-      redirect('/wiki');
-  }, [isWikiExist]);
+    const fetchAndRedirect = async () => {
+      if (isWikiExist) {
+        try {
+          const resData = await getUsersMe(); // 비동기 호출
+          if (resData?.profile?.code) {
+            router.push(`/wiki?code=${resData.profile.code}`);
+          } else {
+            console.error("Profile code not found!");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchAndRedirect();
+  }, [isWikiExist, router]);
 
   const onValid = async (data: PasswordProps) => {
     const reqData = {
@@ -43,8 +58,8 @@ export default function MyPage() {
       const resData = await getUsersMe();
       if(resData !== null) {
         if(resData.profile != null) {
-          setIsWikiExist(true);
           alert('이미 위키 페이지가 존재합니다!');
+          setIsWikiExist(true);
         }
         else {
           const reqProf = {
