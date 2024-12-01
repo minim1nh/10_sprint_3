@@ -47,6 +47,7 @@ export default function MyPage() {
     try {
       const resData = await patchUsersMePassword(reqData);
       console.log(JSON.stringify(resData));
+      alert('비밀번호를 변경하였습니다.');
     } catch (e) {
       console.log(e);
       alert('변경에 실패하였습니다.');
