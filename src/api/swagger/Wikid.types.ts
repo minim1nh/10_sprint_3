@@ -93,7 +93,7 @@ export type ProfilesCodeProps = {
   mbti?: string;
   city?: string;
   image?: string;
-  content: string;
+  content?: string;
 };
 
 export type ProfilesCodePingData = {
