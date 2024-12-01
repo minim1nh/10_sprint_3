@@ -4,9 +4,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/components/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
+import StartButton from "@/components/wiki/StartButton";
 import ParticipateButton from "@/components/wiki/ParicipateButton";
 import dynamic from "next/dynamic";
 import SnackbarNotification from "@/components/wiki/SnackbarNotification";
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
@@ -136,6 +145,9 @@ export default function WikiPage() {
     setIsEditable(true);
   };
 
+  const handleStartSuccess = () => {
+    setIsEditable(true);
+  };
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -196,12 +208,7 @@ export default function WikiPage() {
                   아직 작성된 내용이 없네요. <br />
                   위키에 참여해 보세요!
                 </p>
-                <button
-                  className={styles.startButton}
-                  onClick={handleParticipate}
-                >
-                  시작하기
-                </button>
+                <StartButton onCorrectAnswer={handleStartSuccess} />
               </div>
             )
           ) : (
@@ -247,9 +254,44 @@ export default function WikiPage() {
       </div>
 
       {showAlert && (
-        <div className={styles.alertBox}>
-          <p>5분 동안 입력이 없습니다. 위키 페이지로 돌아갑니다.</p>
-        </div>
+        <Dialog
+          open={showAlert}
+          onClose={() => setShowAlert(false)}
+          PaperProps={{
+            style: {
+              width: "400px",
+              padding: "20px 0px",
+              borderRadius: "16px",
+            },
+          }}
+        >
+          <DialogTitle
+            style={{
+              fontSize: "18px",
+              whiteSpace: "nowrap",
+              fontWeight: "600",
+              textAlign: "center",
+            }}
+          >
+            5분 이상 글을 쓰지 않아 접속이 끊어졌어요.
+          </DialogTitle>
+          <DialogContent style={{ textAlign: "center" }}>
+            위키 참여하기를 통해 다시 위키를 수정해 주세요.
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#4CBFA4",
+                color: "#fff",
+                borderRadius: "10px",
+              }}
+              onClick={() => setShowAlert(false)}
+            >
+              확인
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
 
       <SnackbarNotification

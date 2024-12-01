@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "@/styles/wiki/ProfileCard.module.scss";
 import { patchProfilesCode } from "@/api/swagger/Profile";
+import { ImageInsertModal } from "@/components/common/WikidImage";
 
 interface Profile {
   image: string;
@@ -36,6 +37,7 @@ export default function ProfileCard({
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
 
   const teamId = "10-3";
 
@@ -81,6 +83,14 @@ export default function ProfileCard({
     }));
   };
 
+  const handleImageUpload = (imageUrl: string) => {
+    setEditedProfile((prev) => ({
+      ...prev,
+      image: imageUrl,
+    }));
+    setImageModalOpen(false);
+  };
+
   const handleSave = async () => {
     if (editedProfile) {
       try {
@@ -109,15 +119,20 @@ export default function ProfileCard({
     <div className={styles.container}>
       <div className={styles.header}>
         {isEditable ? (
-          <input
-            type="text"
-            value={editedProfile?.image || ""}
-            onChange={(e) => handleInputChange("image", e.target.value)}
-            placeholder="이미지 URL 입력"
-            className={styles.imageInput}
-          />
+          <div>
+            <button
+              onClick={() => setImageModalOpen(true)}
+              className={styles.uploadButton}
+            >
+              이미지 업로드
+            </button>
+          </div>
         ) : (
-          <img src={profile.image} className={styles.image} alt="Profile" />
+          <img
+            src={profile.image || "/images/icon/ic_profile.svg"}
+            className={styles.image}
+            alt="Profile"
+          />
         )}
       </div>
       <div className={styles.card}>
@@ -145,6 +160,7 @@ export default function ProfileCard({
           </button>
         </div>
       )}
+      {imageModalOpen && <ImageInsertModal onClose={handleImageUpload} />}
     </div>
   );
 }
