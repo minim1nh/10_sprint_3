@@ -1,0 +1,23 @@
+@use "../variables" as *;
+.wikiButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  font-size: 18px;
+  color: $white;
+  background-color: $gray-500;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.wikiButton2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  font-size: 18px;
+  color: $gray-500;
+  background-color: $white;
+  border-radius: 10px;
+  cursor: pointer;
+}
