@@ -11,7 +11,7 @@ import SnackbarNotification from "@/components/wiki/SnackbarNotification";
 
 // TinyMCE 동적 로드
 const Editor = dynamic(
-  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor as any),
+  () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
   {
     ssr: false,
   }
@@ -151,7 +151,7 @@ export default function WikiPage() {
         <header className={styles.header}>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{profile.name}</h1>
-            {!isEditable && (
+            {!isEditable && profile.content && (
               <ParticipateButton onCorrectAnswer={handleParticipate} />
             )}
           </div>
@@ -184,6 +184,12 @@ export default function WikiPage() {
                   아직 작성된 내용이 없네요. <br />
                   위키에 참여해 보세요!
                 </p>
+                <button
+                  className={styles.startButton}
+                  onClick={handleParticipate}
+                >
+                  시작하기
+                </button>
               </div>
             )
           ) : (

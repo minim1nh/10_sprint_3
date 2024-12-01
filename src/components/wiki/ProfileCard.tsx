@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation"; // useRouter 사용
 import styles from "@/styles/wiki/ProfileCard.module.scss";
 import { patchProfilesCode } from "@/api/swagger/Profile";
 
@@ -36,6 +37,8 @@ export default function ProfileCard({
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter(); // useRouter 훅 추가
 
   const teamId = "10-3";
 
@@ -86,8 +89,10 @@ export default function ProfileCard({
       try {
         await patchProfilesCode(code, editedProfile);
         onSave(editedProfile);
-        alert("프로필이 성공적으로 저장되었습니다.");
-        setEditable(false); // 저장 후 수정 모드 해제
+        setEditable(false);
+
+        // 저장 후 리다이렉트
+        window.location.reload();
       } catch (error) {
         console.error("프로필 저장 중 오류 발생:", error);
         alert("프로필 저장에 실패했습니다.");
@@ -146,4 +151,3 @@ export default function ProfileCard({
     </div>
   );
 }
-
