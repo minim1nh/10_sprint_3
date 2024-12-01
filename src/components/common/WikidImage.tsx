@@ -22,7 +22,6 @@ interface ImageInsertModalProps {
 export const ImageInsertModal = ({ onClose }: ImageInsertModalProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,6 @@ export const ImageInsertModal = ({ onClose }: ImageInsertModalProps) => {
         const res = (await postImagesUpload({
           file: files[0],
         })) as ImageUploadData;
-        setUploadedImageUrl(res.url);
         onClose(res.url);
       } catch (error) {
         console.error("이미지 업로드 실패", error);
