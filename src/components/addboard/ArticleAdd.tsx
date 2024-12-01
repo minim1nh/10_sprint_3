@@ -66,6 +66,10 @@ const ArticleForm = () => {
     setIsModalOpen(true);
   };
 
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <div className={styles.articleForm}>
       <div className={styles.topContain}>
