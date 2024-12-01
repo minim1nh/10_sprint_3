@@ -42,7 +42,7 @@ const SearchForm = ({ articles, onSearchResults }: SearchFormProps) => {
     <div className={styles.searchForm}>
       <div className={styles.searchInputWrapper}>
         <Image
-          src="/images/icon/ic_Search.svg"
+          src="/images/icon/ic_search.svg"
           alt="Search Icon"
           className={styles.searchImage}
           width={20}
