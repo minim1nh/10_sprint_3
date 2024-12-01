@@ -1,13 +1,16 @@
 @use "../variables" as *;
 
 .allContain {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.allContain2 {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
 }
-
 .roundBackground {
   top: 850px;
   width: 100%;
