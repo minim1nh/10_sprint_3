@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
 import { getProfilesCode, patchProfilesCode } from "@/api/swagger/Profile";
 import ProfileCard from "@/components/wiki/ProfileCard";
 import styles from "@/styles/wiki/style.module.scss";
@@ -44,8 +43,6 @@ interface Profile {
 }
 
 export default function WikiPage() {
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code") ?? "";
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,6 +69,9 @@ export default function WikiPage() {
   };
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const code = query.get("code") ?? "";
+
     if (!code) {
       setError("URL에서 프로필 코드를 찾을 수 없습니다.");
       setLoading(false);
@@ -102,7 +102,7 @@ export default function WikiPage() {
         clearTimeout(timerRef.current);
       }
     };
-  }, [code]);
+  }, []);
 
   useEffect(() => {
     if (isEditable) {
@@ -115,14 +115,14 @@ export default function WikiPage() {
   }, [isEditable]);
 
   const handleSave = async () => {
-    if (!code || !newContent.trim()) {
+    if (!profile?.code || !newContent.trim()) {
       setError("수정 내용을 입력하세요.");
       return;
     }
 
     try {
-      await patchProfilesCode(code, { content: newContent });
-      const updatedProfile = await getProfilesCode(code);
+      await patchProfilesCode(profile.code, { content: newContent });
+      const updatedProfile = await getProfilesCode(profile.code);
       setProfile(updatedProfile);
       setIsEditable(false);
       setSnackbarMessage("내용 수정이 완료되었습니다.");
@@ -155,7 +155,7 @@ export default function WikiPage() {
 
   const currentUrl = `${
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-  }/wiki?code=${code}`;
+  }/wiki?code=${profile.code}`;
 
   return (
     <div className={styles.container}>
@@ -234,7 +234,7 @@ export default function WikiPage() {
       </div>
       <div className={styles.profileCard}>
         <ProfileCard
-          code={code}
+          code={profile.code}
           isEditable={isEditable}
           setEditable={setIsEditable}
           onSave={(updatedProfile: Partial<Profile>) => {

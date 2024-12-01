@@ -26,7 +26,7 @@ export default function ParticipateButton({
 
     try {
       const response = await getProfilesCode(code);
-      setSecurityQuestion(response.securityQuestion || "");
+      setSecurityQuestion(response!.securityQuestion || "");
     } catch {
       setErrorMessage("질문을 불러오는 데 실패했습니다.");
     }
