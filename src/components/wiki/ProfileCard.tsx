@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation"; // useRouter 사용
 import styles from "@/styles/wiki/ProfileCard.module.scss";
 import { patchProfilesCode } from "@/api/swagger/Profile";
 
@@ -38,8 +37,6 @@ export default function ProfileCard({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter(); // useRouter 훅 추가
-
   const teamId = "10-3";
 
   const fields: { label: string; field: keyof Profile }[] = [
@@ -69,7 +66,7 @@ export default function ProfileCard({
       } else {
         throw new Error(`Failed to fetch profile data: ${res.status}`);
       }
-    } catch (err: any) {
+    } catch {
       setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
       setProfile(null);
     } finally {

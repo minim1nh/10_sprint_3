@@ -20,7 +20,7 @@ interface Profile {
 
 export default function WikiListPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const pageSize = 4;
@@ -50,7 +50,7 @@ export default function WikiListPage() {
 
         if (data && data.list) {
           setProfiles(
-            data.list.map((profile: any) => ({
+            data.list.map((profile) => ({
               id: profile.id,
               code: profile.code,
               image: profile.image,
@@ -67,7 +67,7 @@ export default function WikiListPage() {
           setTotalPages(1);
         }
         setError(null);
-      } catch (err: any) {
+      } catch (err: string) {
         setError(err.message || "데이터를 가져오는 중 오류가 발생했습니다.");
         setProfiles([]);
         setTotalPages(1);
@@ -112,12 +112,12 @@ export default function WikiListPage() {
       {/* 검색 결과 텍스트 */}
       {searchName && profiles.length > 0 && (
         <p className={styles.searchResultText}>
-          "{searchName}"님을 총 {profiles.length}명 찾았습니다.
+          {searchName}님을 총 {profiles.length}명 찾았습니다.
         </p>
       )}
       {searchName && profiles.length === 0 && (
         <p className={styles.searchResultText}>
-          "{searchName}"님을 찾을 수 없습니다.
+          {searchName}님을 찾을 수 없습니다.
         </p>
       )}
 

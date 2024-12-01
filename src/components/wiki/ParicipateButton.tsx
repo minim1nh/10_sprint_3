@@ -27,7 +27,7 @@ export default function ParticipateButton({
     try {
       const response = await getProfilesCode(code);
       setSecurityQuestion(response.securityQuestion || "");
-    } catch (error) {
+    } catch {
       setErrorMessage("질문을 불러오는 데 실패했습니다.");
     }
   };
@@ -45,11 +45,11 @@ export default function ParticipateButton({
     }
 
     try {
-      const response = await postProfilesCodePing(code, { securityAnswer });
+      await postProfilesCodePing(code, { securityAnswer });
       onCorrectAnswer();
       setShowModal(false);
       setErrorMessage("");
-    } catch (error: any) {
+    } catch {
       setErrorMessage("정답이 아닙니다. 다시 시도해 주세요.");
     }
   };

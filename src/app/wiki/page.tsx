@@ -76,7 +76,7 @@ export default function WikiPage() {
         } else {
           setError("프로필 데이터를 찾을 수 없습니다.");
         }
-      } catch (err) {
+      } catch {
         setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -109,13 +109,13 @@ export default function WikiPage() {
     }
 
     try {
-      await patchProfilesCode(code, { content: newContent } as any);
+      await patchProfilesCode(code, { content: newContent });
       const updatedProfile = await getProfilesCode(code);
       setProfile(updatedProfile);
       setIsEditable(false);
       setSnackbarMessage("내용 수정이 완료되었습니다.");
       setSnackbarOpen(true);
-    } catch (err) {
+    } catch {
       setError("내용 저장 중 오류가 발생했습니다.");
     }
   };
