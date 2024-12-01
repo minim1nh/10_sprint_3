@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation"; // useRouter 사용
 import styles from "@/styles/wiki/ProfileCard.module.scss";
+import { patchProfilesCode } from "@/api/swagger/Profile";
 
 interface Profile {
   image: string;
@@ -19,20 +21,24 @@ interface Profile {
 interface ProfileCardProps {
   code: string;
   isEditable: boolean;
+  setEditable: (isEditable: boolean) => void;
   onSave: (updatedProfile: Partial<Profile>) => void;
 }
 
 export default function ProfileCard({
   code,
   isEditable,
+  setEditable,
   onSave,
 }: ProfileCardProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [editedProfile, setEditedProfile] = useState<Partial<Profile> | null>(
     null
   );
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter(); // useRouter 훅 추가
 
   const teamId = "10-3";
 
@@ -60,16 +66,11 @@ export default function ProfileCard({
       if (res.status === 200 || res.status === 201) {
         setProfile(res.data);
         setEditedProfile(res.data);
-        setError(null);
       } else {
         throw new Error(`Failed to fetch profile data: ${res.status}`);
       }
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        setError("프로필 데이터를 찾을 수 없습니다. 올바른 코드를 입력하세요.");
-      } else {
-        setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
-      }
+      setError("프로필 데이터를 불러오는 중 오류가 발생했습니다.");
       setProfile(null);
     } finally {
       setLoading(false);
@@ -83,9 +84,19 @@ export default function ProfileCard({
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editedProfile) {
-      onSave(editedProfile);
+      try {
+        await patchProfilesCode(code, editedProfile);
+        onSave(editedProfile);
+        setEditable(false);
+
+        // 저장 후 리다이렉트
+        window.location.reload();
+      } catch (error) {
+        console.error("프로필 저장 중 오류 발생:", error);
+        alert("프로필 저장에 실패했습니다.");
+      }
     }
   };
 
@@ -118,10 +129,11 @@ export default function ProfileCard({
             <span className={styles.label}>{label}:</span>
             {isEditable ? (
               <input
-                type="string"
+                type="text"
                 value={editedProfile?.[field] || ""}
                 onChange={(e) => handleInputChange(field, e.target.value)}
                 placeholder={`${label} 입력`}
+                className={styles.input}
               />
             ) : (
               <span className={styles.value}>{profile[field] || "없음"}</span>

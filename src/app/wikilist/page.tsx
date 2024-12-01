@@ -126,7 +126,7 @@ export default function WikiListPage() {
         {profiles.map((profile) => {
           const wikiUrl = `${
             process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-          }/wiki/${profile.name}`;
+          }/wiki?code=${profile.code}`;
 
           return (
             <li
