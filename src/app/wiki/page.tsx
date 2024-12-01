@@ -13,9 +13,22 @@ import SnackbarNotification from "@/components/wiki/SnackbarNotification";
 const Editor = dynamic(
   () =>
     import("@tinymce/tinymce-react").then((mod) => mod.Editor) as Promise<
-      React.ComponentType<any>
+
+      React.FC<{
+        apiKey: string;
+        value: string;
+        onEditorChange: (content: string) => void;
+        init: {
+          height: number;
+          plugins: string;
+          toolbar: string;
+        };
+      }>
     >,
-  { ssr: false }
+  {
+    ssr: false,
+  }
+
 );
 
 interface Profile {
