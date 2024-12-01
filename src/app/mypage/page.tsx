@@ -68,6 +68,8 @@ export default function MyPage() {
           }
           const resProf = await postProfiles(reqProf);
           console.log(JSON.stringify(resProf));
+          alert('내 위키가 생성되었습니다.')
+          setIsWikiExist(true);
         }
       }
     }
