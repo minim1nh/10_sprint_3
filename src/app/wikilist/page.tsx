@@ -32,6 +32,10 @@ export default function WikiListPage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    "https://dev.d1a7dyil86c78d.amplifyapp.com";
+
   // 검색어 상태 디바운싱
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -122,40 +126,42 @@ export default function WikiListPage() {
 
       {/* 검색 결과 */}
       <ul className={styles.list}>
-        {profiles.map((profile) => {
-          const wikiUrl = `${
-            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-          }/wiki?code=${profile.code}`;
+        {profiles.map(({ id, code, image, city, job, nationality, name }) => {
+          const currentUrl = `${BASE_URL}/wiki?code=${code}`;
 
           return (
             <li
-              key={profile.id}
+              key={id}
               className={styles.card}
-              onClick={() => handleCardClick(profile.code)}
+              onClick={() => handleCardClick(code)}
             >
               <div className={styles.cardContent}>
                 <img
-                  src={profile.image || "/images/icon/ic_profile.svg"}
+                  src={image || "/images/icon/ic_profile.svg"}
                   alt={"Profile Image"}
                   className={styles.avatar}
                 />
                 <div className={styles.info}>
-                  <h2>{profile.name}</h2>
-                  <p>도시: {profile.city}</p>
-                  <p>직업: {profile.job}</p>
-                  <p>국적: {profile.nationality}</p>
+                  <h2>{name}</h2>
+                  <p>도시: {city}</p>
+                  <p>직업: {job}</p>
+                  <p>국적: {nationality}</p>
                 </div>
                 {/* 링크 추가 */}
                 <div
                   className={styles.linkContainer}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigator.clipboard.writeText(wikiUrl);
+                    navigator.clipboard.writeText(currentUrl);
                     setSnackbarMessage("링크가 복사되었습니다.");
                     setSnackbarOpen(true);
                   }}
                 >
-                  <span className={styles.linkText}>{wikiUrl}</span>
+                  <span className={styles.linkText}>
+                    {currentUrl.length > 30
+                      ? `${currentUrl.slice(0, 30)}`
+                      : currentUrl}
+                  </span>
                 </div>
               </div>
             </li>

@@ -166,7 +166,8 @@ export default function WikiPage() {
   if (!profile) return <div>프로필 데이터가 없습니다.</div>;
 
   const currentUrl = `${
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    "https://dev.d1a7dyil86c78d.amplifyapp.com"
   }/wiki?code=${profile.code}`;
 
   return (
@@ -190,7 +191,7 @@ export default function WikiPage() {
             }}
             className={styles.copyLink}
           >
-            {currentUrl}
+            {currentUrl.length > 30 ? `${currentUrl.slice(0, 30)}` : currentUrl}
           </span>
         </div>
 
